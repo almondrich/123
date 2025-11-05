@@ -1,0 +1,749 @@
+:root {
+    --primary-color: #0066cc;
+    --secondary-color: #004d99;
+    --accent-color: #ff6600;
+    --border-color: #dee2e6;
+    --bg-light: #f8f9fa;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.form-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: white;
+}
+
+.form-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.form-header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.form-header .subtitle {
+    font-size: 0.9rem;
+    opacity: 0.95;
+    margin: 0.25rem 0 0 0;
+}
+
+.progress-container {
+    background: white;
+    padding: 0.5rem 1.5rem 0.25rem;
+    border-bottom: 2px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.progress {
+    height: 5px;
+    border-radius: 3px;
+}
+
+.tabs-container {
+    background: #fff;
+    border-bottom: 2px solid var(--border-color);
+    flex-shrink: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.nav-tabs {
+    border-bottom: none;
+    padding: 0 1.5rem;
+    flex-wrap: nowrap;
+    margin-bottom: 0;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    color: #666;
+    padding: 0.85rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background: none;
+}
+
+.nav-tabs .nav-link.completed {
+    color: #28a745;
+}
+
+.form-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 2rem;
+    background: #fafbfc;
+}
+
+.form-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-title {
+    background-color: var(--bg-light);
+    border-left: 4px solid var(--primary-color);
+    padding: 0.65rem 1rem;
+    margin: 0 0 1.25rem 0;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--secondary-color);
+    flex-shrink: 0;
+}
+
+/* LARGER FORM INPUTS AND LABELS */
+.form-label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 0.4rem;
+    font-size: 1rem;
+}
+
+.form-control, .form-select {
+    border: 1.5px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    height: auto;
+    min-height: 45px;
+}
+
+.form-select[multiple] {
+    min-height: 120px;
+    padding: 0.5rem;
+}
+
+.form-select[multiple] option {
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+.form-select[multiple] option:checked {
+    background: var(--primary-color);
+    color: white;
+}
+
+.form-select[multiple] option:hover {
+    background: #e3f2fd;
+}
+
+.form-select[multiple] option:checked:hover {
+    background: var(--secondary-color);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.15);
+}
+
+textarea.form-control {
+    min-height: 100px;
+}
+
+/* LARGER CHECKBOXES AND RADIOS */
+.form-check-input {
+    width: 1.3rem;
+    height: 1.3rem;
+    margin-top: 0.2rem;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-check-label {
+    font-size: 1rem;
+    margin-left: 0.5rem;
+}
+
+/* OPTIMIZED GRID LAYOUTS */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.85rem 1.25rem;
+}
+
+/* SPECIAL SECTIONS */
+.fast-assessment, .ob-section, .waiver-section {
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0 0 0;
+    font-size: 0.95rem;
+}
+
+.fast-assessment {
+    background-color: #fff3cd;
+    border: 2px solid #ffc107;
+}
+
+.fast-assessment h6 {
+    color: #856404;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.ob-section {
+    background-color: #d1ecf1;
+    border: 2px solid #17a2b8;
+}
+
+.ob-section h6 {
+    color: #0c5460;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.waiver-section {
+    background-color: #f8d7da;
+    border: 2px solid #dc3545;
+}
+
+.waiver-section h6 {
+    color: #721c24;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.waiver-section p {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.signature-box {
+    border: 2px dashed var(--border-color);
+    border-radius: 6px;
+    padding: 1.5rem;
+    text-align: center;
+    background-color: #fafafa;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.signature-box i {
+    font-size: 2rem;
+    color: #ccc;
+}
+
+.signature-box p {
+    font-size: 0.9rem;
+    margin: 0.75rem 0 0 0;
+    color: #666;
+}
+
+/* BODY DIAGRAM SECTION */
+.body-diagram-container {
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+.body-diagram-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.body-diagram-header h6 {
+    margin: 0;
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.body-diagram-content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 1.5rem;
+}
+
+.body-views {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.body-view {
+    text-align: center;
+}
+
+.view-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.body-image-container {
+    position: relative;
+    display: inline-block;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    cursor: crosshair;
+}
+
+.body-image {
+    display: block;
+    width: 220px;
+    height: auto;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* Injury markers */
+.injury-marker {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 3px solid white;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+    animation: markerPop 0.3s ease;
+}
+
+@keyframes markerPop {
+    0% { transform: translate(-50%, -50%) scale(0); }
+    50% { transform: translate(-50%, -50%) scale(1.2); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.injury-marker:hover {
+    transform: translate(-50%, -50%) scale(1.25);
+}
+
+.injury-marker.laceration { background: #dc3545; }
+.injury-marker.fracture { background: #fd7e14; }
+.injury-marker.burn { background: #ffc107; color: #333; }
+.injury-marker.contusion { background: #6f42c1; }
+.injury-marker.abrasion { background: #20c997; }
+.injury-marker.other { background: #6c757d; }
+
+.injury-sidebar {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-y: auto;
+    max-height: 500px;
+}
+
+.injury-type-selector {
+    margin-bottom: 1rem;
+}
+
+.injury-type-selector label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.injury-type-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.injury-type-btn {
+    padding: 0.6rem;
+    border: 2px solid #dee2e6;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.injury-type-btn:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+.injury-type-btn.active {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: white;
+}
+
+.color-indicator {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.injury-list-header {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin: 1rem 0 0.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.injury-item {
+    background: white;
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    border-left: 3px solid var(--primary-color);
+    position: relative;
+    font-size: 0.85rem;
+}
+
+.injury-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.injury-number {
+    font-weight: 700;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.injury-type-badge {
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: white;
+}
+
+.injury-type-badge.laceration { background: #dc3545; }
+.injury-type-badge.fracture { background: #fd7e14; }
+.injury-type-badge.burn { background: #ffc107; color: #333; }
+.injury-type-badge.contusion { background: #6f42c1; }
+.injury-type-badge.abrasion { background: #20c997; }
+.injury-type-badge.other { background: #6c757d; }
+
+.injury-notes {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    resize: vertical;
+    min-height: 50px;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #6c757d;
+}
+
+.empty-state-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.diagram-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.diagram-actions .btn {
+    flex: 1;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+}
+
+.navigation-buttons {
+    background: white;
+    padding: 1rem 2rem;
+    border-top: 2px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.btn {
+    padding: 0.75rem 1.75rem;
+    font-weight: 500;
+    border-radius: 6px;
+    font-size: 1rem;
+    min-width: 120px;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.required-field::after {
+    content: "*";
+    color: #dc3545;
+    margin-left: 4px;
+}
+
+.mb-section {
+    margin-bottom: 1.25rem;
+}
+
+.form-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+.form-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.form-body::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+.form-body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.injury-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.injury-sidebar::-webkit-scrollbar-track {
+    background: #e9ecef;
+}
+
+.injury-sidebar::-webkit-scrollbar-thumb {
+    background: #adb5bd;
+    border-radius: 3px;
+}
+
+.inline-group {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.form-group-compact {
+    margin-bottom: 1.25rem;
+}
+
+/* Vehicle selection modal styles */
+.vehicle-option {
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.vehicle-option:hover {
+    background-color: #f8f9fa;
+    border-color: var(--primary-color);
+}
+
+.vehicle-option.selected {
+    background-color: #e3f2fd;
+    border-color: var(--primary-color);
+}
+
+.vehicle-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+}
+
+.vehicle-details {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+@media (max-width: 1200px) {
+    .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .body-diagram-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .body-views {
+        gap: 1.5rem;
+    }
+    
+    .body-image {
+        width: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-body {
+        padding: 1rem;
+    }
+
+    .navigation-buttons {
+        padding: 0.75rem 1rem;
+    }
+
+    .grid-2, .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-tabs .nav-link {
+        font-size: 0.85rem;
+        padding: 0.7rem 1rem;
+    }
+    
+    .body-views {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media print {
+    body {
+        overflow: visible;
+        height: auto;
+    }
+    .form-container {
+        height: auto;
+    }
+    .tabs-container, .navigation-buttons, .progress-container {
+        display: none;
+    }
+    .form-body {
+        overflow: visible;
+        padding: 1rem;
+    }
+    .tab-pane {
+        display: block !important;
+    }
+}

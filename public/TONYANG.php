@@ -1,0 +1,1029 @@
+<?php
+/**
+ * Pre-Hospital Care Form - PHP Version
+ * Maintains exact HTML design with PHP security features
+ */
+
+define('APP_ACCESS', true);
+require_once '../includes/config.php';
+require_once '../includes/functions.php';
+require_once '../includes/auth.php';
+
+// Security headers
+header("X-Frame-Options: DENY");
+header("X-Content-Type-Options: nosniff");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+
+// Require authentication
+require_login();
+
+// Generate CSRF token
+$csrf_token = generate_token();
+
+// Get current user
+$current_user = get_auth_user();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Hospital Care Form (1x.2025)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/tonyang-form.css" rel="stylesheet">
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h1><i class="bi bi-file-medical"></i> PRE-HOSPITAL CARE FORM</h1>
+            <p class="subtitle">Form 1x.2025 - Emergency Medical Services | User: <?php echo e($current_user['full_name']); ?></p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" id="progressBar" style="width: 14%"></div>
+            </div>
+        </div>
+
+        <div class="tabs-container">
+            <ul class="nav nav-tabs" id="formTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="tab1" data-bs-toggle="tab" data-bs-target="#section1" type="button" role="tab">
+                        <i class="bi bi-1-circle"></i> Basic Info
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab2" data-bs-toggle="tab" data-bs-target="#section2" type="button" role="tab">
+                        <i class="bi bi-2-circle"></i> Patient
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab3" data-bs-toggle="tab" data-bs-target="#section3" type="button" role="tab">
+                        <i class="bi bi-3-circle"></i> Emergency
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab4" data-bs-toggle="tab" data-bs-target="#section4" type="button" role="tab">
+                        <i class="bi bi-4-circle"></i> Vitals
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab5" data-bs-toggle="tab" data-bs-target="#section5" type="button" role="tab">
+                        <i class="bi bi-5-circle"></i> Assessment
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab6" data-bs-toggle="tab" data-bs-target="#section6" type="button" role="tab">
+                        <i class="bi bi-6-circle"></i> Team
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab7" data-bs-toggle="tab" data-bs-target="#section7" type="button" role="tab">
+                        <i class="bi bi-7-circle"></i> Complete
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <?php show_flash(); ?>
+
+        <form id="preHospitalForm" class="form-body" method="POST" action="../api/TONYANG_save.php">
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+            
+            <div class="tab-content" id="formTabContent">
+                <!-- Section 1: Basic Information -->
+                <div class="tab-pane fade show active" id="section1" role="tabpanel">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-info-circle"></i> Basic Information
+                        </div>
+
+                        <div class="grid-3 mb-section">
+                            <div>
+                                <label for="formDate" class="form-label required-field">Date</label>
+                                <input type="date" class="form-control" id="formDate" name="form_date" required>
+                            </div>
+                            <div>
+                                <label for="depTime" class="form-label required-field">Departure Time</label>
+                                <input type="time" class="form-control" id="depTime" name="departure_time" required>
+                            </div>
+                            <div>
+                                <label for="arrTime" class="form-label">Arrival Time</label>
+                                <input type="time" class="form-control" id="arrTime" name="arrival_time">
+                            </div>
+                        </div>
+
+                        <div class="form-group-compact">
+                            <label class="form-label">Vehicle Used</label>
+                            <div class="inline-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="vehicle_used" id="ambulance" value="ambulance">
+                                    <label class="form-check-label" for="ambulance">Ambulance</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="vehicle_used" id="fireTruck" value="fireTruck">
+                                    <label class="form-check-label" for="fireTruck">Fire Truck</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="vehicle_used" id="othersVehicle" value="others">
+                                    <label class="form-check-label" for="othersVehicle">Others</label>
+                                </div>
+                            </div>
+                            <input type="hidden" name="vehicle_details" id="vehicleDetails">
+                        </div>
+                        
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="arrSceneLocation" class="form-label">Arrival at Scene - Location</label>
+                                <input type="text" class="form-control" id="arrSceneLocation" name="arrival_scene_location" placeholder="Scene location">
+                            </div>
+                            <div>
+                                <label for="arrSceneTime" class="form-label">Arrival at Scene - Time</label>
+                                <input type="time" class="form-control" id="arrSceneTime" name="arrival_scene_time">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="depSceneLocation" class="form-label">Departure from Scene - Location</label>
+                                <input type="text" class="form-control" id="depSceneLocation" name="departure_scene_location" placeholder="Departure location">
+                            </div>
+                            <div>
+                                <label for="depSceneTime" class="form-label">Departure from Scene - Time</label>
+                                <input type="time" class="form-control" id="depSceneTime" name="departure_scene_time">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="arrHospName" class="form-label">Arrival at Hospital - Name</label>
+                                <input type="text" class="form-control" id="arrHospName" name="arrival_hospital_name" placeholder="Hospital name">
+                            </div>
+                            <div>
+                                <label for="arrHospTime" class="form-label">Arrival at Hospital - Time</label>
+                                <input type="time" class="form-control" id="arrHospTime" name="arrival_hospital_time">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="depHospLocation" class="form-label">Departure from Hospital - Location</label>
+                                <input type="text" class="form-control" id="depHospLocation" name="departure_hospital_location" placeholder="Departure location">
+                            </div>
+                            <div>
+                                <label for="depHospTime" class="form-label">Departure from Hospital - Time</label>
+                                <input type="time" class="form-control" id="depHospTime" name="departure_hospital_time">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="arrStation" class="form-label">Arrival at Station</label>
+                                <input type="time" class="form-control" id="arrStation" name="arrival_station">
+                            </div>
+                            <div>
+                                <label for="driver" class="form-label">Driver</label>
+                                <input type="text" class="form-control" id="driver" name="driver" placeholder="Driver name">
+                            </div>
+                        </div>
+
+                        <div class="form-group-compact">
+                            <label class="form-label">Persons Present Upon Arrival</label>
+                            <div class="checkbox-grid">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="police" name="persons_present[]" value="police">
+                                    <label class="form-check-label" for="police">Police</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="brgyOfficials" name="persons_present[]" value="brgyOfficials">
+                                    <label class="form-check-label" for="brgyOfficials">Barangay Officials</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="relatives" name="persons_present[]" value="relatives">
+                                    <label class="form-check-label" for="relatives">Relatives</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="bystanders" name="persons_present[]" value="bystanders">
+                                    <label class="form-check-label" for="bystanders">Bystanders</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="nonePresent" name="persons_present[]" value="none">
+                                    <label class="form-check-label" for="nonePresent">None</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Patient Information -->
+                <div class="tab-pane fade" id="section2" role="tabpanel">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-person-fill"></i> Patient Information
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div style="grid-column: span 2;">
+                                <label for="patientName" class="form-label required-field">Patient Name</label>
+                                <input type="text" class="form-control" id="patientName" name="patient_name" placeholder="Last Name, First Name, Middle Initial" required>
+                            </div>
+                            <div>
+                                <label for="dateOfBirth" class="form-label required-field">Date of Birth</label>
+                                <input type="date" class="form-control" id="dateOfBirth" name="date_of_birth" required>
+                            </div>
+                            <div>
+                                <label for="age" class="form-label required-field">Age</label>
+                                <input type="number" class="form-control" id="age" name="age" min="0" max="150" required>
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label class="form-label required-field">Gender</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="gender" id="male" value="male" required>
+                                        <label class="form-check-label" for="male">Male</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="gender" id="female" value="female" required>
+                                        <label class="form-check-label" for="female">Female</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Civil Status</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="civil_status" id="single" value="single">
+                                        <label class="form-check-label" for="single">Single</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="civil_status" id="married" value="married">
+                                        <label class="form-check-label" for="married">Married</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address" placeholder="Complete address">
+                            </div>
+                            <div>
+                                <label for="zone" class="form-label">Zone</label>
+                                <input type="text" class="form-control" id="zone" name="zone">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="occupation" class="form-label">Occupation</label>
+                                <input type="text" class="form-control" id="occupation" name="occupation">
+                            </div>
+                            <div>
+                                <label for="placeOfIncident" class="form-label">Place of Incident</label>
+                                <input type="text" class="form-control" id="placeOfIncident" name="place_of_incident">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="zoneLandmark" class="form-label">Zone/Landmark</label>
+                                <input type="text" class="form-control" id="zoneLandmark" name="zone_landmark">
+                            </div>
+                            <div>
+                                <label for="incidentTime" class="form-label">Time of Incident</label>
+                                <input type="time" class="form-control" id="incidentTime" name="incident_time">
+                            </div>
+                        </div>
+
+                        <div class="section-title" style="margin-top: 1.5rem;">
+                            <i class="bi bi-telephone"></i> Informant Details
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="informant" class="form-label">Informant Name</label>
+                                <input type="text" class="form-control" id="informant" name="informant_name" placeholder="Name of informant">
+                            </div>
+                            <div>
+                                <label for="informantAddress" class="form-label">Informant Address</label>
+                                <input type="text" class="form-control" id="informantAddress" name="informant_address">
+                            </div>
+                        </div>
+
+                        <div class="grid-3 mb-section">
+                            <div>
+                                <label class="form-label">Walk In / Call</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="arrival_type" id="walkIn" value="walkIn">
+                                        <label class="form-check-label" for="walkIn">Walk In</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="arrival_type" id="call" value="call">
+                                        <label class="form-check-label" for="call">Call</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="callArrTime" class="form-label">Call/Arrival Time</label>
+                                <input type="time" class="form-control" id="callArrTime" name="call_arrival_time">
+                            </div>
+                            <div>
+                                <label for="cpNumber" class="form-label">Contact Number</label>
+                                <input type="tel" class="form-control" id="cpNumber" name="contact_number" placeholder="Contact number">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="relationshipVictim" class="form-label">Relationship to Victim</label>
+                                <input type="text" class="form-control" id="relationshipVictim" name="relationship_victim">
+                            </div>
+                            <div>
+                                <label for="personalBelongings" class="form-label">Personal Belongings</label>
+                                <select class="form-select" id="personalBelongings" name="personal_belongings[]" multiple size="4">
+                                    <option value="wallet">Wallet</option>
+                                    <option value="cellphone">Cellphone</option>
+                                    <option value="jewelry">Jewelry</option>
+                                    <option value="watch">Watch</option>
+                                    <option value="keys">Keys</option>
+                                    <option value="bag">Bag</option>
+                                    <option value="documents">Documents/IDs</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="none">None</option>
+                                </select>
+                                <small class="text-muted">Hold Ctrl/Cmd to select multiple items</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-section">
+                            <label for="otherBelongings" class="form-label">Other Belongings (specify)</label>
+                            <input type="text" class="form-control" id="otherBelongings" name="other_belongings" placeholder="List other belongings not mentioned above">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Emergency Call & Care -->
+                <div class="tab-pane fade" id="section3" role="tabpanel">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-telephone-fill"></i> Type of Emergency Call
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="medical" name="emergency_type[]" value="medical">
+                                    <label class="form-check-label" for="medical"><strong>Medical</strong></label>
+                                </div>
+                                <input type="text" class="form-control" id="medicalSpecify" name="medical_specify" placeholder="Specify medical condition">
+                            </div>
+                            <div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="trauma" name="emergency_type[]" value="trauma">
+                                    <label class="form-check-label" for="trauma"><strong>Trauma</strong></label>
+                                </div>
+                                <input type="text" class="form-control" id="traumaSpecify" name="trauma_specify" placeholder="Specify trauma type">
+                            </div>
+                            <div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="ob" name="emergency_type[]" value="ob">
+                                    <label class="form-check-label" for="ob"><strong>OB</strong></label>
+                                </div>
+                                <input type="text" class="form-control" id="obSpecify" name="ob_specify" placeholder="Specify OB condition">
+                            </div>
+                            <div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="general" name="emergency_type[]" value="general">
+                                    <label class="form-check-label" for="general"><strong>General</strong></label>
+                                </div>
+                                <input type="text" class="form-control" id="generalSpecify" name="general_specify" placeholder="Specify general condition">
+                            </div>
+                        </div>
+
+                        <div class="section-title">
+                            <i class="bi bi-heart-pulse-fill"></i> Care Management
+                        </div>
+
+                        <div class="form-group-compact">
+                            <div class="checkbox-grid">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="immobilization" name="care_management[]" value="immobilization">
+                                    <label class="form-check-label" for="immobilization">Immobilization</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="cpr" name="care_management[]" value="cpr">
+                                    <label class="form-check-label" for="cpr">CPR</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="bandaging" name="care_management[]" value="bandaging">
+                                    <label class="form-check-label" for="bandaging">Bandaging</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="woundCare" name="care_management[]" value="woundCare">
+                                    <label class="form-check-label" for="woundCare">Wound Care</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="cCollar" name="care_management[]" value="cCollar">
+                                    <label class="form-check-label" for="cCollar">C-Collar</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="aed" name="care_management[]" value="aed">
+                                    <label class="form-check-label" for="aed">AED</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="ked" name="care_management[]" value="ked">
+                                    <label class="form-check-label" for="ked">KED</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="o2LPM" class="form-label">O² (LPM via)</label>
+                                <input type="text" class="form-control" id="o2LPM" name="oxygen_lpm" placeholder="Oxygen delivery method and rate">
+                            </div>
+                            <div>
+                                <label for="othersCare" class="form-label">Others</label>
+                                <input type="text" class="form-control" id="othersCare" name="other_care" placeholder="Other care management">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Vitals -->
+                <div class="tab-pane fade" id="section4" role="tabpanel">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-activity"></i> Initial Vital Signs
+                        </div>
+
+                        <div class="grid-4 mb-section">
+                            <div>
+                                <label for="initialTime" class="form-label">Time</label>
+                                <input type="time" class="form-control" id="initialTime" name="initial_time">
+                            </div>
+                            <div>
+                                <label for="initialBP" class="form-label">Blood Pressure</label>
+                                <input type="text" class="form-control" id="initialBP" name="initial_bp" placeholder="120/80">
+                            </div>
+                            <div>
+                                <label for="initialTemp" class="form-label">Temp (°C)</label>
+                                <input type="number" class="form-control" id="initialTemp" name="initial_temp" step="0.1" placeholder="36.5">
+                            </div>
+                            <div>
+                                <label for="initialPulse" class="form-label">Pulse (BPM)</label>
+                                <input type="number" class="form-control" id="initialPulse" name="initial_pulse" placeholder="72">
+                            </div>
+                        </div>
+
+                        <div class="grid-4 mb-section">
+                            <div>
+                                <label for="initialResp" class="form-label">Resp. Rate</label>
+                                <input type="number" class="form-control" id="initialResp" name="initial_resp" placeholder="16">
+                            </div>
+                            <div>
+                                <label for="initialPainScore" class="form-label">Pain Score (0-10)</label>
+                                <input type="number" class="form-control" id="initialPainScore" name="initial_pain_score" min="0" max="10">
+                            </div>
+                            <div>
+                                <label for="initialSPO2" class="form-label">SPO2 %</label>
+                                <input type="number" class="form-control" id="initialSPO2" name="initial_spo2" min="0" max="100">
+                            </div>
+                            <div>
+                                <label class="form-label">Spinal Injury</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initial_spinal_injury" id="initialSpinalYes" value="yes">
+                                        <label class="form-check-label" for="initialSpinalYes">Yes</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initial_spinal_injury" id="initialSpinalNo" value="no">
+                                        <label class="form-check-label" for="initialSpinalNo">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label class="form-label">Level of Consciousness</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initial_consciousness" id="initialAlert" value="alert">
+                                        <label class="form-check-label" for="initialAlert">Alert</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initial_consciousness" id="initialVerbal" value="verbal">
+                                        <label class="form-check-label" for="initialVerbal">Verbal</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initial_consciousness" id="initialPain" value="pain">
+                                        <label class="form-check-label" for="initialPain">Pain</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initial_consciousness" id="initialUnconscious" value="unconscious">
+                                        <label class="form-check-label" for="initialUnconscious">Unconscious</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Helmet Status</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initial_helmet" id="initialHelmetAB" value="ab">
+                                        <label class="form-check-label" for="initialHelmetAB">+ AB</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initial_helmet" id="initialNoHelmet" value="none">
+                                        <label class="form-check-label" for="initialNoHelmet">No Helmet</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-title">
+                            <i class="bi bi-arrow-repeat"></i> Follow-up Vital Signs
+                        </div>
+
+                        <div class="grid-4 mb-section">
+                            <div>
+                                <label for="followupTime" class="form-label">Time</label>
+                                <input type="time" class="form-control" id="followupTime" name="followup_time">
+                            </div>
+                            <div>
+                                <label for="followupBP" class="form-label">Blood Pressure</label>
+                                <input type="text" class="form-control" id="followupBP" name="followup_bp" placeholder="120/80">
+                            </div>
+                            <div>
+                                <label for="followupTemp" class="form-label">Temp (°C)</label>
+                                <input type="number" class="form-control" id="followupTemp" name="followup_temp" step="0.1" placeholder="36.5">
+                            </div>
+                            <div>
+                                <label for="followupPulse" class="form-label">Pulse (BPM)</label>
+                                <input type="number" class="form-control" id="followupPulse" name="followup_pulse" placeholder="72">
+                            </div>
+                        </div>
+
+                        <div class="grid-4 mb-section">
+                            <div>
+                                <label for="followupResp" class="form-label">Resp. Rate</label>
+                                <input type="number" class="form-control" id="followupResp" name="followup_resp" placeholder="16">
+                            </div>
+                            <div>
+                                <label for="followupPainScore" class="form-label">Pain Score (0-10)</label>
+                                <input type="number" class="form-control" id="followupPainScore" name="followup_pain_score" min="0" max="10">
+                            </div>
+                            <div>
+                                <label for="followupSPO2" class="form-label">SPO2 %</label>
+                                <input type="number" class="form-control" id="followupSPO2" name="followup_spo2" min="0" max="100">
+                            </div>
+                            <div>
+                                <label class="form-label">Spinal Injury</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="followup_spinal_injury" id="followupSpinalYes" value="yes">
+                                        <label class="form-check-label" for="followupSpinalYes">Yes</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="followup_spinal_injury" id="followupSpinalNo" value="no">
+                                        <label class="form-check-label" for="followupSpinalNo">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="form-label">Level of Consciousness</label>
+                            <div class="inline-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="followup_consciousness" id="followupAlert" value="alert">
+                                    <label class="form-check-label" for="followupAlert">Alert</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="followup_consciousness" id="followupVerbal" value="verbal">
+                                    <label class="form-check-label" for="followupVerbal">Verbal</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="followup_consciousness" id="followupPain" value="pain">
+                                    <label class="form-check-label" for="followupPain">Pain</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="followup_consciousness" id="followupUnconscious" value="unconscious">
+                                    <label class="form-check-label" for="followupUnconscious">Unconscious</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 5: Assessment + Body Diagram -->
+                <div class="tab-pane fade" id="section5" role="tabpanel">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-clipboard2-pulse"></i> Chief Complaints
+                        </div>
+
+                        <div class="form-group-compact">
+                            <div class="checkbox-grid">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="chestPain" name="chief_complaints[]" value="chestPain">
+                                    <label class="form-check-label" for="chestPain">Chest Pain</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="headache" name="chief_complaints[]" value="headache">
+                                    <label class="form-check-label" for="headache">Headache</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="blurredVision" name="chief_complaints[]" value="blurredVision">
+                                    <label class="form-check-label" for="blurredVision">Blurred Vision</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="difficultyBreathing" name="chief_complaints[]" value="difficultyBreathing">
+                                    <label class="form-check-label" for="difficultyBreathing">Difficulty Breathing</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="dizziness" name="chief_complaints[]" value="dizziness">
+                                    <label class="form-check-label" for="dizziness">Dizziness</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="bodyMalaise" name="chief_complaints[]" value="bodyMalaise">
+                                    <label class="form-check-label" for="bodyMalaise">Body Malaise</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-section">
+                            <label for="othersComplaint" class="form-label">Other Complaints</label>
+                            <textarea class="form-control" id="othersComplaint" name="other_complaints" rows="2" placeholder="Describe other complaints"></textarea>
+                        </div>
+
+                        <!-- INTERACTIVE BODY DIAGRAM -->
+                        <div class="body-diagram-container">
+                            <div class="body-diagram-header">
+                                <h6><i class="bi bi-person-bounding-box"></i> Interactive Injury Mapping</h6>
+                                <small class="text-muted">Click on body diagram to mark injuries</small>
+                            </div>
+                            
+                            <div class="body-diagram-content">
+                                <div class="body-views">
+                                    <div class="body-view">
+                                        <div class="view-label">FRONT VIEW</div>
+                                        <div class="body-image-container" id="frontContainer">
+                                            <img src="body-front.png" alt="Body Front" class="body-image">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="body-view">
+                                        <div class="view-label">BACK VIEW</div>
+                                        <div class="body-image-container" id="backContainer">
+                                            <img src="body-back.png" alt="Body Back" class="body-image">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="injury-sidebar">
+                                    <div class="injury-type-selector">
+                                        <label>Select Injury Type:</label>
+                                        <div class="injury-type-grid">
+                                            <button type="button" class="injury-type-btn active" data-type="laceration">
+                                                <span class="color-indicator" style="background: #dc3545;"></span>
+                                                Laceration
+                                            </button>
+                                            <button type="button" class="injury-type-btn" data-type="fracture">
+                                                <span class="color-indicator" style="background: #fd7e14;"></span>
+                                                Fracture
+                                            </button>
+                                            <button type="button" class="injury-type-btn" data-type="burn">
+                                                <span class="color-indicator" style="background: #ffc107;"></span>
+                                                Burn
+                                            </button>
+                                            <button type="button" class="injury-type-btn" data-type="contusion">
+                                                <span class="color-indicator" style="background: #6f42c1;"></span>
+                                                Contusion
+                                            </button>
+                                            <button type="button" class="injury-type-btn" data-type="abrasion">
+                                                <span class="color-indicator" style="background: #20c997;"></span>
+                                                Abrasion
+                                            </button>
+                                            <button type="button" class="injury-type-btn" data-type="other">
+                                                <span class="color-indicator" style="background: #6c757d;"></span>
+                                                Other
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="injury-list-header">
+                                        Injuries Marked (<span id="injuryCount">0</span>)
+                                    </div>
+                                    <div id="injuryListContainer">
+                                        <div class="empty-state">
+                                            <div class="empty-state-icon">📍</div>
+                                            <p>No injuries marked yet.<br>Click on body to add.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="diagram-actions">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearAllInjuries()">Clear All</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="exportInjuryData()">Export</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="injuries_data" id="injuriesData">
+
+                        <div class="fast-assessment">
+                            <h6><i class="bi bi-exclamation-triangle-fill"></i> FOR Stroke Victim - F.A.S.T. Assessment</h6>
+                            <div class="grid-2" style="gap: 1rem;">
+                                <div class="grid-2" style="gap: 0.75rem;">
+                                    <div>
+                                        <label class="form-label">Face Drooping</label>
+                                        <div class="inline-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="face_drooping" id="facePos" value="positive">
+                                                <label class="form-check-label" for="facePos">(+)</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="face_drooping" id="faceNeg" value="negative">
+                                                <label class="form-check-label" for="faceNeg">(++)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Arm Weakness</label>
+                                        <div class="inline-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="arm_weakness" id="armPos" value="positive">
+                                                <label class="form-check-label" for="armPos">(+)</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="arm_weakness" id="armNeg" value="negative">
+                                                <label class="form-check-label" for="armNeg">(++)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Speech Difficulty</label>
+                                        <div class="inline-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="speech_difficulty" id="speechPos" value="positive">
+                                                <label class="form-check-label" for="speechPos">(+)</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="speech_difficulty" id="speechNeg" value="negative">
+                                                <label class="form-check-label" for="speechNeg">(++)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Time to Call</label>
+                                        <div class="inline-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="time_to_call" id="timePos" value="positive">
+                                                <label class="form-check-label" for="timePos">(+)</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="time_to_call" id="timeNeg" value="negative">
+                                                <label class="form-check-label" for="timeNeg">(++)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="fastDetails" class="form-label">S.A.M.P.L.E.</label>
+                                    <textarea class="form-control" id="fastDetails" name="sample_details" rows="5" placeholder="Signs/Symptoms, Allergies, Medications, Pertinent history, Last oral intake, Events"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ob-section">
+                            <h6><i class="bi bi-hospital-fill"></i> FOR OB Patients Only</h6>
+                            <div class="grid-3" style="gap: 1rem;">
+                                <div>
+                                    <label for="babyDelivery" class="form-label">Baby Status</label>
+                                    <input type="text" class="form-control" id="babyDelivery" name="baby_status">
+                                </div>
+                                <div>
+                                    <label for="timeOfDelivery" class="form-label">Delivery Time</label>
+                                    <input type="time" class="form-control" id="timeOfDelivery" name="delivery_time">
+                                </div>
+                                <div>
+                                    <label class="form-label">Placenta</label>
+                                    <div class="inline-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="placenta" id="placentaIn" value="in">
+                                            <label class="form-check-label" for="placentaIn">In</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="placenta" id="placentaOut" value="out">
+                                            <label class="form-check-label" for="placentaOut">Out</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="lmp" class="form-label">LMP</label>
+                                    <input type="date" class="form-control" id="lmp" name="lmp">
+                                </div>
+                                <div>
+                                    <label for="aog" class="form-label">AOG</label>
+                                    <input type="text" class="form-control" id="aog" name="aog" placeholder="Weeks">
+                                </div>
+                                <div>
+                                    <label for="edc" class="form-label">EDC</label>
+                                    <input type="date" class="form-control" id="edc" name="edc">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 6: Team & Notes -->
+                <div class="tab-pane fade" id="section6" role="tabpanel">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-pencil-square"></i> Team Leader Notes
+                        </div>
+
+                        <div class="mb-section">
+                            <textarea class="form-control" id="teamLeaderNotes" name="team_leader_notes" rows="3" placeholder="Enter team leader notes and observations..."></textarea>
+                        </div>
+
+                        <div class="section-title">
+                            <i class="bi bi-people-fill"></i> Team Information
+                        </div>
+
+                        <div class="grid-3 mb-section">
+                            <div>
+                                <label for="teamLeader" class="form-label">Team Leader</label>
+                                <input type="text" class="form-control" id="teamLeader" name="team_leader" placeholder="Name">
+                            </div>
+                            <div>
+                                <label for="dataRecorder" class="form-label">Data Recorder</label>
+                                <input type="text" class="form-control" id="dataRecorder" name="data_recorder" placeholder="Name">
+                            </div>
+                            <div>
+                                <label for="logistic" class="form-label">Logistic</label>
+                                <input type="text" class="form-control" id="logistic" name="logistic" placeholder="Name">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="aider1" class="form-label">1st Aider</label>
+                                <input type="text" class="form-control" id="aider1" name="aider1" placeholder="Name">
+                            </div>
+                            <div>
+                                <label for="aider2" class="form-label">2nd Aider</label>
+                                <input type="text" class="form-control" id="aider2" name="aider2" placeholder="Name">
+                            </div>
+                        </div>
+
+                        <div class="section-title">
+                            <i class="bi bi-building"></i> Hospital Endorsement
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="endorsement" class="form-label">Endorsement</label>
+                                <input type="text" class="form-control" id="endorsement" name="endorsement" placeholder="Facility">
+                            </div>
+                            <div>
+                                <label for="hospital" class="form-label">Hospital Name</label>
+                                <input type="text" class="form-control" id="hospital" name="hospital_name" placeholder="Hospital name">
+                            </div>
+                        </div>
+
+                        <div class="grid-2">
+                            <div>
+                                <label class="form-label">Received by (Signature)</label>
+                                <div class="signature-box">
+                                    <i class="bi bi-pen"></i>
+                                    <p>Signature over printed name</p>
+                                </div>
+                                <input type="hidden" name="received_by_signature" id="receivedBySignature">
+                            </div>
+                            <div>
+                                <label for="dateTime" class="form-label">Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="dateTime" name="endorsement_datetime">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 7: Waiver & Complete -->
+                <div class="tab-pane fade" id="section7" role="tabpanel">
+                    <div class="form-section">
+                        <div class="waiver-section">
+                            <h6><i class="bi bi-file-earmark-text"></i> WAIVER - REFUSAL OF TREATMENT/TRANSPORTATION</h6>
+                            <p>I, the undersigned have been advised that assistance on my behalf is necessary and refusal of assistance and/or transportation for further treatment may result in death or impair my health condition. Nevertheless, I refuse to accept treatment and/or transport and assume all risks and consequences of my decision and release the Rescue 118 responders from any liability arising from any delay or refusal.</p>
+                            
+                            <div class="grid-2">
+                                <div>
+                                    <label class="form-label">Patient Name & Signature</label>
+                                    <div class="signature-box">
+                                        <i class="bi bi-pen"></i>
+                                        <p>Patient signature</p>
+                                    </div>
+                                    <input type="hidden" name="patient_signature" id="patientSignature">
+                                </div>
+                                <div>
+                                    <label class="form-label">Witness Name & Signature</label>
+                                    <div class="signature-box">
+                                        <i class="bi bi-pen"></i>
+                                        <p>Witness signature</p>
+                                    </div>
+                                    <input type="hidden" name="witness_signature" id="witnessSignature">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-success" style="margin-top: 1.5rem;">
+                            <h5 class="alert-heading"><i class="bi bi-check-circle"></i> Ready to Submit</h5>
+                            <p class="mb-3">Review all information before submitting. Navigate back using tabs to check previous sections.</p>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button type="button" class="btn btn-outline-primary" onclick="printForm()">
+                                    <i class="bi bi-printer"></i> Print Form
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" onclick="clearForm()">
+                                    <i class="bi bi-arrow-clockwise"></i> Clear All
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="navigation-buttons">
+            <button type="button" class="btn btn-outline-primary" id="prevBtn" onclick="navigateTab(-1)">
+                <i class="bi bi-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn btn-primary" id="nextBtn" onclick="navigateTab(1)">
+                Next <i class="bi bi-arrow-right"></i>
+            </button>
+            <button type="button" class="btn btn-success" id="submitBtn" style="display: none;" onclick="submitForm()">
+                <i class="bi bi-check-circle"></i> Save Form
+            </button>
+        </div>
+    </div>
+
+    <!-- Ambulance Selection Modal -->
+    <div class="modal fade" id="ambulanceModal" tabindex="-1" aria-labelledby="ambulanceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ambulanceModalLabel">Select Ambulance</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Please select an ambulance from the list below:</p>
+                    <div id="ambulanceList">
+                        <!-- Ambulance options will be generated here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmAmbulance">Confirm Selection</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fire Truck Selection Modal -->
+    <div class="modal fade" id="fireTruckModal" tabindex="-1" aria-labelledby="fireTruckModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fireTruckModalLabel">Select Fire Truck Type</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Please select a fire truck type:</p>
+                    <div class="vehicle-option" data-type="penetrator">
+                        <div class="vehicle-name">Penetrator</div>
+                        <div class="vehicle-details">Specialized for rescue operations and penetration</div>
+                    </div>
+                    <div class="vehicle-option" data-type="tanker">
+                        <div class="vehicle-name">Tanker</div>
+                        <div class="vehicle-details">Equipped with large water tank for fire suppression</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmFireTruck">Confirm Selection</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/tonyang-form.js"></script>
+</body>
+</html>

@@ -1,0 +1,2166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Hospital Care Form (1x.2025)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #004d99;
+            --accent-color: #ff6600;
+            --border-color: #dee2e6;
+            --bg-light: #f8f9fa;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .form-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .form-header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .form-header .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.95;
+            margin: 0.25rem 0 0 0;
+        }
+
+        .progress-container {
+            background: white;
+            padding: 0.5rem 1.5rem 0.25rem;
+            border-bottom: 2px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .progress {
+            height: 5px;
+            border-radius: 3px;
+        }
+
+        .tabs-container {
+            background: #fff;
+            border-bottom: 2px solid var(--border-color);
+            flex-shrink: 0;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .nav-tabs {
+            border-bottom: none;
+            padding: 0 1.5rem;
+            flex-wrap: nowrap;
+            margin-bottom: 0;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: #666;
+            padding: 0.85rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            background: none;
+        }
+
+        .nav-tabs .nav-link.completed {
+            color: #28a745;
+        }
+
+        .form-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem 2rem;
+            background: #fafbfc;
+        }
+
+        .form-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-title {
+            background-color: var(--bg-light);
+            border-left: 4px solid var(--primary-color);
+            padding: 0.65rem 1rem;
+            margin: 0 0 1.25rem 0;
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--secondary-color);
+            flex-shrink: 0;
+        }
+
+        /* LARGER FORM INPUTS AND LABELS */
+        .form-label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.4rem;
+            font-size: 1rem;
+        }
+
+        .form-control, .form-select {
+            border: 1.5px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            height: auto;
+            min-height: 45px;
+        }
+
+        .form-select[multiple] {
+            min-height: 120px;
+            padding: 0.5rem;
+        }
+
+        .form-select[multiple] option {
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 2px;
+            cursor: pointer;
+        }
+
+        .form-select[multiple] option:checked {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .form-select[multiple] option:hover {
+            background: #e3f2fd;
+        }
+
+        .form-select[multiple] option:checked:hover {
+            background: var(--secondary-color);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.15);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+        }
+
+        /* LARGER CHECKBOXES AND RADIOS */
+        .form-check-input {
+            width: 1.3rem;
+            height: 1.3rem;
+            margin-top: 0.2rem;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .form-check-label {
+            font-size: 1rem;
+            margin-left: 0.5rem;
+        }
+
+        /* OPTIMIZED GRID LAYOUTS */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.85rem 1.25rem;
+        }
+
+        /* SPECIAL SECTIONS */
+        .fast-assessment, .ob-section, .waiver-section {
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0 0 0;
+            font-size: 0.95rem;
+        }
+
+        .fast-assessment {
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+        }
+
+        .fast-assessment h6 {
+            color: #856404;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .ob-section {
+            background-color: #d1ecf1;
+            border: 2px solid #17a2b8;
+        }
+
+        .ob-section h6 {
+            color: #0c5460;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .waiver-section {
+            background-color: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+
+        .waiver-section h6 {
+            color: #721c24;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .waiver-section p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .signature-box {
+            border: 2px dashed var(--border-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            text-align: center;
+            background-color: #fafafa;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signature-box i {
+            font-size: 2rem;
+            color: #ccc;
+        }
+
+        .signature-box p {
+            font-size: 0.9rem;
+            margin: 0.75rem 0 0 0;
+            color: #666;
+        }
+
+        /* BODY DIAGRAM SECTION */
+        .body-diagram-container {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .body-diagram-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .body-diagram-header h6 {
+            margin: 0;
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .body-diagram-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 1.5rem;
+        }
+
+        .body-views {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .body-view {
+            text-align: center;
+        }
+
+        .view-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .body-image-container {
+            position: relative;
+            display: inline-block;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            cursor: crosshair;
+        }
+
+        .body-image {
+            display: block;
+            width: 220px;
+            height: auto;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* Injury markers */
+        .injury-marker {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 3px solid white;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            transition: transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            animation: markerPop 0.3s ease;
+        }
+
+        @keyframes markerPop {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .injury-marker:hover {
+            transform: translate(-50%, -50%) scale(1.25);
+        }
+
+        .injury-marker.laceration { background: #dc3545; }
+        .injury-marker.fracture { background: #fd7e14; }
+        .injury-marker.burn { background: #ffc107; color: #333; }
+        .injury-marker.contusion { background: #6f42c1; }
+        .injury-marker.abrasion { background: #20c997; }
+        .injury-marker.other { background: #6c757d; }
+
+        .injury-sidebar {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .injury-type-selector {
+            margin-bottom: 1rem;
+        }
+
+        .injury-type-selector label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .injury-type-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .injury-type-btn {
+            padding: 0.6rem;
+            border: 2px solid #dee2e6;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .injury-type-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        .injury-type-btn.active {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .color-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .injury-list-header {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin: 1rem 0 0.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .injury-item {
+            background: white;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--primary-color);
+            position: relative;
+            font-size: 0.85rem;
+        }
+
+        .injury-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .injury-number {
+            font-weight: 700;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        .injury-type-badge {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .injury-type-badge.laceration { background: #dc3545; }
+        .injury-type-badge.fracture { background: #fd7e14; }
+        .injury-type-badge.burn { background: #ffc107; color: #333; }
+        .injury-type-badge.contusion { background: #6f42c1; }
+        .injury-type-badge.abrasion { background: #20c997; }
+        .injury-type-badge.other { background: #6c757d; }
+
+        .injury-notes {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 16px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #6c757d;
+        }
+
+        .empty-state-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .diagram-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .diagram-actions .btn {
+            flex: 1;
+            font-size: 0.85rem;
+            padding: 0.5rem;
+        }
+
+        .navigation-buttons {
+            background: white;
+            padding: 1rem 2rem;
+            border-top: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 0.75rem 1.75rem;
+            font-weight: 500;
+            border-radius: 6px;
+            font-size: 1rem;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .required-field::after {
+            content: "*";
+            color: #dc3545;
+            margin-left: 4px;
+        }
+
+        .mb-section {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-body::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .form-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .form-body::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 5px;
+        }
+
+        .form-body::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .injury-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .injury-sidebar::-webkit-scrollbar-track {
+            background: #e9ecef;
+        }
+
+        .injury-sidebar::-webkit-scrollbar-thumb {
+            background: #adb5bd;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 1200px) {
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .body-diagram-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .body-views {
+                gap: 1.5rem;
+            }
+            
+            .body-image {
+                width: 180px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-body {
+                padding: 1rem;
+            }
+
+            .navigation-buttons {
+                padding: 0.75rem 1rem;
+            }
+
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs .nav-link {
+                font-size: 0.85rem;
+                padding: 0.7rem 1rem;
+            }
+            
+            .body-views {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        @media print {
+            body {
+                overflow: visible;
+                height: auto;
+            }
+            .form-container {
+                height: auto;
+            }
+            .tabs-container, .navigation-buttons, .progress-container {
+                display: none;
+            }
+            .form-body {
+                overflow: visible;
+                padding: 1rem;
+            }
+            .tab-pane {
+                display: block !important;
+            }
+        }
+
+        .inline-group {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .form-group-compact {
+            margin-bottom: 1.25rem;
+        }
+
+
+        /* Vehicle selection modal styles */
+            .vehicle-option {
+                padding: 1rem;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                margin-bottom: 0.5rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .vehicle-option:hover {
+                background-color: #f8f9fa;
+                border-color: var(--primary-color);
+            }
+
+            .vehicle-option.selected {
+                background-color: #e3f2fd;
+                border-color: var(--primary-color);
+            }
+
+            .vehicle-name {
+                font-weight: 600;
+                font-size: 1.1rem;
+                color: var(--secondary-color);
+            }
+
+            .vehicle-details {
+                font-size: 0.9rem;
+                color: #6c757d;
+            }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h1><i class="bi bi-file-medical"></i> PRE-HOSPITAL CARE FORM</h1>
+            <p class="subtitle">Form 1x.2025 - Emergency Medical Services</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" id="progressBar" style="width: 14%"></div>
+            </div>
+        </div>
+
+        <div class="tabs-container">
+            <ul class="nav nav-tabs" id="formTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="tab1" data-bs-toggle="tab" data-bs-target="#section1" type="button" role="tab">
+                        <i class="bi bi-1-circle"></i> Basic Info
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab2" data-bs-toggle="tab" data-bs-target="#section2" type="button" role="tab">
+                        <i class="bi bi-2-circle"></i> Patient
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab3" data-bs-toggle="tab" data-bs-target="#section3" type="button" role="tab">
+                        <i class="bi bi-3-circle"></i> Emergency
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab4" data-bs-toggle="tab" data-bs-target="#section4" type="button" role="tab">
+                        <i class="bi bi-4-circle"></i> Vitals
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab5" data-bs-toggle="tab" data-bs-target="#section5" type="button" role="tab">
+                        <i class="bi bi-5-circle"></i> Assessment
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab6" data-bs-toggle="tab" data-bs-target="#section6" type="button" role="tab">
+                        <i class="bi bi-6-circle"></i> Team
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab7" data-bs-toggle="tab" data-bs-target="#section7" type="button" role="tab">
+                        <i class="bi bi-7-circle"></i> Complete
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <form id="preHospitalForm" class="form-body">
+            <div class="tab-content" id="formTabContent">
+                <!-- Section 1: Basic Information -->
+                <div class="tab-pane fade show active" id="section1" role="tabpanel">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-info-circle"></i> Basic Information
+                        </div>
+
+                        <div class="grid-3 mb-section">
+                            <div>
+                                <label for="formDate" class="form-label required-field">Date</label>
+                                <input type="date" class="form-control" id="formDate" required>
+                            </div>
+                            <div>
+                                <label for="depTime" class="form-label required-field">Departure Time</label>
+                                <input type="time" class="form-control" id="depTime" required>
+                            </div>
+                            <div>
+                                <label for="arrTime" class="form-label">Arrival Time</label>
+                                <input type="time" class="form-control" id="arrTime">
+                            </div>
+                        </div>
+
+                            <div class="form-group-compact">
+                                <label class="form-label">Vehicle Used</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="vehicleUsed" id="ambulance" value="ambulance">
+                                        <label class="form-check-label" for="ambulance">Ambulance</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="vehicleUsed" id="fireTruck" value="fireTruck">
+                                        <label class="form-check-label" for="fireTruck">Fire Truck</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="vehicleUsed" id="othersVehicle" value="others">
+                                        <label class="form-check-label" for="othersVehicle">Others</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid-2 mb-section">
+                            <div>
+                                <label for="arrSceneLocation" class="form-label">Arrival at Scene - Location</label>
+                                <input type="text" class="form-control" id="arrSceneLocation" placeholder="Scene location">
+                            </div>
+                            <div>
+                                <label for="arrSceneTime" class="form-label">Arrival at Scene - Time</label>
+                                <input type="time" class="form-control" id="arrSceneTime">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="depSceneLocation" class="form-label">Departure from Scene - Location</label>
+                                <input type="text" class="form-control" id="depSceneLocation" placeholder="Departure location">
+                            </div>
+                            <div>
+                                <label for="depSceneTime" class="form-label">Departure from Scene - Time</label>
+                                <input type="time" class="form-control" id="depSceneTime">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="arrHospName" class="form-label">Arrival at Hospital - Name</label>
+                                <input type="text" class="form-control" id="arrHospName" placeholder="Hospital name">
+                            </div>
+                            <div>
+                                <label for="arrHospTime" class="form-label">Arrival at Hospital - Time</label>
+                                <input type="time" class="form-control" id="arrHospTime">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="depHospLocation" class="form-label">Departure from Hospital - Location</label>
+                                <input type="text" class="form-control" id="depHospLocation" placeholder="Departure location">
+                            </div>
+                            <div>
+                                <label for="depHospTime" class="form-label">Departure from Hospital - Time</label>
+                                <input type="time" class="form-control" id="depHospTime">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="arrStation" class="form-label">Arrival at Station</label>
+                                <input type="time" class="form-control" id="arrStation">
+                            </div>
+                            <div>
+                                <label for="driver" class="form-label">Driver</label>
+                                <input type="text" class="form-control" id="driver" placeholder="Driver name">
+                            </div>
+                        </div>
+
+                        <div class="form-group-compact">
+                            <label class="form-label">Persons Present Upon Arrival</label>
+                            <div class="checkbox-grid">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="police" value="police">
+                                    <label class="form-check-label" for="police">Police</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="brgyOfficials" value="brgyOfficials">
+                                    <label class="form-check-label" for="brgyOfficials">Barangay Officials</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="relatives" value="relatives">
+                                    <label class="form-check-label" for="relatives">Relatives</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="bystanders" value="bystanders">
+                                    <label class="form-check-label" for="bystanders">Bystanders</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="nonePresent" value="none">
+                                    <label class="form-check-label" for="nonePresent">None</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Patient Information -->
+                <div class="tab-pane fade" id="section2" role="tabpanel">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-person-fill"></i> Patient Information
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div style="grid-column: span 2;">
+                                <label for="patientName" class="form-label required-field">Patient Name</label>
+                                <input type="text" class="form-control" id="patientName" placeholder="Last Name, First Name, Middle Initial" required>
+                            </div>
+                            <div>
+                                <label for="dateOfBirth" class="form-label required-field">Date of Birth</label>
+                                <input type="date" class="form-control" id="dateOfBirth" required>
+                            </div>
+                            <div>
+                                <label for="age" class="form-label required-field">Age</label>
+                                <input type="number" class="form-control" id="age" min="0" max="150" required>
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label class="form-label required-field">Gender</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="gender" id="male" value="male" required>
+                                        <label class="form-check-label" for="male">Male</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="gender" id="female" value="female" required>
+                                        <label class="form-check-label" for="female">Female</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Civil Status</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="civilStatus" id="single" value="single">
+                                        <label class="form-check-label" for="single">Single</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="civilStatus" id="married" value="married">
+                                        <label class="form-check-label" for="married">Married</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" placeholder="Complete address">
+                            </div>
+                            <div>
+                                <label for="zone" class="form-label">Zone</label>
+                                <input type="text" class="form-control" id="zone">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="occupation" class="form-label">Occupation</label>
+                                <input type="text" class="form-control" id="occupation">
+                            </div>
+                            <div>
+                                <label for="placeOfIncident" class="form-label">Place of Incident</label>
+                                <input type="text" class="form-control" id="placeOfIncident">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="zoneLandmark" class="form-label">Zone/Landmark</label>
+                                <input type="text" class="form-control" id="zoneLandmark">
+                            </div>
+                            <div>
+                                <label for="incidentTime" class="form-label">Time of Incident</label>
+                                <input type="time" class="form-control" id="incidentTime">
+                            </div>
+                        </div>
+
+                        <div class="section-title" style="margin-top: 1.5rem;">
+                            <i class="bi bi-telephone"></i> Informant Details
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="informant" class="form-label">Informant Name</label>
+                                <input type="text" class="form-control" id="informant" placeholder="Name of informant">
+                            </div>
+                            <div>
+                                <label for="informantAddress" class="form-label">Informant Address</label>
+                                <input type="text" class="form-control" id="informantAddress">
+                            </div>
+                        </div>
+
+                        <div class="grid-3 mb-section">
+                            <div>
+                                <label class="form-label">Walk In / Call</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="arrivalType" id="walkIn" value="walkIn">
+                                        <label class="form-check-label" for="walkIn">Walk In</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="arrivalType" id="call" value="call">
+                                        <label class="form-check-label" for="call">Call</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="callArrTime" class="form-label">Call/Arrival Time</label>
+                                <input type="time" class="form-control" id="callArrTime">
+                            </div>
+                            <div>
+                                <label for="cpNumber" class="form-label">Contact Number</label>
+                                <input type="tel" class="form-control" id="cpNumber" placeholder="Contact number">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="relationshipVictim" class="form-label">Relationship to Victim</label>
+                                <input type="text" class="form-control" id="relationshipVictim">
+                            </div>
+                            <div>
+                                <label for="personalBelongings" class="form-label">Personal Belongings</label>
+                                <select class="form-select" id="personalBelongings" multiple size="4">
+                                    <option value="wallet">Wallet</option>
+                                    <option value="cellphone">Cellphone</option>
+                                    <option value="jewelry">Jewelry</option>
+                                    <option value="watch">Watch</option>
+                                    <option value="keys">Keys</option>
+                                    <option value="bag">Bag</option>
+                                    <option value="documents">Documents/IDs</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="none">None</option>
+                                </select>
+                                <small class="text-muted">Hold Ctrl/Cmd to select multiple items</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-section">
+                            <label for="otherBelongings" class="form-label">Other Belongings (specify)</label>
+                            <input type="text" class="form-control" id="otherBelongings" placeholder="List other belongings not mentioned above">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Emergency Call & Care -->
+                <div class="tab-pane fade" id="section3" role="tabpanel">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-telephone-fill"></i> Type of Emergency Call
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="medical" value="medical">
+                                    <label class="form-check-label" for="medical"><strong>Medical</strong></label>
+                                </div>
+                                <input type="text" class="form-control" id="medicalSpecify" placeholder="Specify medical condition">
+                            </div>
+                            <div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="trauma" value="trauma">
+                                    <label class="form-check-label" for="trauma"><strong>Trauma</strong></label>
+                                </div>
+                                <input type="text" class="form-control" id="traumaSpecify" placeholder="Specify trauma type">
+                            </div>
+                            <div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="ob" value="ob">
+                                    <label class="form-check-label" for="ob"><strong>OB</strong></label>
+                                </div>
+                                <input type="text" class="form-control" id="obSpecify" placeholder="Specify OB condition">
+                            </div>
+                            <div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="general" value="general">
+                                    <label class="form-check-label" for="general"><strong>General</strong></label>
+                                </div>
+                                <input type="text" class="form-control" id="generalSpecify" placeholder="Specify general condition">
+                            </div>
+                        </div>
+
+                        <div class="section-title">
+                            <i class="bi bi-heart-pulse-fill"></i> Care Management
+                        </div>
+
+                        <div class="form-group-compact">
+                            <div class="checkbox-grid">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="immobilization" value="immobilization">
+                                    <label class="form-check-label" for="immobilization">Immobilization</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="cpr" value="cpr">
+                                    <label class="form-check-label" for="cpr">CPR</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="bandaging" value="bandaging">
+                                    <label class="form-check-label" for="bandaging">Bandaging</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="woundCare" value="woundCare">
+                                    <label class="form-check-label" for="woundCare">Wound Care</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="cCollar" value="cCollar">
+                                    <label class="form-check-label" for="cCollar">C-Collar</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="aed" value="aed">
+                                    <label class="form-check-label" for="aed">AED</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="ked" value="ked">
+                                    <label class="form-check-label" for="ked">KED</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="o2LPM" class="form-label">O² (LPM via)</label>
+                                <input type="text" class="form-control" id="o2LPM" placeholder="Oxygen delivery method and rate">
+                            </div>
+                            <div>
+                                <label for="othersCare" class="form-label">Others</label>
+                                <input type="text" class="form-control" id="othersCare" placeholder="Other care management">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Vitals -->
+                <div class="tab-pane fade" id="section4" role="tabpanel">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-activity"></i> Initial Vital Signs
+                        </div>
+
+                        <div class="grid-4 mb-section">
+                            <div>
+                                <label for="initialTime" class="form-label">Time</label>
+                                <input type="time" class="form-control" id="initialTime">
+                            </div>
+                            <div>
+                                <label for="initialBP" class="form-label">Blood Pressure</label>
+                                <input type="text" class="form-control" id="initialBP" placeholder="120/80">
+                            </div>
+                            <div>
+                                <label for="initialTemp" class="form-label">Temp (°C)</label>
+                                <input type="number" class="form-control" id="initialTemp" step="0.1" placeholder="36.5">
+                            </div>
+                            <div>
+                                <label for="initialPulse" class="form-label">Pulse (BPM)</label>
+                                <input type="number" class="form-control" id="initialPulse" placeholder="72">
+                            </div>
+                        </div>
+
+                        <div class="grid-4 mb-section">
+                            <div>
+                                <label for="initialResp" class="form-label">Resp. Rate</label>
+                                <input type="number" class="form-control" id="initialResp" placeholder="16">
+                            </div>
+                            <div>
+                                <label for="initialPainScore" class="form-label">Pain Score (0-10)</label>
+                                <input type="number" class="form-control" id="initialPainScore" min="0" max="10">
+                            </div>
+                            <div>
+                                <label for="initialSPO2" class="form-label">SPO2 %</label>
+                                <input type="number" class="form-control" id="initialSPO2" min="0" max="100">
+                            </div>
+                            <div>
+                                <label class="form-label">Spinal Injury</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initialSpinalInjury" id="initialSpinalYes" value="yes">
+                                        <label class="form-check-label" for="initialSpinalYes">Yes</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initialSpinalInjury" id="initialSpinalNo" value="no">
+                                        <label class="form-check-label" for="initialSpinalNo">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label class="form-label">Level of Consciousness</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initialConsciousness" id="initialAlert" value="alert">
+                                        <label class="form-check-label" for="initialAlert">Alert</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initialConsciousness" id="initialVerbal" value="verbal">
+                                        <label class="form-check-label" for="initialVerbal">Verbal</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initialConsciousness" id="initialPain" value="pain">
+                                        <label class="form-check-label" for="initialPain">Pain</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initialConsciousness" id="initialUnconscious" value="unconscious">
+                                        <label class="form-check-label" for="initialUnconscious">Unconscious</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Helmet Status</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initialHelmet" id="initialHelmetAB" value="ab">
+                                        <label class="form-check-label" for="initialHelmetAB">+ AB</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="initialHelmet" id="initialNoHelmet" value="none">
+                                        <label class="form-check-label" for="initialNoHelmet">No Helmet</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-title">
+                            <i class="bi bi-arrow-repeat"></i> Follow-up Vital Signs
+                        </div>
+
+                        <div class="grid-4 mb-section">
+                            <div>
+                                <label for="followupTime" class="form-label">Time</label>
+                                <input type="time" class="form-control" id="followupTime">
+                            </div>
+                            <div>
+                                <label for="followupBP" class="form-label">Blood Pressure</label>
+                                <input type="text" class="form-control" id="followupBP" placeholder="120/80">
+                            </div>
+                            <div>
+                                <label for="followupTemp" class="form-label">Temp (°C)</label>
+                                <input type="number" class="form-control" id="followupTemp" step="0.1" placeholder="36.5">
+                            </div>
+                            <div>
+                                <label for="followupPulse" class="form-label">Pulse (BPM)</label>
+                                <input type="number" class="form-control" id="followupPulse" placeholder="72">
+                            </div>
+                        </div>
+
+                        <div class="grid-4 mb-section">
+                            <div>
+                                <label for="followupResp" class="form-label">Resp. Rate</label>
+                                <input type="number" class="form-control" id="followupResp" placeholder="16">
+                            </div>
+                            <div>
+                                <label for="followupPainScore" class="form-label">Pain Score (0-10)</label>
+                                <input type="number" class="form-control" id="followupPainScore" min="0" max="10">
+                            </div>
+                            <div>
+                                <label for="followupSPO2" class="form-label">SPO2 %</label>
+                                <input type="number" class="form-control" id="followupSPO2" min="0" max="100">
+                            </div>
+                            <div>
+                                <label class="form-label">Spinal Injury</label>
+                                <div class="inline-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="followupSpinalInjury" id="followupSpinalYes" value="yes">
+                                        <label class="form-check-label" for="followupSpinalYes">Yes</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="followupSpinalInjury" id="followupSpinalNo" value="no">
+                                        <label class="form-check-label" for="followupSpinalNo">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="form-label">Level of Consciousness</label>
+                            <div class="inline-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="followupConsciousness" id="followupAlert" value="alert">
+                                    <label class="form-check-label" for="followupAlert">Alert</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="followupConsciousness" id="followupVerbal" value="verbal">
+                                    <label class="form-check-label" for="followupVerbal">Verbal</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="followupConsciousness" id="followupPain" value="pain">
+                                    <label class="form-check-label" for="followupPain">Pain</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="followupConsciousness" id="followupUnconscious" value="unconscious">
+                                    <label class="form-check-label" for="followupUnconscious">Unconscious</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 5: Assessment + Body Diagram -->
+                <div class="tab-pane fade" id="section5" role="tabpanel">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-clipboard2-pulse"></i> Chief Complaints
+                        </div>
+
+                        <div class="form-group-compact">
+                            <div class="checkbox-grid">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="chestPain" value="chestPain">
+                                    <label class="form-check-label" for="chestPain">Chest Pain</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="headache" value="headache">
+                                    <label class="form-check-label" for="headache">Headache</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="blurredVision" value="blurredVision">
+                                    <label class="form-check-label" for="blurredVision">Blurred Vision</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="difficultyBreathing" value="difficultyBreathing">
+                                    <label class="form-check-label" for="difficultyBreathing">Difficulty Breathing</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="dizziness" value="dizziness">
+                                    <label class="form-check-label" for="dizziness">Dizziness</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="bodyMalaise" value="bodyMalaise">
+                                    <label class="form-check-label" for="bodyMalaise">Body Malaise</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-section">
+                            <label for="othersComplaint" class="form-label">Other Complaints</label>
+                            <textarea class="form-control" id="othersComplaint" rows="2" placeholder="Describe other complaints"></textarea>
+                        </div>
+
+                        <!-- INTERACTIVE BODY DIAGRAM -->
+                        <div class="body-diagram-container">
+                            <div class="body-diagram-header">
+                                <h6><i class="bi bi-person-bounding-box"></i> Interactive Injury Mapping</h6>
+                                <small class="text-muted">Click on body diagram to mark injuries</small>
+                            </div>
+                            
+                            <div class="body-diagram-content">
+                                <div class="body-views">
+                                    <div class="body-view">
+                                        <div class="view-label">FRONT VIEW</div>
+                                        <div class="body-image-container" id="frontContainer">
+                                            <img src="body-front.png" alt="Body Front" class="body-image">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="body-view">
+                                        <div class="view-label">BACK VIEW</div>
+                                        <div class="body-image-container" id="backContainer">
+                                            <img src="/mnt/user-data/uploads/body-back.png" alt="Body Back" class="body-image">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="injury-sidebar">
+                                    <div class="injury-type-selector">
+                                        <label>Select Injury Type:</label>
+                                        <div class="injury-type-grid">
+                                            <button type="button" class="injury-type-btn active" data-type="laceration">
+                                                <span class="color-indicator" style="background: #dc3545;"></span>
+                                                Laceration
+                                            </button>
+                                            <button type="button" class="injury-type-btn" data-type="fracture">
+                                                <span class="color-indicator" style="background: #fd7e14;"></span>
+                                                Fracture
+                                            </button>
+                                            <button type="button" class="injury-type-btn" data-type="burn">
+                                                <span class="color-indicator" style="background: #ffc107;"></span>
+                                                Burn
+                                            </button>
+                                            <button type="button" class="injury-type-btn" data-type="contusion">
+                                                <span class="color-indicator" style="background: #6f42c1;"></span>
+                                                Contusion
+                                            </button>
+                                            <button type="button" class="injury-type-btn" data-type="abrasion">
+                                                <span class="color-indicator" style="background: #20c997;"></span>
+                                                Abrasion
+                                            </button>
+                                            <button type="button" class="injury-type-btn" data-type="other">
+                                                <span class="color-indicator" style="background: #6c757d;"></span>
+                                                Other
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="injury-list-header">
+                                        Injuries Marked (<span id="injuryCount">0</span>)
+                                    </div>
+                                    <div id="injuryListContainer">
+                                        <div class="empty-state">
+                                            <div class="empty-state-icon">📍</div>
+                                            <p>No injuries marked yet.<br>Click on body to add.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="diagram-actions">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearAllInjuries()">Clear All</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="exportInjuryData()">Export</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fast-assessment">
+                            <h6><i class="bi bi-exclamation-triangle-fill"></i> FOR Stroke Victim - F.A.S.T. Assessment</h6>
+                            <div class="grid-2" style="gap: 1rem;">
+                                <div class="grid-2" style="gap: 0.75rem;">
+                                    <div>
+                                        <label class="form-label">Face Drooping</label>
+                                        <div class="inline-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="faceDrooping" id="facePos" value="positive">
+                                                <label class="form-check-label" for="facePos">(+)</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="faceDrooping" id="faceNeg" value="negative">
+                                                <label class="form-check-label" for="faceNeg">(++)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Arm Weakness</label>
+                                        <div class="inline-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="armWeakness" id="armPos" value="positive">
+                                                <label class="form-check-label" for="armPos">(+)</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="armWeakness" id="armNeg" value="negative">
+                                                <label class="form-check-label" for="armNeg">(++)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Speech Difficulty</label>
+                                        <div class="inline-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="speechDifficulty" id="speechPos" value="positive">
+                                                <label class="form-check-label" for="speechPos">(+)</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="speechDifficulty" id="speechNeg" value="negative">
+                                                <label class="form-check-label" for="speechNeg">(++)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Time to Call</label>
+                                        <div class="inline-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="timeToCall" id="timePos" value="positive">
+                                                <label class="form-check-label" for="timePos">(+)</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="timeToCall" id="timeNeg" value="negative">
+                                                <label class="form-check-label" for="timeNeg">(++)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="fastDetails" class="form-label">S.A.M.P.L.E.</label>
+                                    <textarea class="form-control" id="fastDetails" rows="5" placeholder="Signs/Symptoms, Allergies, Medications, Pertinent history, Last oral intake, Events"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ob-section">
+                            <h6><i class="bi bi-hospital-fill"></i> FOR OB Patients Only</h6>
+                            <div class="grid-3" style="gap: 1rem;">
+                                <div>
+                                    <label for="babyDelivery" class="form-label">Baby Status</label>
+                                    <input type="text" class="form-control" id="babyDelivery">
+                                </div>
+                                <div>
+                                    <label for="timeOfDelivery" class="form-label">Delivery Time</label>
+                                    <input type="time" class="form-control" id="timeOfDelivery">
+                                </div>
+                                <div>
+                                    <label class="form-label">Placenta</label>
+                                    <div class="inline-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="placenta" id="placentaIn" value="in">
+                                            <label class="form-check-label" for="placentaIn">In</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="placenta" id="placentaOut" value="out">
+                                            <label class="form-check-label" for="placentaOut">Out</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="lmp" class="form-label">LMP</label>
+                                    <input type="date" class="form-control" id="lmp">
+                                </div>
+                                <div>
+                                    <label for="aog" class="form-label">AOG</label>
+                                    <input type="text" class="form-control" id="aog" placeholder="Weeks">
+                                </div>
+                                <div>
+                                    <label for="edc" class="form-label">EDC</label>
+                                    <input type="date" class="form-control" id="edc">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 6: Team & Notes -->
+                <div class="tab-pane fade" id="section6" role="tabpanel">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-pencil-square"></i> Team Leader Notes
+                        </div>
+
+                        <div class="mb-section">
+                            <textarea class="form-control" id="teamLeaderNotes" rows="3" placeholder="Enter team leader notes and observations..."></textarea>
+                        </div>
+
+                        <div class="section-title">
+                            <i class="bi bi-people-fill"></i> Team Information
+                        </div>
+
+                        <div class="grid-3 mb-section">
+                            <div>
+                                <label for="teamLeader" class="form-label">Team Leader</label>
+                                <input type="text" class="form-control" id="teamLeader" placeholder="Name">
+                            </div>
+                            <div>
+                                <label for="dataRecorder" class="form-label">Data Recorder</label>
+                                <input type="text" class="form-control" id="dataRecorder" placeholder="Name">
+                            </div>
+                            <div>
+                                <label for="logistic" class="form-label">Logistic</label>
+                                <input type="text" class="form-control" id="logistic" placeholder="Name">
+                            </div>
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="aider1" class="form-label">1st Aider</label>
+                                <input type="text" class="form-control" id="aider1" placeholder="Name">
+                            </div>
+                            <div>
+                                <label for="aider2" class="form-label">2nd Aider</label>
+                                <input type="text" class="form-control" id="aider2" placeholder="Name">
+                            </div>
+                        </div>
+
+                        <div class="section-title">
+                            <i class="bi bi-building"></i> Hospital Endorsement
+                        </div>
+
+                        <div class="grid-2 mb-section">
+                            <div>
+                                <label for="endorsement" class="form-label">Endorsement</label>
+                                <input type="text" class="form-control" id="endorsement" placeholder="Facility">
+                            </div>
+                            <div>
+                                <label for="hospital" class="form-label">Hospital Name</label>
+                                <input type="text" class="form-control" id="hospital" placeholder="Hospital name">
+                            </div>
+                        </div>
+
+                        <div class="grid-2">
+                            <div>
+                                <label class="form-label">Received by (Signature)</label>
+                                <div class="signature-box">
+                                    <i class="bi bi-pen"></i>
+                                    <p>Signature over printed name</p>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="dateTime" class="form-label">Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="dateTime">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 7: Waiver & Complete -->
+                <div class="tab-pane fade" id="section7" role="tabpanel">
+                    <div class="form-section">
+                        <div class="waiver-section">
+                            <h6><i class="bi bi-file-earmark-text"></i> WAIVER - REFUSAL OF TREATMENT/TRANSPORTATION</h6>
+                            <p>I, the undersigned have been advised that assistance on my behalf is necessary and refusal of assistance and/or transportation for further treatment may result in death or impair my health condition. Nevertheless, I refuse to accept treatment and/or transport and assume all risks and consequences of my decision and release the Rescue 118 responders from any liability arising from any delay or refusal.</p>
+                            
+                            <div class="grid-2">
+                                <div>
+                                    <label class="form-label">Patient Name & Signature</label>
+                                    <div class="signature-box">
+                                        <i class="bi bi-pen"></i>
+                                        <p>Patient signature</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="form-label">Witness Name & Signature</label>
+                                    <div class="signature-box">
+                                        <i class="bi bi-pen"></i>
+                                        <p>Witness signature</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-success" style="margin-top: 1.5rem;">
+                            <h5 class="alert-heading"><i class="bi bi-check-circle"></i> Ready to Submit</h5>
+                            <p class="mb-3">Review all information before submitting. Navigate back using tabs to check previous sections.</p>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button type="button" class="btn btn-outline-primary" onclick="printForm()">
+                                    <i class="bi bi-printer"></i> Print Form
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" onclick="clearForm()">
+                                    <i class="bi bi-arrow-clockwise"></i> Clear All
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="navigation-buttons">
+            <button type="button" class="btn btn-outline-primary" id="prevBtn" onclick="navigateTab(-1)">
+                <i class="bi bi-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn btn-primary" id="nextBtn" onclick="navigateTab(1)">
+                Next <i class="bi bi-arrow-right"></i>
+            </button>
+            <button type="button" class="btn btn-success" id="submitBtn" style="display: none;" onclick="submitForm()">
+                <i class="bi bi-check-circle"></i> Save Form
+            </button>
+        </div>
+    </div>
+    <!-- Ambulance Selection Modal -->
+<div class="modal fade" id="ambulanceModal" tabindex="-1" aria-labelledby="ambulanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ambulanceModalLabel">Select Ambulance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please select an ambulance from the list below:</p>
+                <div id="ambulanceList">
+                    <!-- Ambulance options will be generated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmAmbulance">Confirm Selection</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Fire Truck Selection Modal -->
+<div class="modal fade" id="fireTruckModal" tabindex="-1" aria-labelledby="fireTruckModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fireTruckModalLabel">Select Fire Truck Type</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please select a fire truck type:</p>
+                <div class="vehicle-option" data-type="penetrator">
+                    <div class="vehicle-name">Penetrator</div>
+                    <div class="vehicle-details">Specialized for rescue operations and penetration</div>
+                </div>
+                <div class="vehicle-option" data-type="tanker">
+                    <div class="vehicle-name">Tanker</div>
+                    <div class="vehicle-details">Equipped with large water tank for fire suppression</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmFireTruck">Confirm Selection</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentTab = 0;
+        const totalTabs = 7;
+
+        // Body Diagram Variables
+        let injuries = [];
+        let injuryCounter = 0;
+        let selectedInjuryType = 'laceration';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavigation();
+            updateProgress();
+            setupInjuryTypeButtons();
+            setupBodyDiagrams();
+        });
+
+        function navigateTab(direction) {
+            const tabs = document.querySelectorAll('.nav-link');
+            
+            if (direction === 1) {
+                tabs[currentTab].classList.add('completed');
+            }
+            
+            currentTab += direction;
+            
+            if (currentTab >= totalTabs) currentTab = totalTabs - 1;
+            if (currentTab < 0) currentTab = 0;
+            
+            const targetTab = tabs[currentTab];
+            const tabTrigger = new bootstrap.Tab(targetTab);
+            tabTrigger.show();
+            
+            updateNavigation();
+            updateProgress();
+            
+            document.querySelector('.form-body').scrollTop = 0;
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            prevBtn.style.display = currentTab === 0 ? 'none' : 'block';
+            
+            if (currentTab === totalTabs - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentTab + 1) / totalTabs) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        document.querySelectorAll('.nav-link').forEach((tab, index) => {
+            tab.addEventListener('click', function() {
+                currentTab = index;
+                updateNavigation();
+                updateProgress();
+            });
+        });
+
+        document.getElementById('dateOfBirth').addEventListener('change', function() {
+            const dob = new Date(this.value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const monthDiff = today.getMonth() - dob.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            
+            document.getElementById('age').value = age;
+        });
+
+        function submitForm() {
+            const formData = new FormData(document.getElementById('preHospitalForm'));
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            
+            // Add structured time/location data
+            data.arrivalScene = {
+                location: document.getElementById('arrSceneLocation').value,
+                time: document.getElementById('arrSceneTime').value
+            };
+            data.departureScene = {
+                location: document.getElementById('depSceneLocation').value,
+                time: document.getElementById('depSceneTime').value
+            };
+            data.arrivalHospital = {
+                name: document.getElementById('arrHospName').value,
+                time: document.getElementById('arrHospTime').value
+            };
+            data.departureHospital = {
+                location: document.getElementById('depHospLocation').value,
+                time: document.getElementById('depHospTime').value
+            };
+            
+            // Get selected personal belongings
+            const belongingsSelect = document.getElementById('personalBelongings');
+            const selectedBelongings = Array.from(belongingsSelect.selectedOptions).map(option => option.value);
+            data.personalBelongings = selectedBelongings;
+            data.otherBelongingsSpecify = document.getElementById('otherBelongings').value;
+            
+            // Add injury data
+            data.injuries = injuries;
+            
+            console.log('Form submitted:', data);
+            alert('✓ Form saved successfully!');
+        }
+
+        function printForm() {
+            window.print();
+        }
+
+        function clearForm() {
+            if (confirm('Are you sure you want to clear all form data? This action cannot be undone.')) {
+                document.getElementById('preHospitalForm').reset();
+                clearAllInjuries();
+                currentTab = 0;
+                navigateTab(0);
+                document.querySelectorAll('.nav-link').forEach(tab => {
+                    tab.classList.remove('completed');
+                });
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    navigateTab(-1);
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    navigateTab(1);
+                }
+            }
+        });
+
+        // BODY DIAGRAM FUNCTIONS
+        function setupInjuryTypeButtons() {
+            const buttons = document.querySelectorAll('.injury-type-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedInjuryType = this.dataset.type;
+                });
+            });
+        }
+
+        function setupBodyDiagrams() {
+            const frontContainer = document.getElementById('frontContainer');
+            const backContainer = document.getElementById('backContainer');
+
+            frontContainer.addEventListener('click', function(e) {
+                handleBodyClick(e, 'front', frontContainer);
+            });
+
+            backContainer.addEventListener('click', function(e) {
+                handleBodyClick(e, 'back', backContainer);
+            });
+        }
+
+        function handleBodyClick(e, view, container) {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            if (x < 10 || y < 10 || x > rect.width - 10 || y > rect.height - 10) {
+                return;
+            }
+
+            addInjury(x, y, view, container);
+        }
+
+        function addInjury(x, y, view, container) {
+            injuryCounter++;
+            const injury = {
+                id: injuryCounter,
+                type: selectedInjuryType,
+                x: x,
+                y: y,
+                view: view,
+                notes: ''
+            };
+
+            injuries.push(injury);
+
+            const marker = document.createElement('div');
+            marker.className = `injury-marker ${selectedInjuryType}`;
+            marker.style.left = x + 'px';
+            marker.style.top = y + 'px';
+            marker.textContent = injuryCounter;
+            marker.dataset.id = injuryCounter;
+            marker.title = `Injury #${injuryCounter} - ${selectedInjuryType}`;
+
+            container.appendChild(marker);
+            updateInjuryList();
+        }
+
+        function updateInjuryList() {
+            const container = document.getElementById('injuryListContainer');
+            const countElement = document.getElementById('injuryCount');
+            
+            countElement.textContent = injuries.length;
+
+            if (injuries.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📍</div>
+                        <p>No injuries marked yet.<br>Click on body to add.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = injuries.map(injury => `
+                <div class="injury-item" data-injury-id="${injury.id}">
+                    <button class="delete-btn" onclick="deleteInjury(${injury.id})" title="Delete injury">×</button>
+                    <div class="injury-item-header">
+                        <span class="injury-number">Injury #${injury.id}</span>
+                        <span class="injury-type-badge ${injury.type}">${injury.type.toUpperCase()}</span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem;">
+                        <strong>Location:</strong> ${injury.view === 'front' ? 'Front' : 'Back'}
+                    </div>
+                    <textarea class="injury-notes" placeholder="Notes about this injury..." 
+                              onchange="updateInjuryNotes(${injury.id}, this.value)">${injury.notes}</textarea>
+                </div>
+            `).join('');
+        }
+
+        function updateInjuryNotes(id, notes) {
+            const injury = injuries.find(i => i.id === id);
+            if (injury) {
+                injury.notes = notes;
+            }
+        }
+
+        function deleteInjury(id) {
+            if (confirm('Delete this injury marker?')) {
+                injuries = injuries.filter(i => i.id !== id);
+
+                const marker = document.querySelector(`.injury-marker[data-id="${id}"]`);
+                if (marker) {
+                    marker.remove();
+                }
+
+                updateInjuryList();
+            }
+        }
+
+        function clearAllInjuries() {
+            if (injuries.length === 0) {
+                return;
+            }
+            
+            if (confirm(`Clear all ${injuries.length} injury markers?`)) {
+                injuries = [];
+                injuryCounter = 0;
+                document.querySelectorAll('.injury-marker').forEach(m => m.remove());
+                updateInjuryList();
+            }
+        }
+
+        function exportInjuryData() {
+            if (injuries.length === 0) {
+                alert('No injuries to export! Please mark some injuries first.');
+                return;
+            }
+
+            const data = {
+                formTitle: 'Pre-Hospital Care - Injury Assessment',
+                timestamp: new Date().toISOString(),
+                totalInjuries: injuries.length,
+                injuries: injuries.map(i => ({
+                    injuryNumber: i.id,
+                    type: i.type,
+                    view: i.view,
+                    coordinates: { x: Math.round(i.x), y: Math.round(i.y) },
+                    notes: i.notes || 'No notes provided'
+                }))
+            };
+
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `injury-assessment-${Date.now()}.json`;
+            link.click();
+
+            alert(`✅ Successfully exported ${injuries.length} injuries!`);
+        }
+
+
+        // Vehicle Modal Functions
+function initializeAmbulanceList() {
+    const ambulanceList = document.getElementById('ambulanceList');
+    ambulanceList.innerHTML = '';
+    
+    // Generate ambulance options V1 to V12
+    for (let i = 1; i <= 12; i++) {
+        const ambulanceId = `V${i}`;
+        const plateNumber = generatePlateNumber();
+        
+        const ambulanceOption = document.createElement('div');
+        ambulanceOption.className = 'vehicle-option';
+        ambulanceOption.dataset.id = ambulanceId;
+        
+        ambulanceOption.innerHTML = `
+            <div class="vehicle-name">${ambulanceId}</div>
+            <div class="vehicle-details">Plate Number: ${plateNumber}</div>
+        `;
+        
+        ambulanceOption.addEventListener('click', function() {
+            // Remove selected class from all options
+            document.querySelectorAll('#ambulanceList .vehicle-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            this.classList.add('selected');
+        });
+        
+        ambulanceList.appendChild(ambulanceOption);
+    }
+}
+
+function generatePlateNumber() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numbers = '0123456789';
+    
+    let plate = '';
+    // First 3 letters
+    for (let i = 0; i < 3; i++) {
+        plate += letters.charAt(Math.floor(Math.random() * letters.length));
+    }
+    // Then 4 numbers
+    for (let i = 0; i < 4; i++) {
+        plate += numbers.charAt(Math.floor(Math.random() * numbers.length));
+    }
+    
+    return plate;
+}
+
+// Add these event listeners to your DOMContentLoaded function
+document.addEventListener('DOMContentLoaded', function() {
+    // ... your existing DOMContentLoaded code ...
+    
+    // Initialize ambulance list
+    initializeAmbulanceList();
+    
+    // Ambulance selection
+    document.getElementById('ambulance').addEventListener('click', function() {
+        const ambulanceModal = new bootstrap.Modal(document.getElementById('ambulanceModal'));
+        ambulanceModal.show();
+    });
+    
+    // Fire truck selection
+    document.getElementById('fireTruck').addEventListener('click', function() {
+        const fireTruckModal = new bootstrap.Modal(document.getElementById('fireTruckModal'));
+        fireTruckModal.show();
+    });
+    
+    // Fire truck selection
+    document.querySelectorAll('#fireTruckModal .vehicle-option').forEach(option => {
+        option.addEventListener('click', function() {
+            // Remove selected class from all options
+            document.querySelectorAll('#fireTruckModal .vehicle-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            this.classList.add('selected');
+        });
+    });
+    
+    // Confirm ambulance selection
+    document.getElementById('confirmAmbulance').addEventListener('click', function() {
+        const selectedAmbulance = document.querySelector('#ambulanceList .vehicle-option.selected');
+        
+        if (selectedAmbulance) {
+            const ambulanceId = selectedAmbulance.dataset.id;
+            const plateNumber = selectedAmbulance.querySelector('.vehicle-details').textContent.replace('Plate Number: ', '');
+            
+            alert(`Ambulance ${ambulanceId} with plate ${plateNumber} selected.`);
+            
+            // Close modal
+            const ambulanceModal = bootstrap.Modal.getInstance(document.getElementById('ambulanceModal'));
+            ambulanceModal.hide();
+        } else {
+            alert('Please select an ambulance.');
+        }
+    });
+    
+    // Confirm fire truck selection
+    document.getElementById('confirmFireTruck').addEventListener('click', function() {
+        const selectedFireTruck = document.querySelector('#fireTruckModal .vehicle-option.selected');
+        
+        if (selectedFireTruck) {
+            const fireTruckType = selectedFireTruck.dataset.type;
+            const fireTruckName = selectedFireTruck.querySelector('.vehicle-name').textContent;
+            
+            alert(`${fireTruckName} selected.`);
+            
+            // Close modal
+            const fireTruckModal = bootstrap.Modal.getInstance(document.getElementById('fireTruckModal'));
+            fireTruckModal.hide();
+        } else {
+            alert('Please select a fire truck type.');
+        }
+    });
+});
+    </script>
+</body>
+
+</html>
