@@ -36,24 +36,40 @@ document.addEventListener('DOMContentLoaded', function() {
 // ============================================
 
 function navigateTab(direction) {
-    const tabs = document.querySelectorAll('.nav-link');
-    
-    if (direction === 1) {
+    const tabs = document.querySelectorAll('.nav-tabs .nav-link');
+
+    if (direction === 1 && currentTab < totalTabs - 1) {
         tabs[currentTab].classList.add('completed');
     }
-    
+
     currentTab += direction;
-    
+
     if (currentTab >= totalTabs) currentTab = totalTabs - 1;
     if (currentTab < 0) currentTab = 0;
-    
-    const targetTab = tabs[currentTab];
-    const tabTrigger = new bootstrap.Tab(targetTab);
-    tabTrigger.show();
-    
+
+    // Hide all tab-panes
+    document.querySelectorAll('.tab-pane').forEach(pane => {
+        pane.classList.remove('show', 'active');
+    });
+
+    // Show the target pane
+    const targetPane = document.querySelector(`#section${currentTab + 1}`);
+    if (targetPane) {
+        targetPane.classList.add('show', 'active');
+    }
+
+    // Update tab buttons
+    tabs.forEach((tab, index) => {
+        if (index === currentTab) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+
     updateNavigation();
     updateProgress();
-    
+
     document.querySelector('.form-body').scrollTop = 0;
 }
 
@@ -95,9 +111,31 @@ function updateProgress() {
 }
 
 // Tab click event listeners
-document.querySelectorAll('.nav-link').forEach((tab, index) => {
-    tab.addEventListener('click', function() {
+document.querySelectorAll('.nav-tabs .nav-link').forEach((tab, index) => {
+    tab.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent Bootstrap's default tab behavior
         currentTab = index;
+
+        // Hide all tab-panes
+        document.querySelectorAll('.tab-pane').forEach(pane => {
+            pane.classList.remove('show', 'active');
+        });
+
+        // Show the target pane
+        const targetPane = document.querySelector(`#section${currentTab + 1}`);
+        if (targetPane) {
+            targetPane.classList.add('show', 'active');
+        }
+
+        // Update tab buttons
+        document.querySelectorAll('.nav-tabs .nav-link').forEach((t, i) => {
+            if (i === currentTab) {
+                t.classList.add('active');
+            } else {
+                t.classList.remove('active');
+            }
+        });
+
         updateNavigation();
         updateProgress();
         if (currentTab === totalTabs - 1) {
