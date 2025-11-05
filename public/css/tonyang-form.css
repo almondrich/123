@@ -17,13 +17,16 @@ body {
     padding: 0;
     height: 100vh;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-container {
-    height: 100vh;
+    flex: 1;
     display: flex;
     flex-direction: column;
     background: white;
+    overflow: hidden;
 }
 
 .form-header {
@@ -87,7 +90,7 @@ body {
     color: var(--primary-color);
     border-bottom-color: var(--primary-color);
 }
-
+E
 .nav-tabs .nav-link.active {
     color: var(--primary-color);
     border-bottom-color: var(--primary-color);
@@ -608,6 +611,78 @@ textarea.form-control {
 
 .mb-section {
     margin-bottom: 1.25rem;
+}
+
+.summary-content {
+    max-width: none;
+    padding: 0;
+}
+
+.summary-section {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.summary-section h6 {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 0.75rem;
+}
+
+.summary-section h7 {
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin: 2rem 0 1rem 0;
+    font-size: 1.1rem;
+    background: #f8f9fa;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.summary-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+}
+
+.summary-table td:first-child {
+    font-weight: 600;
+    color: #333;
+    width: 40%;
+    background: #f8f9fa;
+    border-right: 2px solid #e9ecef;
+}
+
+.summary-table td:last-child {
+    width: 60%;
+    color: #495057;
+}
+
+.summary-table tr:last-child td {
+    border-bottom: none;
+}
+
+.summary-table tr:hover td {
+    background: #f8f9fa;
+}
+
+.summary-table tr:hover td:first-child {
+    background: #e9ecef;
 }
 
 .form-body::-webkit-scrollbar {

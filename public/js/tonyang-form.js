@@ -80,6 +80,7 @@ function updateNavigation() {
         if (currentTab === totalTabs - 1) {
             nextBtn.style.display = 'none';
             submitBtn.style.display = 'block';
+            generateFormSummary(); // Generate summary when reaching the last tab
         } else {
             nextBtn.style.display = 'block';
             submitBtn.style.display = 'none';
@@ -99,6 +100,9 @@ document.querySelectorAll('.nav-link').forEach((tab, index) => {
         currentTab = index;
         updateNavigation();
         updateProgress();
+        if (currentTab === totalTabs - 1) {
+            generateFormSummary();
+        }
     });
 });
 
@@ -121,6 +125,173 @@ document.getElementById('dateOfBirth')?.addEventListener('change', function() {
 });
 
 // ============================================
+// FORM SUMMARY
+// ============================================
+
+function generateFormSummary() {
+    const summaryContainer = document.getElementById('formSummary');
+    if (!summaryContainer) return;
+
+    let summaryHTML = '<div class="summary-content">';
+
+    // Basic Information Table
+    summaryHTML += '<div class="summary-section">';
+    summaryHTML += '<h6>📋 Basic Information</h6>';
+    summaryHTML += '<table class="summary-table">';
+    summaryHTML += '<tbody>';
+    summaryHTML += `<tr><td><strong>Date:</strong></td><td>${document.getElementById('formDate').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Departure Time:</strong></td><td>${document.getElementById('depTime').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Arrival Time:</strong></td><td>${document.getElementById('arrTime').value || 'Not specified'}</td></tr>`;
+
+    const vehicleUsed = document.querySelector('input[name="vehicle_used"]:checked');
+    summaryHTML += `<tr><td><strong>Vehicle Used:</strong></td><td>${vehicleUsed ? vehicleUsed.value : 'Not specified'}</td></tr>`;
+
+    summaryHTML += `<tr><td><strong>Driver:</strong></td><td>${document.getElementById('driver').value || 'Not specified'}</td></tr>`;
+
+    const personsPresent = Array.from(document.querySelectorAll('input[name="persons_present[]"]:checked')).map(cb => cb.value);
+    summaryHTML += `<tr><td><strong>Persons Present:</strong></td><td>${personsPresent.length > 0 ? personsPresent.join(', ') : 'None'}</td></tr>`;
+    summaryHTML += '</tbody></table>';
+    summaryHTML += '</div>';
+
+    // Patient Information Table
+    summaryHTML += '<div class="summary-section">';
+    summaryHTML += '<h6>👤 Patient Information</h6>';
+    summaryHTML += '<table class="summary-table">';
+    summaryHTML += '<tbody>';
+    summaryHTML += `<tr><td><strong>Name:</strong></td><td>${document.getElementById('patientName').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Date of Birth:</strong></td><td>${document.getElementById('dateOfBirth').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Age:</strong></td><td>${document.getElementById('age').value || 'Not specified'}</td></tr>`;
+
+    const gender = document.querySelector('input[name="gender"]:checked');
+    summaryHTML += `<tr><td><strong>Gender:</strong></td><td>${gender ? gender.value : 'Not specified'}</td></tr>`;
+
+    const civilStatus = document.querySelector('input[name="civil_status"]:checked');
+    summaryHTML += `<tr><td><strong>Civil Status:</strong></td><td>${civilStatus ? civilStatus.value : 'Not specified'}</td></tr>`;
+
+    summaryHTML += `<tr><td><strong>Address:</strong></td><td>${document.getElementById('address').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Occupation:</strong></td><td>${document.getElementById('occupation').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Place of Incident:</strong></td><td>${document.getElementById('placeOfIncident').value || 'Not specified'}</td></tr>`;
+    summaryHTML += '</tbody></table>';
+    summaryHTML += '</div>';
+
+    // Emergency Type & Care Table
+    summaryHTML += '<div class="summary-section">';
+    summaryHTML += '<h6>🚑 Emergency Type & Care</h6>';
+    summaryHTML += '<table class="summary-table">';
+    summaryHTML += '<tbody>';
+
+    const emergencyTypes = Array.from(document.querySelectorAll('input[name="emergency_type[]"]:checked')).map(cb => cb.value);
+    summaryHTML += `<tr><td><strong>Emergency Types:</strong></td><td>${emergencyTypes.length > 0 ? emergencyTypes.join(', ') : 'None specified'}</td></tr>`;
+
+    const careManagement = Array.from(document.querySelectorAll('input[name="care_management[]"]:checked')).map(cb => cb.value);
+    summaryHTML += `<tr><td><strong>Care Management:</strong></td><td>${careManagement.length > 0 ? careManagement.join(', ') : 'None specified'}</td></tr>`;
+
+    summaryHTML += `<tr><td><strong>O² LPM:</strong></td><td>${document.getElementById('o2LPM').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Other Care:</strong></td><td>${document.getElementById('othersCare').value || 'Not specified'}</td></tr>`;
+    summaryHTML += '</tbody></table>';
+    summaryHTML += '</div>';
+
+    // Vital Signs Table
+    summaryHTML += '<div class="summary-section">';
+    summaryHTML += '<h6>❤️ Vital Signs</h6>';
+    summaryHTML += '<h7>Initial:</h7>';
+    summaryHTML += '<table class="summary-table">';
+    summaryHTML += '<tbody>';
+    summaryHTML += `<tr><td><strong>Time:</strong></td><td>${document.getElementById('initialTime').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>BP:</strong></td><td>${document.getElementById('initialBP').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Temp:</strong></td><td>${document.getElementById('initialTemp').value || 'Not specified'}°C</td></tr>`;
+    summaryHTML += `<tr><td><strong>Pulse:</strong></td><td>${document.getElementById('initialPulse').value || 'Not specified'} BPM</td></tr>`;
+    summaryHTML += `<tr><td><strong>Resp Rate:</strong></td><td>${document.getElementById('initialResp').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Pain Score:</strong></td><td>${document.getElementById('initialPainScore').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>SPO2:</strong></td><td>${document.getElementById('initialSPO2').value || 'Not specified'}%</td></tr>`;
+
+    const initialConsciousness = document.querySelector('input[name="initial_consciousness"]:checked');
+    summaryHTML += `<tr><td><strong>Level of Consciousness:</strong></td><td>${initialConsciousness ? initialConsciousness.value : 'Not specified'}</td></tr>`;
+    summaryHTML += '</tbody></table>';
+
+    summaryHTML += '<h7>Follow-up:</h7>';
+    summaryHTML += '<table class="summary-table">';
+    summaryHTML += '<tbody>';
+    summaryHTML += `<tr><td><strong>Time:</strong></td><td>${document.getElementById('followupTime').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>BP:</strong></td><td>${document.getElementById('followupBP').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Temp:</strong></td><td>${document.getElementById('followupTemp').value || 'Not specified'}°C</td></tr>`;
+    summaryHTML += `<tr><td><strong>Pulse:</strong></td><td>${document.getElementById('followupPulse').value || 'Not specified'} BPM</td></tr>`;
+    summaryHTML += `<tr><td><strong>Resp Rate:</strong></td><td>${document.getElementById('followupResp').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Pain Score:</strong></td><td>${document.getElementById('followupPainScore').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>SPO2:</strong></td><td>${document.getElementById('followupSPO2').value || 'Not specified'}%</td></tr>`;
+
+    const followupConsciousness = document.querySelector('input[name="followup_consciousness"]:checked');
+    summaryHTML += `<tr><td><strong>Level of Consciousness:</strong></td><td>${followupConsciousness ? followupConsciousness.value : 'Not specified'}</td></tr>`;
+    summaryHTML += '</tbody></table>';
+    summaryHTML += '</div>';
+
+    // Assessment Table
+    summaryHTML += '<div class="summary-section">';
+    summaryHTML += '<h6>🔍 Assessment</h6>';
+    summaryHTML += '<table class="summary-table">';
+    summaryHTML += '<tbody>';
+
+    const chiefComplaints = Array.from(document.querySelectorAll('input[name="chief_complaints[]"]:checked')).map(cb => cb.value);
+    summaryHTML += `<tr><td><strong>Chief Complaints:</strong></td><td>${chiefComplaints.length > 0 ? chiefComplaints.join(', ') : 'None specified'}</td></tr>`;
+
+    summaryHTML += `<tr><td><strong>Other Complaints:</strong></td><td>${document.getElementById('othersComplaint').value || 'None'}</td></tr>`;
+
+    summaryHTML += `<tr><td><strong>Injuries Marked:</strong></td><td>${injuries.length}</td></tr>`;
+
+    // FAST Assessment
+    const faceDrooping = document.querySelector('input[name="face_drooping"]:checked');
+    const armWeakness = document.querySelector('input[name="arm_weakness"]:checked');
+    const speechDifficulty = document.querySelector('input[name="speech_difficulty"]:checked');
+    const timeToCall = document.querySelector('input[name="time_to_call"]:checked');
+
+    summaryHTML += '<tr><td colspan="2"><strong>FAST Assessment:</strong></td></tr>';
+    summaryHTML += `<tr><td><strong>Face Drooping:</strong></td><td>${faceDrooping ? faceDrooping.value : 'Not assessed'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Arm Weakness:</strong></td><td>${armWeakness ? armWeakness.value : 'Not assessed'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Speech Difficulty:</strong></td><td>${speechDifficulty ? speechDifficulty.value : 'Not assessed'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Time to Call:</strong></td><td>${timeToCall ? timeToCall.value : 'Not assessed'}</td></tr>`;
+
+    summaryHTML += `<tr><td><strong>SAMPLE Details:</strong></td><td>${document.getElementById('fastDetails').value || 'Not provided'}</td></tr>`;
+
+    // OB Section
+    summaryHTML += '<tr><td colspan="2"><strong>OB Patient Info:</strong></td></tr>';
+    summaryHTML += `<tr><td><strong>Baby Status:</strong></td><td>${document.getElementById('babyDelivery').value || 'Not applicable'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Delivery Time:</strong></td><td>${document.getElementById('timeOfDelivery').value || 'Not applicable'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>LMP:</strong></td><td>${document.getElementById('lmp').value || 'Not applicable'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>AOG:</strong></td><td>${document.getElementById('aog').value || 'Not applicable'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>EDC:</strong></td><td>${document.getElementById('edc').value || 'Not applicable'}</td></tr>`;
+    summaryHTML += '</tbody></table>';
+    summaryHTML += '</div>';
+
+    // Team Information Table
+    summaryHTML += '<div class="summary-section">';
+    summaryHTML += '<h6>👥 Team Information</h6>';
+    summaryHTML += '<table class="summary-table">';
+    summaryHTML += '<tbody>';
+    summaryHTML += `<tr><td><strong>Team Leader:</strong></td><td>${document.getElementById('teamLeader').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Data Recorder:</strong></td><td>${document.getElementById('dataRecorder').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Logistic:</strong></td><td>${document.getElementById('logistic').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>1st Aider:</strong></td><td>${document.getElementById('aider1').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>2nd Aider:</strong></td><td>${document.getElementById('aider2').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Team Leader Notes:</strong></td><td>${document.getElementById('teamLeaderNotes').value || 'None'}</td></tr>`;
+    summaryHTML += '</tbody></table>';
+    summaryHTML += '</div>';
+
+    // Hospital Endorsement Table
+    summaryHTML += '<div class="summary-section">';
+    summaryHTML += '<h6>🏥 Hospital Endorsement</h6>';
+    summaryHTML += '<table class="summary-table">';
+    summaryHTML += '<tbody>';
+    summaryHTML += `<tr><td><strong>Endorsement:</strong></td><td>${document.getElementById('endorsement').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Hospital Name:</strong></td><td>${document.getElementById('hospital').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Date & Time:</strong></td><td>${document.getElementById('dateTime').value || 'Not specified'}</td></tr>`;
+    summaryHTML += '</tbody></table>';
+    summaryHTML += '</div>';
+
+    summaryHTML += '</div>';
+    summaryContainer.innerHTML = summaryHTML;
+}
+
+// ============================================
 // FORM SUBMISSION
 // ============================================
 
@@ -130,7 +301,7 @@ function submitForm() {
     formData.forEach((value, key) => {
         data[key] = value;
     });
-    
+
     // Add structured time/location data
     data.arrivalScene = {
         location: document.getElementById('arrSceneLocation').value,
@@ -148,18 +319,18 @@ function submitForm() {
         location: document.getElementById('depHospLocation').value,
         time: document.getElementById('depHospTime').value
     };
-    
+
     // Get selected personal belongings
     const belongingsSelect = document.getElementById('personalBelongings');
     const selectedBelongings = Array.from(belongingsSelect.selectedOptions).map(option => option.value);
     data.personalBelongings = selectedBelongings;
     data.otherBelongingsSpecify = document.getElementById('otherBelongings').value;
-    
+
     // Add injury data
     data.injuries = injuries;
-    
+
     console.log('Form submitted:', data);
-    
+
     // Submit the form
     document.getElementById('preHospitalForm').submit();
 }

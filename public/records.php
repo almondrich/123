@@ -91,15 +91,51 @@ $records = $stmt->fetchAll();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="css/tonyang-form.css" rel="stylesheet">
     <style>
-        body {
+        html, body {
             background-color: #f5f5f5;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: auto;
+            overflow-y: auto;
+            height: 100%;
         }
         
+        .app-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.1rem;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
         .records-container {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            max-width: 100%;
+            margin: 1rem auto;
+            padding: 0 0.5rem;
         }
         
         .page-header {
@@ -268,41 +304,42 @@ $records = $stmt->fetchAll();
         
         .stat-card {
             background: white;
-            padding: 1.5rem;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
             border: 1px solid #dee2e6;
-            border-left: 4px solid #0d6efd;
+            border-left: 3px solid #0d6efd;
             transition: box-shadow 0.2s;
         }
-        
+
         .stat-card:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
+
         .stat-card:nth-child(2) {
             border-left-color: #198754;
         }
-        
+
         .stat-card:nth-child(3) {
             border-left-color: #ffc107;
         }
-        
+
         .stat-card:nth-child(4) {
             border-left-color: #0dcaf0;
         }
-        
+
         .stat-card h3 {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 1.5rem;
+            font-weight: 600;
             color: #212529;
             margin: 0;
         }
-        
+
         .stat-card p {
-            margin: 0.5rem 0 0 0;
+            margin: 0.25rem 0 0 0;
             color: #6c757d;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
         
         .empty-state {
@@ -350,34 +387,145 @@ $records = $stmt->fetchAll();
         }
         
         @media (max-width: 768px) {
+            .app-header {
+                padding: 0.75rem 1rem;
+            }
+
+            .user-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .user-name {
+                font-size: 0.9rem;
+            }
+
+            .user-role {
+                font-size: 0.7rem;
+            }
+
+            .records-container {
+                margin: 0.5rem auto;
+                padding: 0 0.25rem;
+                overflow-x: auto;
+            }
+
+            .page-header {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.25rem;
+            }
+
+            .filters-card {
+                padding: 1rem;
+                margin-bottom: 1rem;
+                overflow-x: auto;
+            }
+
+            .records-card {
+                padding: 1rem;
+                overflow-x: auto;
+            }
+
             .top-actions {
                 flex-direction: column;
                 gap: 1rem;
                 align-items: stretch;
             }
-            
+
             .stats-row {
                 grid-template-columns: 1fr;
+                overflow-x: auto;
+            }
+
+            .table-responsive {
+                font-size: 0.75rem;
+                min-width: 800px;
+                overflow-x: auto !important;
+            }
+
+            .table thead th {
+                padding: 0.5rem;
+                font-size: 0.7rem;
+                white-space: nowrap;
+            }
+
+            .table tbody td {
+                padding: 0.5rem;
+                white-space: nowrap;
+            }
+
+            .btn-action {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+                margin: 0 0.1rem;
+            }
+
+            .pagination {
+                overflow-x: auto;
+            }
+
+            .pagination .page-link {
+                padding: 0.375rem 0.5rem;
+                font-size: 0.75rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-file-medical"></i> Pre-Hospital Care
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="TONYANG.php">
+                            <i class="bi bi-plus-circle"></i> New Form
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="records.php">
+                            <i class="bi bi-folder2-open"></i> Records
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin/dashboard.php">
+                            <i class="bi bi-graph-up"></i> Dashboard
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i> <?php echo e($current_user['full_name']); ?>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="records-container">
         <div class="page-header">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h1><i class="bi bi-folder2-open"></i> Pre-Hospital Care Records</h1>
-                    <p>View and manage all saved forms | User: <?php echo e($current_user['full_name']); ?></p>
-                </div>
-                <div>
-                    <a href="TONYANG.php" class="btn btn-light">
-                        <i class="bi bi-plus-circle"></i> New Form
-                    </a>
-                    <a href="logout.php" class="btn btn-outline-light">
-                        <i class="bi bi-box-arrow-right"></i> Logout
-                    </a>
-                </div>
+            <div>
+                <h1><i class="bi bi-folder2-open"></i> Pre-Hospital Care Records</h1>
+                <p>View and manage all saved forms | User: <?php echo e($current_user['full_name']); ?></p>
             </div>
         </div>
 
@@ -391,7 +539,7 @@ $records = $stmt->fetchAll();
             </div>
             <div class="stat-card" style="border-left-color: #28a745;">
                 <h3>
-                    <?php 
+                    <?php
                     $completed_sql = "SELECT COUNT(*) as count FROM prehospital_forms WHERE status = 'completed'";
                     $completed_stmt = db_query($completed_sql);
                     echo number_format($completed_stmt->fetch()['count']);
@@ -401,7 +549,7 @@ $records = $stmt->fetchAll();
             </div>
             <div class="stat-card" style="border-left-color: #ffc107;">
                 <h3>
-                    <?php 
+                    <?php
                     $today_sql = "SELECT COUNT(*) as count FROM prehospital_forms WHERE DATE(created_at) = CURDATE()";
                     $today_stmt = db_query($today_sql);
                     echo number_format($today_stmt->fetch()['count']);
@@ -411,7 +559,7 @@ $records = $stmt->fetchAll();
             </div>
             <div class="stat-card" style="border-left-color: #17a2b8;">
                 <h3>
-                    <?php 
+                    <?php
                     $week_sql = "SELECT COUNT(*) as count FROM prehospital_forms WHERE YEARWEEK(created_at) = YEARWEEK(NOW())";
                     $week_stmt = db_query($week_sql);
                     echo number_format($week_stmt->fetch()['count']);

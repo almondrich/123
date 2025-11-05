@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Hospital Care Sheet (Form 1x.2025)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #003d7a;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #003d7a;
+        }
+
+        .logo-space {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        .section-header {
+            background-color: #e8e8e8;
+            padding: 8px 12px;
+            margin: 20px 0 12px 0;
+            border-left: 4px solid #003d7a;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="time"],
+        .form-group input[type="number"],
+        .form-group select {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            font-size: 0.9rem;
+            background: white;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: 2px solid #003d7a;
+            border-color: #003d7a;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .radio-item input[type="radio"],
+        .radio-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .radio-item label {
+            font-size: 0.875rem;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .vital-signs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .vital-signs-table th,
+        .vital-signs-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        .vital-signs-table th {
+            background-color: #f0f0f0;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .vital-signs-table input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            font-size: 0.85rem;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            font-family: inherit;
+            font-size: 0.875rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        textarea:focus {
+            outline: 2px solid #003d7a;
+            border-color: #003d7a;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #e8e8e8;
+        }
+
+        button {
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background-color: #003d7a;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #002a54;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+
+        .inline-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .inline-group label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .inline-group input[type="text"] {
+            flex: 1;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            font-size: 0.9rem;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 10px;
+            }
+            .button-group {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.25rem;
+            }
+            .vital-signs-table {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-space">LOGO</div>
+            <h1>PRE-HOSPITAL CARE SHEET (Form 1x.2025)</h1>
+            <div class="logo-space">LOGO</div>
+        </div>
+
+        <!-- Basic Information -->
+        <div class="form-row">
+            <div class="form-group">
+                <label>DATE</label>
+                <input type="date">
+            </div>
+            <div class="form-group">
+                <label>VEHICLE USED</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="medic" name="vehicle" value="medic">
+                        <label for="medic">MEDIC</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="b1c402" name="vehicle" value="b1c402">
+                        <label for="b1c402">B1C402</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="others-vehicle" name="vehicle" value="others">
+                        <label for="others-vehicle">OTHERS</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>DRIVER</label>
+                <input type="text">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>DEP TIME</label>
+                <input type="time">
+            </div>
+            <div class="form-group">
+                <label>ARR SCENE</label>
+                <input type="time">
+            </div>
+            <div class="form-group">
+                <label>DEP SCENE</label>
+                <input type="time">
+            </div>
+            <div class="form-group">
+                <label>ARR HOSP</label>
+                <input type="time">
+            </div>
+            <div class="form-group">
+                <label>DEP HOSP</label>
+                <input type="time">
+            </div>
+            <div class="form-group">
+                <label>ARR STATION</label>
+                <input type="time">
+            </div>
+        </div>
+
+        <div class="section-header">PERSONS PRESENT UPON ARRIVAL</div>
+        <div class="radio-group">
+            <div class="radio-item">
+                <input type="checkbox" id="police" name="persons" value="police">
+                <label for="police">POLICE</label>
+            </div>
+            <div class="radio-item">
+                <input type="checkbox" id="brgy" name="persons" value="brgy">
+                <label for="brgy">BRGY OFFICIALS</label>
+            </div>
+            <div class="radio-item">
+                <input type="checkbox" id="relatives" name="persons" value="relatives">
+                <label for="relatives">RELATIVES</label>
+            </div>
+            <div class="radio-item">
+                <input type="checkbox" id="bystanders" name="persons" value="bystanders">
+                <label for="bystanders">BYSTANDERS</label>
+            </div>
+            <div class="radio-item">
+                <input type="checkbox" id="none" name="persons" value="none">
+                <label for="none">NONE</label>
+            </div>
+        </div>
+
+        <!-- Patient Information -->
+        <div class="section-header">PATIENT INFORMATION</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>PATIENT NAME</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>DATE OF BIRTH</label>
+                <input type="date">
+            </div>
+            <div class="form-group">
+                <label>AGE</label>
+                <input type="number" min="0">
+            </div>
+            <div class="form-group">
+                <label>GENDER</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="male" name="gender" value="male">
+                        <label for="male">MALE</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label for="female">FEMALE</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>ADDRESS</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>ZONE</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>OCCUPATION</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>CIVIL STATUS</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="single" name="civil" value="single">
+                        <label for="single">SINGLE</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="married" name="civil" value="married">
+                        <label for="married">MARRIED</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Incident Information -->
+        <div class="section-header">INCIDENT INFORMATION</div>
+        <div class="form-row">
+            <div class="form-group full-width">
+                <label>PLACE OF INCIDENT</label>
+                <input type="text">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>ZONE/LANDMARK</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>TIME</label>
+                <input type="time">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>INFORMANT</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>ADDRESS</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>CONTACT METHOD</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="walkin" name="contact" value="walkin">
+                        <label for="walkin">WALK IN</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="call" name="contact" value="call">
+                        <label for="call">CALL/ARR TIME</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group full-width">
+                <label>RELATIONSHIP TO THE VICTIM</label>
+                <input type="text">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>CP #</label>
+                <input type="text">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group full-width">
+                <label>PERSONAL BELONGINGS</label>
+                <div class="checkbox-grid">
+                    <div class="radio-item">
+                        <input type="checkbox" id="wallet" name="belongings" value="wallet">
+                        <label for="wallet">WALLET</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="checkbox" id="cellphone" name="belongings" value="cellphone">
+                        <label for="cellphone">CELLPHONE</label>
+                    </div>
+                    <div class="form-group">
+                        <label>OTHERS:</label>
+                        <input type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Call Type & Care Management -->
+        <div class="section-header">TYPE OF EMERGENCY CALL</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>MEDICAL</label>
+                <input type="text" placeholder="Specify">
+            </div>
+            <div class="form-group">
+                <label>TRAUMA</label>
+                <input type="text" placeholder="Specify">
+            </div>
+            <div class="form-group">
+                <label>OB</label>
+                <input type="text" placeholder="Specify">
+            </div>
+            <div class="form-group">
+                <label>GENERAL</label>
+                <input type="text" placeholder="Specify">
+            </div>
+        </div>
+
+        <div class="section-header">CARE MANAGEMENT</div>
+        <div class="checkbox-grid">
+            <div class="radio-item">
+                <input type="checkbox" id="immobilization" name="care" value="immobilization">
+                <label for="immobilization">IMMOBILIZATION</label>
+            </div>
+            <div class="radio-item">
+                <input type="checkbox" id="cpr" name="care" value="cpr">
+                <label for="cpr">CPR</label>
+            </div>
+            <div class="radio-item">
+                <input type="checkbox" id="bandaging" name="care" value="bandaging">
+                <label for="bandaging">BANDAGING</label>
+            </div>
+            <div class="radio-item">
+                <input type="checkbox" id="wound" name="care" value="wound">
+                <label for="wound">WOUND CARE</label>
+            </div>
+            <div class="radio-item">
+                <input type="checkbox" id="ccollar" name="care" value="ccollar">
+                <label for="ccollar">C-Collar</label>
+            </div>
+            <div class="radio-item">
+                <input type="checkbox" id="aed" name="care" value="aed">
+                <label for="aed">AED</label>
+            </div>
+            <div class="radio-item">
+                <input type="checkbox" id="ked" name="care" value="ked">
+                <label for="ked">KED</label>
+            </div>
+            <div class="radio-item">
+                <input type="checkbox" id="o2" name="care" value="o2">
+                <label for="o2">O²</label>
+            </div>
+            <div class="form-group">
+                <label>LPM via:</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>OTHERS:</label>
+                <input type="text">
+            </div>
+        </div>
+
+        <!-- Vital Signs -->
+        <div class="section-header">VITAL SIGNS</div>
+        <table class="vital-signs-table">
+            <thead>
+                <tr>
+                    <th>TIME</th>
+                    <th>BP</th>
+                    <th>TEMP (°C)</th>
+                    <th>PULSE RATE (BPM)</th>
+                    <th>RESP. RATE</th>
+                    <th>PAIN SCORE (0-10)</th>
+                    <th>SPO2 Sat</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><label style="font-weight: 600;">Initial</label></td>
+                    <td><input type="text" placeholder="___/___"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td><label style="font-weight: 600;">Follow-up</label></td>
+                    <td><input type="text" placeholder="___/___"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="form-row" style="margin-top: 15px;">
+            <div class="form-group">
+                <label>SPINAL INJURY</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="spinal-yes" name="spinal" value="yes">
+                        <label for="spinal-yes">YES</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="spinal-no" name="spinal" value="no">
+                        <label for="spinal-no">NO</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>HELMET</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="ab" name="helmet" value="ab">
+                        <label for="ab">+ AB</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="no-helmet" name="helmet" value="no">
+                        <label for="no-helmet">NO HELMET</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>LEVEL OF CONSCIOUSNESS</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="alert" name="consciousness" value="alert">
+                        <label for="alert">ALERT</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="verbal" name="consciousness" value="verbal">
+                        <label for="verbal">VERBAL</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="pain" name="consciousness" value="pain">
+                        <label for="pain">PAIN</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="unconscious" name="consciousness" value="unconscious">
+                        <label for="unconscious">UNCONSCIOUS</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Notes -->
+        <div class="section-header">ADDITIONAL NOTES / REMARKS</div>
+        <textarea placeholder="Enter additional observations, treatment details, or relevant information..."></textarea>
+
+        <!-- Action Buttons -->
+        <div class="button-group">
+            <button type="button" class="btn-primary" onclick="window.print()">Print Form</button>
+            <button type="button" class="btn-secondary" onclick="if(confirm('Clear all form data?')) { document.querySelectorAll('input, textarea, select').forEach(el => { if(el.type === 'checkbox' || el.type === 'radio') el.checked = false; else el.value = ''; }); }">Clear Form</button>
+        </div>
+    </div>
+</body>
+</html>

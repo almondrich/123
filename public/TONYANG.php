@@ -35,10 +35,11 @@ $current_user = get_auth_user();
     <link href="css/tonyang-form.css" rel="stylesheet">
 </head>
 <body>
+
     <div class="form-container">
         <div class="form-header">
             <h1><i class="bi bi-file-medical"></i> PRE-HOSPITAL CARE FORM</h1>
-            <p class="subtitle">Form 1x.2025 - Emergency Medical Services | User: <?php echo e($current_user['full_name']); ?></p>
+            <p class="subtitle">Form 1x.2025 - Emergency Medical Services</p>
         </div>
 
         <div class="progress-container">
@@ -917,36 +918,20 @@ $current_user = get_auth_user();
                     </div>
                 </div>
 
-                <!-- Section 7: Waiver & Complete -->
+                <!-- Section 7: Complete -->
                 <div class="tab-pane fade" id="section7" role="tabpanel">
                     <div class="form-section">
-                        <div class="waiver-section">
-                            <h6><i class="bi bi-file-earmark-text"></i> WAIVER - REFUSAL OF TREATMENT/TRANSPORTATION</h6>
-                            <p>I, the undersigned have been advised that assistance on my behalf is necessary and refusal of assistance and/or transportation for further treatment may result in death or impair my health condition. Nevertheless, I refuse to accept treatment and/or transport and assume all risks and consequences of my decision and release the Rescue 118 responders from any liability arising from any delay or refusal.</p>
-                            
-                            <div class="grid-2">
-                                <div>
-                                    <label class="form-label">Patient Name & Signature</label>
-                                    <div class="signature-box">
-                                        <i class="bi bi-pen"></i>
-                                        <p>Patient signature</p>
-                                    </div>
-                                    <input type="hidden" name="patient_signature" id="patientSignature">
-                                </div>
-                                <div>
-                                    <label class="form-label">Witness Name & Signature</label>
-                                    <div class="signature-box">
-                                        <i class="bi bi-pen"></i>
-                                        <p>Witness signature</p>
-                                    </div>
-                                    <input type="hidden" name="witness_signature" id="witnessSignature">
-                                </div>
-                            </div>
+                        <div class="section-title">
+                            <i class="bi bi-check-circle"></i> Form Summary
+                        </div>
+
+                        <div class="summary-container" id="formSummary">
+                            <!-- Summary will be populated by JavaScript -->
                         </div>
 
                         <div class="alert alert-success" style="margin-top: 1.5rem;">
                             <h5 class="alert-heading"><i class="bi bi-check-circle"></i> Ready to Submit</h5>
-                            <p class="mb-3">Review all information before submitting. Navigate back using tabs to check previous sections.</p>
+                            <p class="mb-3">Review all information above before submitting. Navigate back using tabs to make changes.</p>
                             <div class="d-flex gap-2 flex-wrap">
                                 <button type="button" class="btn btn-outline-primary" onclick="printForm()">
                                     <i class="bi bi-printer"></i> Print Form
@@ -1021,6 +1006,7 @@ $current_user = get_auth_user();
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
