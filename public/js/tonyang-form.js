@@ -334,6 +334,39 @@ function generateFormSummary() {
 // ============================================
 
 function submitForm() {
+    // Validate required fields
+    const requiredFields = [
+        { id: 'formDate', name: 'Date' },
+        { id: 'depTime', name: 'Departure Time' },
+        { id: 'patientName', name: 'Patient Name' },
+        { id: 'dateOfBirth', name: 'Date of Birth' },
+        { id: 'age', name: 'Age' }
+    ];
+
+    let missingFields = [];
+    for (let field of requiredFields) {
+        const element = document.getElementById(field.id);
+        if (!element || !element.value.trim()) {
+            missingFields.push(field.name);
+        }
+    }
+
+    // Check gender radio buttons
+    const genderSelected = document.querySelector('input[name="gender"]:checked');
+    if (!genderSelected) {
+        missingFields.push('Gender');
+    }
+
+    if (missingFields.length > 0) {
+        alert('Please fill out the following required fields:\n\n' + missingFields.join('\n'));
+        return;
+    }
+
+    // Confirmation prompt
+    if (!confirm('Are you sure you want to save this form? Please review all information before proceeding.')) {
+        return;
+    }
+
     const formData = new FormData(document.getElementById('preHospitalForm'));
     const data = {};
     formData.forEach((value, key) => {
