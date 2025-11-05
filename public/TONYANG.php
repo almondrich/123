@@ -36,49 +36,8 @@ $current_user = get_auth_user();
 </head>
 <body>
     <!-- Top Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-file-medical"></i> Pre-Hospital Care
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                                      <li class="nav-item">
-                        <a class="nav-link" href="admin/dashboard.php">
-                            <i class="bi bi-graph-up"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="TONYANG.php">
-                            <i class="bi bi-plus-circle"></i> New Form
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="records.php">
-                            <i class="bi bi-folder2-open"></i> Records
-                        </a>
-                    </li>
-
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle"></i> <?php echo e($current_user['full_name']); ?>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Include the new navbar -->
+    <?php include '../includes/navbar.php'; ?>
 
     <div class="form-container">
         <div class="form-header">
@@ -722,14 +681,14 @@ $current_user = get_auth_user();
                                     <div class="body-view">
                                         <div class="view-label">FRONT VIEW</div>
                                         <div class="body-image-container" id="frontContainer">
-                                            <img src="body-front.png" alt="Body Front" class="body-image">
+                                            <img src="../public/images/body-front.png" alt="Body Front" class="body-image">
                                         </div>
                                     </div>
                                     
                                     <div class="body-view">
                                         <div class="view-label">BACK VIEW</div>
                                         <div class="body-image-container" id="backContainer">
-                                            <img src="body-back.png" alt="Body Back" class="body-image">
+                                            <img src="../public/images/body-back.png" alt="Body Back" class="body-image">
                                         </div>
                                     </div>
                                 </div>
