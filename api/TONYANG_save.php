@@ -39,6 +39,70 @@ if (!verify_token($_POST['csrf_token'] ?? '')) {
     json_response(['success' => false, 'message' => 'Invalid security token'], 403);
 }
 
+// Handle file upload security
+$endorsement_attachment_path = null;
+if (isset($_FILES['endorsement_attachment']) && $_FILES['endorsement_attachment']['error'] !== UPLOAD_ERR_NO_FILE) {
+    $file = $_FILES['endorsement_attachment'];
+
+    // Security checks
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        throw new Exception('File upload error: ' . $file['error']);
+    }
+
+    // Validate file size (5MB max)
+    $maxSize = 5 * 1024 * 1024; // 5MB
+    if ($file['size'] > $maxSize) {
+        throw new Exception('File size exceeds 5MB limit');
+    }
+
+    // Validate MIME type
+    $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mimeType = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+
+    if (!in_array($mimeType, $allowedMimeTypes)) {
+        throw new Exception('Invalid file type. Only images are allowed.');
+    }
+
+    // Validate file extension matches MIME type
+    $fileName = strtolower($file['name']);
+    $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+    if (!in_array($extension, $allowedExtensions)) {
+        throw new Exception('File extension not allowed');
+    }
+
+    // Additional security: Check for malicious content
+    if (function_exists('exif_imagetype')) {
+        $imageType = exif_imagetype($file['tmp_name']);
+        if (!$imageType || !in_array($imageType, [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF, IMAGETYPE_WEBP])) {
+            throw new Exception('Invalid image file');
+        }
+    }
+
+    // Generate secure filename
+    $uniqueId = bin2hex(random_bytes(16));
+    $safeFileName = 'endorsement_' . $uniqueId . '.' . $extension;
+
+    // Create uploads directory in public folder if it doesn't exist
+    $uploadDir = '../public/uploads/endorsements/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    $targetPath = $uploadDir . $safeFileName;
+
+    // Move uploaded file
+    if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
+        throw new Exception('Failed to save uploaded file');
+    }
+
+    // Store relative path for database (accessible via web)
+    $endorsement_attachment_path = 'uploads/endorsements/' . $safeFileName;
+}
+
 // Start transaction
 try {
     $pdo->beginTransaction();
@@ -217,6 +281,7 @@ try {
     $hospital_name = sanitize($_POST['hospital_name'] ?? null);
     $received_by = sanitize($_POST['received_by'] ?? null);
     $endorsement_datetime = sanitize($_POST['endorsement_datetime'] ?? null);
+    $endorsement_attachment = $endorsement_attachment_path; // Store the file path
     
     // Get current user ID
     $created_by = $_SESSION['user_id'];
@@ -248,7 +313,7 @@ try {
         fast_face_drooping, fast_arm_weakness, fast_speech_difficulty, fast_time_to_call, fast_sample_details,
         ob_baby_status, ob_delivery_time, ob_placenta, ob_lmp, ob_aog, ob_edc,
         team_leader_notes, team_leader, data_recorder, logistic, first_aider, second_aider,
-        endorsement, hospital_name, received_by, endorsement_datetime,
+        endorsement, hospital_name, received_by, endorsement_datetime, endorsement_attachment,
         created_by, status
     ) VALUES (
         ?, ?, ?, ?, ?, ?, ?,
@@ -270,10 +335,10 @@ try {
         ?, ?, ?, ?, ?,
         ?, ?, ?, ?, ?, ?,
         ?, ?, ?, ?, ?, ?,
-        ?, ?, ?, ?,
+        ?, ?, ?, ?, ?,
         ?, 'completed'
     )";
-    
+
     $params = [
         $form_number, $form_date, $departure_time, $arrival_time, $vehicle_used, $vehicle_details, $driver_name,
         $arrival_scene_location, $arrival_scene_time, $departure_scene_location, $departure_scene_time,
@@ -294,7 +359,7 @@ try {
         $fast_face_drooping, $fast_arm_weakness, $fast_speech_difficulty, $fast_time_to_call, $fast_sample_details,
         $ob_baby_status, $ob_delivery_time, $ob_placenta, $ob_lmp, $ob_aog, $ob_edc,
         $team_leader_notes, $team_leader, $data_recorder, $logistic, $first_aider, $second_aider,
-        $endorsement, $hospital_name, $received_by, $endorsement_datetime,
+        $endorsement, $hospital_name, $received_by, $endorsement_datetime, $endorsement_attachment,
         $created_by
     ];
     
