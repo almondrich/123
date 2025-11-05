@@ -27,6 +27,12 @@ if (!check_rate_limit('form_submit', 10, 300)) {
     json_response(['success' => false, 'message' => 'Too many submissions. Please wait.'], 429);
 }
 
+// Daily form limit check
+$user_id = $_SESSION['user_id'];
+if (!check_daily_form_limit($user_id, 50)) {
+    json_response(['success' => false, 'message' => 'Daily form submission limit exceeded (50 forms per day).'], 429);
+}
+
 // Verify CSRF token
 if (!verify_token($_POST['csrf_token'] ?? '')) {
     set_flash('Security token validation failed', 'error');

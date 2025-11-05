@@ -17,12 +17,15 @@ if (is_logged_in()) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = sanitize($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
-    
+    $recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
+
     if (!verify_token($_POST['csrf_token'] ?? '')) {
         set_flash('Invalid security token', 'error');
+    } elseif (!verify_recaptcha($recaptcha_response)) {
+        set_flash('Please complete the CAPTCHA verification', 'error');
     } else {
-        $result = login_user($username, $password);
-        
+        $result = login_user($username, $password, $recaptcha_response);
+
         if ($result['success']) {
             redirect('TONYANG.php');
         } else {
@@ -164,17 +167,21 @@ $csrf_token = generate_token();
                     </div>
                 </div>
                 
-                <div class="mb-4">
+                <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="bi bi-lock"></i>
                         </span>
-                        <input type="password" class="form-control" id="password" name="password" 
+                        <input type="password" class="form-control" id="password" name="password"
                                placeholder="Enter password" required>
                     </div>
                 </div>
-                
+
+                <div class="mb-4">
+                    <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITE_KEY; ?>"></div>
+                </div>
+
                 <button type="submit" class="btn btn-login">
                     <i class="bi bi-box-arrow-in-right"></i> Login
                 </button>
@@ -188,5 +195,6 @@ $csrf_token = generate_token();
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 </html>

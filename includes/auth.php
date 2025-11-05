@@ -46,47 +46,52 @@ function require_admin() {
 /**
  * Login user
  */
-function login_user($username, $password) {
+function login_user($username, $password, $recaptcha_response = null) {
     global $pdo;
-    
+
     // Rate limiting
     if (!check_rate_limit('login', 5, 300)) {
         return ['success' => false, 'message' => 'Too many login attempts. Please try again later.'];
     }
-    
+
+    // Verify reCAPTCHA if provided
+    if ($recaptcha_response && !verify_recaptcha($recaptcha_response)) {
+        return ['success' => false, 'message' => 'CAPTCHA verification failed. Please try again.'];
+    }
+
     $sql = "SELECT id, username, password, role, status FROM users WHERE username = ? LIMIT 1";
     $stmt = db_query($sql, [$username]);
-    
+
     if (!$stmt || $stmt->rowCount() === 0) {
         return ['success' => false, 'message' => 'Invalid username or password'];
     }
-    
+
     $user = $stmt->fetch();
-    
+
     if ($user['status'] !== 'active') {
         return ['success' => false, 'message' => 'Account is inactive. Contact administrator.'];
     }
-    
+
     if (!password_verify($password, $user['password'])) {
         return ['success' => false, 'message' => 'Invalid username or password'];
     }
-    
+
     // Regenerate session ID to prevent fixation
     session_regenerate_id(true);
-    
+
     // Set session variables
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['username'] = $user['username'];
     $_SESSION['user_role'] = $user['role'];
     $_SESSION['login_time'] = time();
-    
+
     // Update last login
     $update_sql = "UPDATE users SET last_login = NOW() WHERE id = ?";
     db_query($update_sql, [$user['id']]);
-    
+
     // Log activity
     log_activity('user_login', 'User logged in: ' . $username);
-    
+
     return ['success' => true, 'message' => 'Login successful'];
 }
 

@@ -1,0 +1,49 @@
+# Environment variables
+.env
+
+# Logs
+*.log
+logs/
+
+# Dependencies
+vendor/
+node_modules/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# PHP
+.phpunit.result.cache
+composer.lock
+
+# Database
+*.db
+*.sqlite
+database_schema.sql
+
+# Sensitive configuration files
+includes/config.php
+
+# Laravel specific (if applicable)
+storage/
+bootstrap/cache/
+
+# Symfony specific (if applicable)
+var/
+
+# WordPress specific (if applicable)
+wp-content/uploads/
+
+# Custom logs or cache
+cache/
+tmp/

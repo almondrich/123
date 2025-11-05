@@ -184,27 +184,46 @@ function get_client_ip() {
  */
 function check_rate_limit($action, $max_attempts = 5, $time_window = 300) {
     $key = 'rate_limit_' . $action;
-    
+
     if (!isset($_SESSION[$key])) {
         $_SESSION[$key] = ['count' => 0, 'start_time' => time()];
     }
-    
+
     $rate_data = $_SESSION[$key];
-    
+
     // Reset if time window expired
     if (time() - $rate_data['start_time'] > $time_window) {
         $_SESSION[$key] = ['count' => 1, 'start_time' => time()];
         return true;
     }
-    
+
     // Check if limit exceeded
     if ($rate_data['count'] >= $max_attempts) {
         return false;
     }
-    
+
     // Increment counter
     $_SESSION[$key]['count']++;
     return true;
+}
+
+/**
+ * Check daily form submission limit per user
+ */
+function check_daily_form_limit($user_id, $max_forms = 50) {
+    global $pdo;
+
+    $today = date('Y-m-d');
+    $sql = "SELECT COUNT(*) as form_count FROM prehospital_forms
+            WHERE created_by = ? AND DATE(created_at) = ?";
+    $stmt = db_query($sql, [$user_id, $today]);
+
+    if ($stmt) {
+        $result = $stmt->fetch();
+        return $result['form_count'] < $max_forms;
+    }
+
+    return false; // Error checking, deny submission
 }
 
 /**
@@ -227,6 +246,55 @@ function log_activity($action, $details = '') {
  */
 function e($string) {
     return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
+}
+
+/**
+ * Verify reCAPTCHA response
+ */
+function verify_recaptcha($response) {
+    $secret_key = RECAPTCHA_SECRET_KEY;
+
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = [
+        'secret' => $secret_key,
+        'response' => $response,
+        'remoteip' => get_client_ip()
+    ];
+
+    // Use cURL for better reliability
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+    $result = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curl_error = curl_error($ch);
+    curl_close($ch);
+
+    if ($result === false || $http_code !== 200) {
+        error_log("reCAPTCHA verification failed: HTTP $http_code, cURL error: $curl_error");
+        return false;
+    }
+
+    $result = json_decode($result, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        error_log("reCAPTCHA JSON decode error: " . json_last_error_msg());
+        return false;
+    }
+
+    if (!isset($result['success'])) {
+        error_log("reCAPTCHA response missing 'success' field");
+        return false;
+    }
+
+    if (!$result['success']) {
+        error_log("reCAPTCHA verification failed: " . json_encode($result));
+    }
+
+    return $result['success'];
 }
 
 /**
