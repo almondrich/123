@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Reposition markers on window resize
+window.addEventListener('resize', repositionMarkers);
+
 // ============================================
 // TAB NAVIGATION FUNCTIONS
 // ============================================
@@ -468,18 +471,27 @@ function setupBodyDiagrams() {
 }
 
 function handleBodyClick(e, view, container) {
-    const rect = container.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const container_rect = container.getBoundingClientRect();
+    const image = container.querySelector('.body-image');
+    const image_rect = image.getBoundingClientRect();
 
-    if (x < 10 || y < 10 || x > rect.width - 10 || y > rect.height - 10) {
+    // Check if click is on the image
+    if (e.clientX < image_rect.left || e.clientX > image_rect.right ||
+        e.clientY < image_rect.top || e.clientY > image_rect.bottom) {
         return;
     }
 
-    addInjury(x, y, view, container);
+    const x = e.clientX - image_rect.left;
+    const y = e.clientY - image_rect.top;
+
+    // Calculate percentages relative to image dimensions
+    const xPercent = (x / image_rect.width) * 100;
+    const yPercent = (y / image_rect.height) * 100;
+
+    addInjury(xPercent, yPercent, view, container, image_rect, container_rect);
 }
 
-function addInjury(x, y, view, container) {
+function addInjury(x, y, view, container, image_rect, container_rect) {
     injuryCounter++;
     const injury = {
         id: injuryCounter,
@@ -492,10 +504,14 @@ function addInjury(x, y, view, container) {
 
     injuries.push(injury);
 
+    // Calculate marker position relative to container
+    const containerX = image_rect.left - container_rect.left + (x / 100) * image_rect.width;
+    const containerY = image_rect.top - container_rect.top + (y / 100) * image_rect.height;
+
     const marker = document.createElement('div');
     marker.className = `injury-marker ${selectedInjuryType}`;
-    marker.style.left = x + 'px';
-    marker.style.top = y + 'px';
+    marker.style.left = containerX + 'px';
+    marker.style.top = containerY + 'px';
     marker.textContent = injuryCounter;
     marker.dataset.id = injuryCounter;
     marker.title = `Injury #${injuryCounter} - ${selectedInjuryType}`;
@@ -569,6 +585,25 @@ function clearAllInjuries() {
         document.querySelectorAll('.injury-marker').forEach(m => m.remove());
         updateInjuryList();
     }
+}
+
+function repositionMarkers() {
+    injuries.forEach(injury => {
+        const marker = document.querySelector(`.injury-marker[data-id="${injury.id}"]`);
+        if (marker) {
+            const container = marker.parentElement;
+            const image = container.querySelector('.body-image');
+            const container_rect = container.getBoundingClientRect();
+            const image_rect = image.getBoundingClientRect();
+
+            // Recalculate marker position relative to container
+            const containerX = image_rect.left - container_rect.left + (injury.x / 100) * image_rect.width;
+            const containerY = image_rect.top - container_rect.top + (injury.y / 100) * image_rect.height;
+
+            marker.style.left = containerX + 'px';
+            marker.style.top = containerY + 'px';
+        }
+    });
 }
 
 function exportInjuryData() {
