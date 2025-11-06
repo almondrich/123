@@ -72,6 +72,13 @@ $current_user = get_auth_user();
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 3px solid #003d7a;
+            position: relative;
+        }
+
+        .header .logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 10px;
         }
 
         .header h1 {
@@ -287,6 +294,13 @@ $current_user = get_auth_user();
                 margin-bottom: 10px;
                 padding-bottom: 8px;
                 border-bottom: 3px solid #003d7a;
+                text-align: center;
+            }
+
+            .header .logo {
+                width: 60px;
+                height: auto;
+                margin-bottom: 5px;
             }
 
             .header h1 {
@@ -496,6 +510,7 @@ $current_user = get_auth_user();
     <div class="form-container">
         <!-- Header -->
         <div class="header">
+            <img src="uploads/logo.png" alt="Logo" class="logo">
             <h1>PRE-HOSPITAL CARE FORM</h1>
             <p>Form Number: <?php echo e($record['form_number']); ?></p>
             <p>Status: <span class="badge-status badge-success"><?php echo ucfirst($record['status']); ?></span></p>

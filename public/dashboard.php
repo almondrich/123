@@ -46,107 +46,322 @@ $recent_forms = $recent_forms_stmt->fetchAll();
         :root {
             --primary-color: #0066cc;
             --secondary-color: #004d99;
+            --light-bg: #f8fafc;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --card-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         body {
-            background-color: #f0f2f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #334155;
         }
 
         .navbar {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .navbar-brand {
             font-weight: 600;
-            font-size: 1.25rem;
+            color: var(--primary-color);
         }
 
+        /* Simplified Stat Cards */
         .stat-card {
             background: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s;
+            border-radius: 12px;
+            padding: 1.25rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #f1f5f9;
+            transition: all 0.2s ease;
+            height: 100%;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--card-hover-shadow);
+            transform: translateY(-2px);
         }
 
         .stat-icon {
-            width: 60px;
-            height: 60px;
+            width: 48px;
+            height: 48px;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.75rem;
-            color: white;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            background: #f8fafc;
         }
 
-        .stat-icon.blue { background: linear-gradient(135deg, #0066cc, #004d99); }
-        .stat-icon.green { background: linear-gradient(135deg, #28a745, #20c997); }
-        .stat-icon.orange { background: linear-gradient(135deg, #fd7e14, #ffc107); }
-        .stat-icon.purple { background: linear-gradient(135deg, #6f42c1, #e83e8c); }
+        .stat-icon.blue { color: var(--primary-color); }
+        .stat-icon.green { color: #10b981; }
+        .stat-icon.orange { color: #f59e0b; }
+        .stat-icon.purple { color: #8b5cf6; }
 
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            color: #333;
-            margin: 0.5rem 0 0 0;
+            color: #1e293b;
+            margin: 0;
+            line-height: 1.2;
         }
 
         .stat-label {
-            color: #6c757d;
-            font-size: 0.95rem;
-            margin: 0;
+            color: #64748b;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin: 0.25rem 0 0 0;
         }
 
+        /* Clean Table Design */
         .table-card {
             background: white;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--card-shadow);
+            border: 1px solid #f1f5f9;
         }
 
         .table-card h5 {
-            color: var(--secondary-color);
+            color: #1e293b;
             font-weight: 600;
             margin-bottom: 1.25rem;
+            font-size: 1.125rem;
+        }
+
+        .table th {
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.875rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0.75rem 1rem;
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.15s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
         }
 
         .badge-status {
             padding: 0.35rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
             font-weight: 600;
         }
 
+        /* LARGER ACTION BUTTONS */
         .btn-action {
-            padding: 0.35rem 0.75rem;
-            font-size: 0.85rem;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        .btn-group-sm > .btn-action {
+            padding: 0.6rem 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        /* Welcome Section */
         .welcome-section {
             background: white;
-            border-radius: 10px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #f1f5f9;
         }
 
         .welcome-section h2 {
-            color: var(--secondary-color);
+            color: #1e293b;
             font-weight: 600;
             margin-bottom: 0.5rem;
+            font-size: 1.5rem;
         }
 
         .welcome-section p {
-            color: #6c757d;
+            color: #64748b;
             margin: 0;
+        }
+
+        /* Mobile Cards for Forms */
+        .mobile-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #f1f5f9;
+        }
+
+        .mobile-card-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .mobile-card-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .mobile-card-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .mobile-card-detail {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+
+        .mobile-card-label {
+            font-weight: 500;
+            color: #64748b;
+            min-width: 80px;
+            font-size: 0.8rem;
+        }
+
+        .mobile-card-value {
+            color: #334155;
+            font-size: 0.85rem;
+        }
+
+        /* LARGER MOBILE ACTION BUTTONS */
+        .mobile-card-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .mobile-card-actions .btn-action {
+            flex: 1;
+            padding: 0.75rem 0.5rem;
+            font-size: 0.85rem;
+            min-height: 44px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .welcome-section {
+                padding: 1.25rem;
+            }
+            
+            .welcome-section h2 {
+                font-size: 1.25rem;
+            }
+            
+            .table-card {
+                padding: 1rem;
+            }
+
+            /* Larger buttons on mobile */
+            .btn-action {
+                padding: 0.7rem 0.9rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container-fluid {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+            
+            .stat-value {
+                font-size: 1.25rem;
+            }
+
+            /* Even larger buttons on very small screens */
+            .mobile-card-actions .btn-action {
+                padding: 0.85rem 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .btn-group-sm > .btn-action {
+                padding: 0.7rem 0.8rem;
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem 1rem;
+            color: #64748b;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            min-height: 44px;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+        }
+
+        .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* Ensure button group has proper spacing */
+        .btn-group {
+            gap: 0.5rem;
+        }
+
+        .btn-group .btn-action {
+            border-radius: 6px !important;
         }
     </style>
 </head>
@@ -154,7 +369,7 @@ $recent_forms = $recent_forms_stmt->fetchAll();
     <!-- Include the navbar -->
     <?php include '../includes/navbar.php'; ?>
 
-    <div class="container-fluid py-4">
+    <div class="container-fluid py-3">
         <?php show_flash(); ?>
 
         <!-- Welcome Section -->
@@ -164,69 +379,53 @@ $recent_forms = $recent_forms_stmt->fetchAll();
                     <h2>Welcome back, <?php echo e($current_user['full_name']); ?>!</h2>
                     <p>Here's an overview of your pre-hospital care forms and recent activity.</p>
                 </div>
-                <div class="col-md-4 text-end">
-                    <a href="TONYANG.php" class="btn btn-primary btn-lg">
-                        <i class="bi bi-plus-circle"></i> Create New Form
+                <div class="col-md-4 text-md-end text-start mt-3 mt-md-0">
+                    <a href="TONYANG.php" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i> Create New Form
                     </a>
                 </div>
             </div>
         </div>
 
         <!-- Statistics Cards -->
-        <div class="row g-4 mb-4">
-            <div class="col-md-3">
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
                 <div class="stat-card">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon blue">
-                            <i class="bi bi-file-earmark-medical"></i>
-                        </div>
-                        <div class="ms-3 flex-grow-1">
-                            <p class="stat-value"><?php echo number_format($total_forms); ?></p>
-                            <p class="stat-label">Total Forms</p>
-                        </div>
+                    <div class="stat-icon blue">
+                        <i class="bi bi-file-earmark-medical"></i>
                     </div>
+                    <p class="stat-value"><?php echo number_format($total_forms); ?></p>
+                    <p class="stat-label">Total Forms</p>
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-6 col-md-3">
                 <div class="stat-card">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon green">
-                            <i class="bi bi-calendar-check"></i>
-                        </div>
-                        <div class="ms-3 flex-grow-1">
-                            <p class="stat-value"><?php echo number_format($today_forms); ?></p>
-                            <p class="stat-label">Today's Forms</p>
-                        </div>
+                    <div class="stat-icon green">
+                        <i class="bi bi-calendar-check"></i>
                     </div>
+                    <p class="stat-value"><?php echo number_format($today_forms); ?></p>
+                    <p class="stat-label">Today's Forms</p>
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-6 col-md-3">
                 <div class="stat-card">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon orange">
-                            <i class="bi bi-clock"></i>
-                        </div>
-                        <div class="ms-3 flex-grow-1">
-                            <p class="stat-value"><?php echo number_format($pending_forms); ?></p>
-                            <p class="stat-label">Pending Forms</p>
-                        </div>
+                    <div class="stat-icon orange">
+                        <i class="bi bi-clock"></i>
                     </div>
+                    <p class="stat-value"><?php echo number_format($pending_forms); ?></p>
+                    <p class="stat-label">Pending Forms</p>
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-6 col-md-3">
                 <div class="stat-card">
-                    <div class="d-flex align-items-center">
-                        <div class="stat-icon purple">
-                            <i class="bi bi-check-circle"></i>
-                        </div>
-                        <div class="ms-3 flex-grow-1">
-                            <p class="stat-value"><?php echo number_format($completed_forms); ?></p>
-                            <p class="stat-label">Completed Forms</p>
-                        </div>
+                    <div class="stat-icon purple">
+                        <i class="bi bi-check-circle"></i>
                     </div>
+                    <p class="stat-value"><?php echo number_format($completed_forms); ?></p>
+                    <p class="stat-label">Completed Forms</p>
                 </div>
             </div>
         </div>
@@ -234,87 +433,171 @@ $recent_forms = $recent_forms_stmt->fetchAll();
         <!-- Recent Forms Table -->
         <div class="table-card">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5><i class="bi bi-clock-history"></i> Your Recent Forms</h5>
+                <h5><i class="bi bi-clock-history me-2"></i>Your Recent Forms</h5>
                 <a href="records.php" class="btn btn-outline-primary btn-sm">
-                    <i class="bi bi-list-ul"></i> View All Records
+                    <i class="bi bi-list-ul me-1"></i> View All Records
                 </a>
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Form Number</th>
-                            <th>Date</th>
-                            <th>Patient Name</th>
-                            <th>Age/Gender</th>
-                            <th>Vehicle</th>
-                            <th>Hospital</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (empty($recent_forms)): ?>
+            <!-- Desktop Table -->
+            <div class="d-none d-md-block">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <td colspan="8" class="text-center text-muted py-4">
-                                    <i class="bi bi-inbox" style="font-size: 2rem;"></i>
-                                    <p class="mt-2">No forms found</p>
-                                    <a href="TONYANG.php" class="btn btn-primary mt-2">
-                                        <i class="bi bi-plus-circle"></i> Create Your First Form
-                                    </a>
-                                </td>
+                                <th>Form Number</th>
+                                <th>Date</th>
+                                <th>Patient Name</th>
+                                <th>Age/Gender</th>
+                                <th>Vehicle</th>
+                                <th>Hospital</th>
+                                <th>Status</th>
+                                <th>Actions</th>
                             </tr>
-                        <?php else: ?>
-                            <?php foreach ($recent_forms as $form): ?>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($recent_forms)): ?>
                                 <tr>
-                                    <td><strong><?php echo e($form['form_number']); ?></strong></td>
-                                    <td><?php echo date('M d, Y', strtotime($form['form_date'])); ?></td>
-                                    <td><?php echo e($form['patient_name']); ?></td>
-                                    <td><?php echo e($form['age']); ?> / <?php echo ucfirst(e($form['gender'])); ?></td>
-                                    <td>
-                                        <?php if ($form['vehicle_used']): ?>
-                                            <span class="badge bg-info"><?php echo ucfirst(e($form['vehicle_used'])); ?></span>
-                                        <?php else: ?>
-                                            <span class="text-muted">-</span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td><?php echo e($form['arrival_hospital_name'] ?: '-'); ?></td>
-                                    <td>
-                                        <?php
-                                        $status_class = [
-                                            'draft' => 'bg-secondary',
-                                            'completed' => 'bg-success',
-                                            'pending' => 'bg-warning',
-                                            'archived' => 'bg-dark'
-                                        ];
-                                        $class = $status_class[$form['status']] ?? 'bg-secondary';
-                                        ?>
-                                        <span class="badge badge-status <?php echo $class; ?>">
-                                            <?php echo ucfirst(e($form['status'])); ?>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="view_record.php?id=<?php echo $form['id']; ?>"
-                                               class="btn btn-outline-primary btn-action" title="View">
-                                                <i class="bi bi-eye"></i>
+                                    <td colspan="8" class="text-center py-5">
+                                        <div class="empty-state">
+                                            <i class="bi bi-inbox"></i>
+                                            <p class="mt-2 mb-3">No forms found</p>
+                                            <a href="TONYANG.php" class="btn btn-primary">
+                                                <i class="bi bi-plus-circle me-1"></i> Create Your First Form
                                             </a>
-                                            <a href="edit_record.php?id=<?php echo $form['id']; ?>"
-                                               class="btn btn-outline-success btn-action" title="Edit">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
-                                            <button class="btn btn-outline-danger btn-action" title="Delete"
-                                                    onclick="deleteRecord(<?php echo $form['id']; ?>)">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
                                         </div>
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                            <?php else: ?>
+                                <?php foreach ($recent_forms as $form): ?>
+                                    <tr>
+                                        <td><strong><?php echo e($form['form_number']); ?></strong></td>
+                                        <td><?php echo date('M d, Y', strtotime($form['form_date'])); ?></td>
+                                        <td><?php echo e($form['patient_name']); ?></td>
+                                        <td><?php echo e($form['age']); ?> / <?php echo ucfirst(e($form['gender'])); ?></td>
+                                        <td>
+                                            <?php if ($form['vehicle_used']): ?>
+                                                <span class="badge bg-light text-dark border"><?php echo ucfirst(e($form['vehicle_used'])); ?></span>
+                                            <?php else: ?>
+                                                <span class="text-muted">-</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?php echo e($form['arrival_hospital_name'] ?: '-'); ?></td>
+                                        <td>
+                                            <?php
+                                            $status_class = [
+                                                'draft' => 'bg-light text-dark',
+                                                'completed' => 'bg-success',
+                                                'pending' => 'bg-warning text-dark',
+                                                'archived' => 'bg-dark'
+                                            ];
+                                            $class = $status_class[$form['status']] ?? 'bg-secondary';
+                                            ?>
+                                            <span class="badge badge-status <?php echo $class; ?>">
+                                                <?php echo ucfirst(e($form['status'])); ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="view_record.php?id=<?php echo $form['id']; ?>"
+                                                   class="btn btn-outline-primary btn-action" title="View">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a href="edit_record.php?id=<?php echo $form['id']; ?>"
+                                                   class="btn btn-outline-success btn-action" title="Edit">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <button class="btn btn-outline-danger btn-action" title="Delete"
+                                                        onclick="deleteRecord(<?php echo $form['id']; ?>)">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Mobile Cards -->
+            <div class="d-md-none">
+                <?php if (empty($recent_forms)): ?>
+                    <div class="empty-state">
+                        <i class="bi bi-inbox"></i>
+                        <p class="mt-2 mb-3">No forms found</p>
+                        <a href="TONYANG.php" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-1"></i> Create Your First Form
+                        </a>
+                    </div>
+                <?php else: ?>
+                    <?php foreach ($recent_forms as $form): ?>
+                        <div class="mobile-card">
+                            <div class="mobile-card-header">
+                                <h6 class="mobile-card-title"><?php echo e($form['form_number']); ?></h6>
+                                <?php
+                                $status_class = [
+                                    'draft' => 'bg-light text-dark',
+                                    'completed' => 'bg-success',
+                                    'pending' => 'bg-warning text-dark',
+                                    'archived' => 'bg-dark'
+                                ];
+                                $class = $status_class[$form['status']] ?? 'bg-secondary';
+                                ?>
+                                <span class="badge mobile-card-badge <?php echo $class; ?>">
+                                    <?php echo ucfirst(e($form['status'])); ?>
+                                </span>
+                            </div>
+                            
+                            <div class="mobile-card-detail">
+                                <span class="mobile-card-label">Date:</span>
+                                <span class="mobile-card-value"><?php echo date('M d, Y', strtotime($form['form_date'])); ?></span>
+                            </div>
+                            
+                            <div class="mobile-card-detail">
+                                <span class="mobile-card-label">Patient:</span>
+                                <span class="mobile-card-value"><?php echo e($form['patient_name']); ?></span>
+                            </div>
+                            
+                            <div class="mobile-card-detail">
+                                <span class="mobile-card-label">Age/Gender:</span>
+                                <span class="mobile-card-value"><?php echo e($form['age']); ?> / <?php echo ucfirst(e($form['gender'])); ?></span>
+                            </div>
+                            
+                            <div class="mobile-card-detail">
+                                <span class="mobile-card-label">Vehicle:</span>
+                                <span class="mobile-card-value">
+                                    <?php if ($form['vehicle_used']): ?>
+                                        <?php echo ucfirst(e($form['vehicle_used'])); ?>
+                                    <?php else: ?>
+                                        <span class="text-muted">-</span>
+                                    <?php endif; ?>
+                                </span>
+                            </div>
+                            
+                            <div class="mobile-card-detail">
+                                <span class="mobile-card-label">Hospital:</span>
+                                <span class="mobile-card-value"><?php echo e($form['arrival_hospital_name'] ?: '-'); ?></span>
+                            </div>
+                            
+                            <div class="mobile-card-actions">
+                                <a href="view_record.php?id=<?php echo $form['id']; ?>"
+                                   class="btn btn-outline-primary btn-action" title="View">
+                                    <i class="bi bi-eye me-1 d-none d-sm-inline"></i> View
+                                </a>
+                                <a href="edit_record.php?id=<?php echo $form['id']; ?>"
+                                   class="btn btn-outline-success btn-action" title="Edit">
+                                    <i class="bi bi-pencil me-1 d-none d-sm-inline"></i> Edit
+                                </a>
+                                <button class="btn btn-outline-danger btn-action" title="Delete"
+                                        onclick="deleteRecord(<?php echo $form['id']; ?>)">
+                                    <i class="bi bi-trash me-1 d-none d-sm-inline"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>

@@ -19,8 +19,8 @@ $user_role = strtolower($current_user['role'] ?? 'guest');
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm">
   <div class="container">
     <a class="navbar-brand fw-bold d-flex align-items-center" href="<?= $base_path ?>dashboard.php">
-        <i class="bi bi-file-medical" style="font-size: 32px; margin-right: 8px; color: #0d6efd;"></i>
-        Pre-Hospital Care
+        <img src="<?= $base_path ?>uploads/logo.png" alt="Logo" style="height: 40px; margin-right: 10px;">
+        RESQ-link
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
       <span class="navbar-toggler-icon"></span>
