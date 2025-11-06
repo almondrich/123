@@ -1,0 +1,514 @@
+/* ========================================
+   Pre-Hospital Care Records - Custom Styles
+   Following Annex4 Design Pattern
+   ======================================== */
+
+body {
+    background-color: #f5f5f5;
+    padding: clamp(15px, 3vw, 20px);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    scroll-behavior: smooth;
+}
+
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+}
+
+.records-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    padding: clamp(20px, 4vw, 30px);
+    margin: 0 auto;
+    width: 100%;
+    max-width: 98vw;
+}
+
+/* ========================================
+   Header Section
+   ======================================== */
+.header-section {
+    margin-bottom: clamp(25px, 5vw, 30px);
+    padding-bottom: clamp(15px, 3vw, 20px);
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.header-section h1 {
+    font-size: clamp(1.5rem, 4vw, 1.75rem);
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: clamp(5px, 1.5vw, 8px);
+}
+
+.header-section h2 {
+    font-size: clamp(1.1rem, 3vw, 1.25rem);
+    color: #6c757d;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* ========================================
+   Statistics Cards
+   ======================================== */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: clamp(12px, 2.5vw, 15px);
+    margin-bottom: clamp(25px, 5vw, 30px);
+}
+
+.stat-card {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    padding: clamp(15px, 3.5vw, 20px);
+    border-radius: 6px;
+    border-left: 4px solid #0d6efd;
+    transition: box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.stat-card h3 {
+    font-size: clamp(1.5rem, 4vw, 1.75rem);
+    margin-bottom: clamp(5px, 1.5vw, 8px);
+    font-weight: 600;
+    color: #212529;
+}
+
+.stat-card p {
+    margin: 0;
+    color: #6c757d;
+    font-size: clamp(0.85rem, 2.3vw, 0.9rem);
+}
+
+.stat-card:nth-child(1) { border-left-color: #0d6efd; }
+.stat-card:nth-child(2) { border-left-color: #198754; }
+.stat-card:nth-child(3) { border-left-color: #ffc107; }
+.stat-card:nth-child(4) { border-left-color: #17a2b8; }
+
+/* ========================================
+   Action Section
+   ======================================== */
+.action-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: clamp(10px, 2.5vw, 15px);
+    margin-bottom: clamp(20px, 4vw, 25px);
+    padding: clamp(15px, 3vw, 20px);
+    background-color: #f8f9fa;
+    border-radius: 6px;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 250px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: clamp(8px, 2vw, 10px);
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: clamp(0.85rem, 2.3vw, 0.9rem);
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+}
+
+.action-buttons {
+    display: flex;
+    gap: clamp(8px, 2vw, 10px);
+    flex-wrap: wrap;
+}
+
+/* ========================================
+   Custom Buttons
+   ======================================== */
+.btn-custom {
+    padding: clamp(8px, 2vw, 10px) clamp(15px, 3.5vw, 18px);
+    font-size: clamp(0.85rem, 2.3vw, 0.9rem);
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(5px, 1.5vw, 8px);
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.btn-primary-custom {
+    background-color: #0d6efd;
+    color: white;
+    border: 1px solid #0d6efd;
+}
+
+.btn-primary-custom:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.btn-secondary-custom {
+    background-color: #6c757d;
+    color: white;
+    border: 1px solid #6c757d;
+}
+
+.btn-secondary-custom:hover {
+    background-color: #5c636a;
+    border-color: #565e64;
+}
+
+.btn-success-custom {
+    background-color: #198754;
+    color: white;
+    border: 1px solid #198754;
+}
+
+.btn-success-custom:hover {
+    background-color: #157347;
+    border-color: #146c43;
+}
+
+/* ========================================
+   Table Container
+   ======================================== */
+.table-container {
+    overflow-x: auto;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    background-color: white;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    font-size: clamp(0.8rem, 2.2vw, 0.875rem);
+}
+
+.custom-table thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.custom-table th {
+    padding: clamp(12px, 2.5vw, 15px);
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.custom-table td {
+    padding: clamp(10px, 2.5vw, 12px);
+    border-bottom: 1px solid #dee2e6;
+    color: #212529;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ========================================
+   Badges
+   ======================================== */
+.badge-custom {
+    padding: clamp(4px, 1.2vw, 5px) clamp(8px, 2vw, 10px);
+    border-radius: 4px;
+    font-size: clamp(0.7rem, 2vw, 0.75rem);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.status-completed {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+.status-draft {
+    background-color: #fff3cd;
+    color: #664d03;
+    border: 1px solid #ffecb5;
+}
+
+.status-pending {
+    background-color: #cff4fc;
+    color: #055160;
+    border: 1px solid #b6effb;
+}
+
+/* ========================================
+   Table Action Buttons
+   ======================================== */
+.btn-table {
+    padding: clamp(5px, 1.5vw, 6px) clamp(10px, 2.5vw, 12px);
+    font-size: clamp(0.75rem, 2vw, 0.8rem);
+    border: 1px solid;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin: 2px;
+    font-weight: 500;
+}
+
+.btn-view {
+    background-color: #0dcaf0;
+    color: #000;
+    border-color: #0dcaf0;
+}
+
+.btn-view:hover {
+    background-color: #31d2f2;
+    border-color: #25cff2;
+}
+
+.btn-edit {
+    background-color: #ffc107;
+    color: #000;
+    border-color: #ffc107;
+}
+
+.btn-edit:hover {
+    background-color: #ffca2c;
+    border-color: #ffc720;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.btn-delete:hover {
+    background-color: #bb2d3b;
+    border-color: #b02a37;
+}
+
+/* ========================================
+   Skeleton Loaders
+   ======================================== */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-loader {
+    display: none;
+}
+
+.loading .skeleton-loader {
+    display: table-row-group;
+}
+
+.loading .table-content {
+    display: none;
+}
+
+.skeleton-card {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    padding: clamp(15px, 3.5vw, 20px);
+    border-radius: 6px;
+    border-left: 4px solid #e0e0e0;
+}
+
+.skeleton-title {
+    height: clamp(1.5rem, 4vw, 1.75rem);
+    margin-bottom: clamp(5px, 1.5vw, 8px);
+    border-radius: 4px;
+}
+
+.skeleton-text {
+    height: clamp(0.85rem, 2.3vw, 0.9rem);
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.skeleton-text.short {
+    width: 60%;
+}
+
+.loading .stats-cards .stat-card {
+    display: none;
+}
+
+.loading .stats-cards .skeleton-card {
+    display: block;
+}
+
+.stats-cards .skeleton-card {
+    display: none;
+}
+
+.skeleton-row {
+    display: table-row;
+}
+
+.skeleton-cell {
+    display: table-cell;
+    padding: clamp(10px, 2.5vw, 12px);
+    border-bottom: 1px solid #dee2e6;
+}
+
+.skeleton-bar {
+    height: 12px;
+    border-radius: 4px;
+    margin: 4px 0;
+}
+
+.skeleton-bar.short {
+    width: 60%;
+}
+
+.skeleton-bar.medium {
+    width: 80%;
+}
+
+.skeleton-bar.long {
+    width: 95%;
+}
+
+/* ========================================
+   Empty State
+   ======================================== */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+/* ========================================
+   Back to Top Button
+   ======================================== */
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #0d6efd;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
+    z-index: 1000;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.back-to-top:hover {
+    background: #0b5ed7;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(13, 110, 253, 0.5);
+}
+
+.back-to-top.show {
+    display: flex;
+}
+
+/* ========================================
+   Mobile Filters
+   ======================================== */
+.filters-card {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: clamp(15px, 3vw, 20px);
+    margin-bottom: clamp(15px, 3vw, 20px);
+    border: 1px solid #dee2e6;
+}
+
+.form-control, .form-select {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: clamp(0.85rem, 2.3vw, 0.875rem);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25);
+}
+
+/* ========================================
+   Responsive Design - Tablet
+   ======================================== */
+@media (max-width: 768px) {
+    .stats-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .action-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .action-buttons {
+        justify-content: center;
+    }
+
+    .back-to-top {
+        width: 42px;
+        height: 42px;
+        bottom: 16px;
+        right: 16px;
+    }
+}
+
+/* ========================================
+   Responsive Design - Mobile
+   ======================================== */
+@media (max-width: 576px) {
+    body {
+        padding: clamp(10px, 2vw, 15px);
+    }
+
+    .records-container {
+        padding: clamp(15px, 3vw, 20px);
+    }
+
+    .stats-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .back-to-top {
+        width: 40px;
+        height: 40px;
+        bottom: 12px;
+        right: 12px;
+        font-size: 1rem;
+    }
+}

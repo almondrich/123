@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"c:\\xampp\\htdocs\\123\\public\\records.temp.php\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

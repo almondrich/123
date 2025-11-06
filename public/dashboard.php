@@ -203,118 +203,228 @@ $recent_forms = $recent_forms_stmt->fetchAll();
         /* Mobile Cards for Forms */
         .mobile-card {
             background: white;
-            border-radius: 10px;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.875rem;
             box-shadow: var(--card-shadow);
             border: 1px solid #f1f5f9;
         }
 
         .mobile-card-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.625rem;
+            gap: 0.5rem;
         }
 
         .mobile-card-title {
             font-weight: 600;
             color: #1e293b;
             margin: 0;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            flex: 1;
         }
 
         .mobile-card-badge {
             font-size: 0.7rem;
             padding: 0.25rem 0.5rem;
+            white-space: nowrap;
         }
 
         .mobile-card-detail {
             display: flex;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
         }
 
         .mobile-card-label {
             font-weight: 500;
             color: #64748b;
-            min-width: 80px;
+            min-width: 75px;
             font-size: 0.8rem;
         }
 
         .mobile-card-value {
             color: #334155;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
+            flex: 1;
+            word-break: break-word;
         }
 
         /* LARGER MOBILE ACTION BUTTONS */
         .mobile-card-actions {
             display: flex;
-            gap: 0.75rem;
-            margin-top: 1rem;
-            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.875rem;
+            justify-content: stretch;
         }
 
         .mobile-card-actions .btn-action {
             flex: 1;
-            padding: 0.75rem 0.5rem;
-            font-size: 0.85rem;
-            min-height: 44px;
+            padding: 0.65rem 0.4rem;
+            font-size: 0.8rem;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .stat-card {
-                padding: 1rem;
+                padding: 0.875rem;
             }
-            
+
             .stat-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
+                width: 36px;
+                height: 36px;
+                font-size: 0.95rem;
                 margin-bottom: 0.5rem;
             }
-            
+
             .stat-value {
-                font-size: 1.5rem;
+                font-size: 1.35rem;
             }
-            
+
+            .stat-label {
+                font-size: 0.75rem;
+            }
+
             .welcome-section {
-                padding: 1.25rem;
-            }
-            
-            .welcome-section h2 {
-                font-size: 1.25rem;
-            }
-            
-            .table-card {
                 padding: 1rem;
             }
 
-            /* Larger buttons on mobile */
+            .welcome-section h2 {
+                font-size: 1.15rem;
+            }
+
+            .welcome-section p {
+                font-size: 0.875rem;
+            }
+
+            .table-card {
+                padding: 0.875rem;
+            }
+
+            .table-card h5 {
+                font-size: 1rem;
+            }
+
+            .table-card .btn-sm {
+                padding: 0.4rem 0.7rem;
+                font-size: 0.75rem;
+            }
+
+            /* More compact mobile cards */
+            .mobile-card {
+                padding: 0.875rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .mobile-card-title {
+                font-size: 0.9rem;
+            }
+
+            .mobile-card-label {
+                min-width: 70px;
+                font-size: 0.75rem;
+            }
+
+            .mobile-card-value {
+                font-size: 0.8rem;
+            }
+
+            .mobile-card-detail {
+                margin-bottom: 0.35rem;
+            }
+
+            .mobile-card-actions {
+                margin-top: 0.75rem;
+                gap: 0.5rem;
+            }
+
+            /* Optimized buttons on mobile */
             .btn-action {
-                padding: 0.7rem 0.9rem;
-                font-size: 0.95rem;
+                padding: 0.6rem 0.7rem;
+                font-size: 0.85rem;
+            }
+
+            .mobile-card-actions .btn-action {
+                padding: 0.6rem 0.4rem;
+                font-size: 0.8rem;
+                min-height: 38px;
             }
         }
 
         @media (max-width: 576px) {
             .container-fluid {
-                padding-left: 0.75rem;
-                padding-right: 0.75rem;
+                padding-left: 0.625rem;
+                padding-right: 0.625rem;
             }
-            
+
+            /* More compact stats on very small screens */
+            .stat-card {
+                padding: 0.75rem;
+            }
+
+            .stat-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 0.875rem;
+                margin-bottom: 0.4rem;
+            }
+
             .stat-value {
                 font-size: 1.25rem;
             }
 
-            /* Even larger buttons on very small screens */
+            .stat-label {
+                font-size: 0.7rem;
+            }
+
+            .welcome-section {
+                padding: 0.875rem;
+            }
+
+            .welcome-section h2 {
+                font-size: 1.05rem;
+            }
+
+            .welcome-section p {
+                font-size: 0.8rem;
+            }
+
+            /* More compact mobile cards */
+            .mobile-card {
+                padding: 0.75rem;
+            }
+
             .mobile-card-actions .btn-action {
-                padding: 0.85rem 0.5rem;
-                font-size: 0.9rem;
+                padding: 0.55rem 0.35rem;
+                font-size: 0.75rem;
+                min-height: 36px;
+            }
+
+            .mobile-card-actions .btn-action i {
+                font-size: 0.85rem;
             }
 
             .btn-group-sm > .btn-action {
-                padding: 0.7rem 0.8rem;
+                padding: 0.6rem 0.7rem;
+            }
+
+            .btn-primary {
+                padding: 0.625rem 1.25rem;
+            }
+
+            /* Better overflow handling on small screens */
+            .table-card {
+                overflow: hidden;
+            }
+
+            .mobile-card-title {
+                line-height: 1.3;
             }
         }
 
@@ -388,7 +498,7 @@ $recent_forms = $recent_forms_stmt->fetchAll();
         </div>
 
         <!-- Statistics Cards -->
-        <div class="row g-3 mb-4">
+        <div class="row g-2 g-md-3 mb-4">
             <div class="col-6 col-md-3">
                 <div class="stat-card">
                     <div class="stat-icon blue">
