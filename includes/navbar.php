@@ -6,6 +6,10 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
+// Detect if we're in admin subdirectory
+$is_admin_page = strpos($_SERVER['REQUEST_URI'], '/admin/') !== false;
+$base_path = $is_admin_page ? '../' : '';
+
 // Get user info from session via auth function
 require_once 'auth.php';
 $current_user = get_auth_user();
@@ -14,7 +18,7 @@ $user_role = strtolower($current_user['role'] ?? 'guest');
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm">
   <div class="container">
-    <a class="navbar-brand fw-bold d-flex align-items-center" href="dashboard.php">
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="<?= $base_path ?>dashboard.php">
         <i class="bi bi-file-medical" style="font-size: 32px; margin-right: 8px; color: #0d6efd;"></i>
         Pre-Hospital Care
     </a>
@@ -27,21 +31,21 @@ $user_role = strtolower($current_user['role'] ?? 'guest');
       <ul class="navbar-nav ms-auto">
         <!-- Dashboard -->
         <li class="nav-item">
-          <a class="nav-link <?php if($current_page=='dashboard.php' || $current_page=='index.php') echo 'active'; ?>" href="dashboard.php">
+          <a class="nav-link <?php if($current_page=='dashboard.php' || $current_page=='index.php') echo 'active'; ?>" href="<?= $base_path ?>dashboard.php">
             <span class="material-icons">home</span> Dashboard
           </a>
         </li>
 
         <!-- New Form -->
         <li class="nav-item">
-          <a class="nav-link <?php if($current_page=='TONYANG.php') echo 'active'; ?>" href="TONYANG.php">
+          <a class="nav-link <?php if($current_page=='TONYANG.php') echo 'active'; ?>" href="<?= $base_path ?>TONYANG.php">
             <span class="material-icons">add</span> New Form
           </a>
         </li>
 
         <!-- Records -->
         <li class="nav-item">
-          <a class="nav-link <?php if($current_page=='records.php') echo 'active'; ?>" href="records.php">
+          <a class="nav-link <?php if($current_page=='records.php') echo 'active'; ?>" href="<?= $base_path ?>records.php">
             <span class="material-icons">table_view</span> Records
           </a>
         </li>
@@ -49,7 +53,7 @@ $user_role = strtolower($current_user['role'] ?? 'guest');
         <!-- Admin Dashboard (if admin) -->
         <?php if ($user_role === 'admin'): ?>
           <li class="nav-item">
-            <a class="nav-link <?php if($current_page=='dashboard.php' && strpos($_SERVER['REQUEST_URI'], 'admin') !== false) echo 'active'; ?>" href="admin/dashboard.php">
+            <a class="nav-link <?php if($current_page=='users.php' || ($current_page=='dashboard.php' && $is_admin_page)) echo 'active'; ?>" href="<?= $base_path ?>admin/users.php">
               <span class="material-icons">admin_panel_settings</span> Admin
             </a>
           </li>
@@ -68,9 +72,9 @@ $user_role = strtolower($current_user['role'] ?? 'guest');
             <span class="ms-2"><?= htmlspecialchars($user_full) ?></span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <li><a class="dropdown-item" href="change_password.php">Change Password</a></li>
+            <li><a class="dropdown-item" href="<?= $base_path ?>change_password.php">Change Password</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" href="logout.php">Logout</a></li>
+            <li><a class="dropdown-item text-danger" href="<?= $base_path ?>logout.php">Logout</a></li>
           </ul>
         </li>
       </ul>

@@ -268,6 +268,79 @@ function check_rate_limit($action, $max_attempts = 5, $time_window = 300) {
 }
 
 /**
+ * IP-based rate limiting (for APIs and login attempts)
+ * Stores in database for persistence across sessions
+ */
+function check_ip_rate_limit($action, $max_attempts = 5, $time_window = 300) {
+    global $pdo;
+
+    $ip_address = get_client_ip();
+    $action_key = sanitize($action);
+    $current_time = time();
+
+    try {
+        // Check if rate limit record exists
+        $sql = "SELECT attempt_count, window_start FROM rate_limits
+                WHERE ip_address = ? AND action = ? LIMIT 1";
+        $stmt = db_query($sql, [$ip_address, $action_key]);
+        $rate_data = $stmt ? $stmt->fetch() : null;
+
+        if (!$rate_data) {
+            // First attempt - create record
+            $insert_sql = "INSERT INTO rate_limits (ip_address, action, attempt_count, window_start)
+                          VALUES (?, ?, 1, ?)";
+            db_query($insert_sql, [$ip_address, $action_key, $current_time]);
+            return true;
+        }
+
+        $window_start = (int)$rate_data['window_start'];
+        $attempt_count = (int)$rate_data['attempt_count'];
+
+        // Check if time window expired
+        if (($current_time - $window_start) > $time_window) {
+            // Reset window
+            $update_sql = "UPDATE rate_limits
+                          SET attempt_count = 1, window_start = ?
+                          WHERE ip_address = ? AND action = ?";
+            db_query($update_sql, [$current_time, $ip_address, $action_key]);
+            return true;
+        }
+
+        // Check if limit exceeded
+        if ($attempt_count >= $max_attempts) {
+            return false;
+        }
+
+        // Increment counter
+        $update_sql = "UPDATE rate_limits
+                      SET attempt_count = attempt_count + 1
+                      WHERE ip_address = ? AND action = ?";
+        db_query($update_sql, [$ip_address, $action_key]);
+        return true;
+
+    } catch (Exception $e) {
+        error_log("Rate limit check failed: " . $e->getMessage());
+        // Fail open - allow request if rate limiting fails
+        return true;
+    }
+}
+
+/**
+ * Clean up old rate limit records (call this periodically)
+ */
+function cleanup_rate_limits($older_than_hours = 24) {
+    global $pdo;
+
+    try {
+        $cutoff_time = time() - ($older_than_hours * 3600);
+        $sql = "DELETE FROM rate_limits WHERE window_start < ?";
+        db_query($sql, [$cutoff_time]);
+    } catch (Exception $e) {
+        error_log("Rate limit cleanup failed: " . $e->getMessage());
+    }
+}
+
+/**
  * Check daily form submission limit per user
  */
 function check_daily_form_limit($user_id, $max_forms = 50) {
@@ -291,14 +364,108 @@ function check_daily_form_limit($user_id, $max_forms = 50) {
  */
 function log_activity($action, $details = '') {
     global $pdo;
-    
+
     $user_id = $_SESSION['user_id'] ?? null;
     $ip_address = get_client_ip();
-    
-    $sql = "INSERT INTO activity_logs (user_id, action, details, ip_address, created_at) 
+
+    $sql = "INSERT INTO activity_logs (user_id, action, details, ip_address, created_at)
             VALUES (?, ?, ?, ?, NOW())";
-    
+
     db_query($sql, [$user_id, $action, $details, $ip_address]);
+}
+
+/**
+ * Check if account is locked due to failed login attempts
+ */
+function is_account_locked($username) {
+    global $pdo;
+
+    try {
+        $sql = "SELECT failed_attempts, locked_until FROM users WHERE username = ? LIMIT 1";
+        $stmt = db_query($sql, [$username]);
+        $user = $stmt ? $stmt->fetch() : null;
+
+        if (!$user) {
+            return false;
+        }
+
+        // Check if account is locked
+        if ($user['locked_until']) {
+            $locked_until = strtotime($user['locked_until']);
+            $current_time = time();
+
+            if ($current_time < $locked_until) {
+                $minutes_left = ceil(($locked_until - $current_time) / 60);
+                return [
+                    'locked' => true,
+                    'minutes_remaining' => $minutes_left
+                ];
+            } else {
+                // Lock expired - reset
+                reset_failed_attempts($username);
+                return false;
+            }
+        }
+
+        return false;
+    } catch (Exception $e) {
+        error_log("Account lock check failed: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Record failed login attempt
+ */
+function record_failed_attempt($username, $max_attempts = 5, $lockout_minutes = 15) {
+    global $pdo;
+
+    try {
+        $sql = "SELECT failed_attempts FROM users WHERE username = ? LIMIT 1";
+        $stmt = db_query($sql, [$username]);
+        $user = $stmt ? $stmt->fetch() : null;
+
+        if (!$user) {
+            return;
+        }
+
+        $failed_attempts = (int)$user['failed_attempts'] + 1;
+
+        if ($failed_attempts >= $max_attempts) {
+            // Lock the account
+            $locked_until = date('Y-m-d H:i:s', time() + ($lockout_minutes * 60));
+            $update_sql = "UPDATE users
+                          SET failed_attempts = ?, locked_until = ?
+                          WHERE username = ?";
+            db_query($update_sql, [$failed_attempts, $locked_until, $username]);
+
+            log_activity('account_locked', "Account locked for user: $username after $failed_attempts failed attempts");
+        } else {
+            // Increment failed attempts
+            $update_sql = "UPDATE users
+                          SET failed_attempts = ?
+                          WHERE username = ?";
+            db_query($update_sql, [$failed_attempts, $username]);
+        }
+    } catch (Exception $e) {
+        error_log("Record failed attempt error: " . $e->getMessage());
+    }
+}
+
+/**
+ * Reset failed login attempts on successful login
+ */
+function reset_failed_attempts($username) {
+    global $pdo;
+
+    try {
+        $sql = "UPDATE users
+                SET failed_attempts = 0, locked_until = NULL
+                WHERE username = ?";
+        db_query($sql, [$username]);
+    } catch (Exception $e) {
+        error_log("Reset failed attempts error: " . $e->getMessage());
+    }
 }
 
 /**

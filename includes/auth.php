@@ -55,7 +55,12 @@ function require_admin() {
 function login_user($username, $password, $recaptcha_response = null) {
     global $pdo;
 
-    // Rate limiting
+    // IP-based rate limiting (more strict for login)
+    if (!check_ip_rate_limit('login', 10, 600)) {
+        return ['success' => false, 'message' => 'Too many login attempts from your IP. Please try again in 10 minutes.'];
+    }
+
+    // Session-based rate limiting (backup)
     if (!check_rate_limit('login', 5, 300)) {
         return ['success' => false, 'message' => 'Too many login attempts. Please try again later.'];
     }
@@ -65,10 +70,18 @@ function login_user($username, $password, $recaptcha_response = null) {
         return ['success' => false, 'message' => 'CAPTCHA verification failed. Please try again.'];
     }
 
+    // Check if account is locked
+    $lock_status = is_account_locked($username);
+    if ($lock_status && isset($lock_status['locked'])) {
+        $minutes = $lock_status['minutes_remaining'];
+        return ['success' => false, 'message' => "Account is temporarily locked due to multiple failed login attempts. Try again in $minutes minute(s)."];
+    }
+
     $sql = "SELECT id, username, password, role, status FROM users WHERE username = ? LIMIT 1";
     $stmt = db_query($sql, [$username]);
 
     if (!$stmt || $stmt->rowCount() === 0) {
+        // Don't reveal if username exists - generic error
         return ['success' => false, 'message' => 'Invalid username or password'];
     }
 
@@ -79,8 +92,13 @@ function login_user($username, $password, $recaptcha_response = null) {
     }
 
     if (!password_verify($password, $user['password'])) {
+        // Record failed attempt
+        record_failed_attempt($username, 5, 15);
         return ['success' => false, 'message' => 'Invalid username or password'];
     }
+
+    // Successful login - reset failed attempts
+    reset_failed_attempts($username);
 
     // Regenerate session ID to prevent fixation
     session_regenerate_id(true);
