@@ -65,14 +65,16 @@ $count_stmt = db_query($count_sql, $params);
 $total_records = $count_stmt->fetch()['total'];
 $total_pages = ceil($total_records / $per_page);
 
-// Get records
-$sql = "SELECT 
-    id, form_number, form_date, patient_name, age, gender, 
-    place_of_incident, vehicle_used, status, created_at,
-    arrival_hospital_name
-    FROM prehospital_forms 
-    $where_sql 
-    ORDER BY created_at DESC 
+// Get records with creator information
+$sql = "SELECT
+    pf.id, pf.form_number, pf.form_date, pf.patient_name, pf.age, pf.gender,
+    pf.place_of_incident, pf.vehicle_used, pf.status, pf.created_at,
+    pf.arrival_hospital_name,
+    u.full_name as created_by_name
+    FROM prehospital_forms pf
+    LEFT JOIN users u ON pf.created_by = u.id
+    $where_sql
+    ORDER BY pf.created_at DESC
     LIMIT ? OFFSET ?";
 
 $params[] = $per_page;
@@ -225,6 +227,7 @@ $records = $stmt->fetchAll();
                         <th>Incident Location</th>
                         <th>Hospital</th>
                         <th>Vehicle</th>
+                        <th>Created By</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -256,6 +259,9 @@ $records = $stmt->fetchAll();
                             <div class="skeleton-bar short skeleton"></div>
                         </td>
                         <td class="skeleton-cell">
+                            <div class="skeleton-bar medium skeleton"></div>
+                        </td>
+                        <td class="skeleton-cell">
                             <div class="skeleton-bar short skeleton"></div>
                         </td>
                         <td class="skeleton-cell">
@@ -271,7 +277,7 @@ $records = $stmt->fetchAll();
                 <tbody class="table-content" id="tableContent">
                     <?php if (empty($records)): ?>
                         <tr>
-                            <td colspan="9" style="text-align: center; padding: 30px;">
+                            <td colspan="10" style="text-align: center; padding: 30px;">
                                 <div class="empty-state">
                                     <i class="fas fa-inbox"></i>
                                     <p style="color: #6c757d; margin-top: 15px;">No records found.</p>
@@ -299,6 +305,10 @@ $records = $stmt->fetchAll();
                                     <?php else: ?>
                                         <span class="text-muted">-</span>
                                     <?php endif; ?>
+                                </td>
+                                <td>
+                                    <i class="fas fa-user-circle" style="color: #6c757d; margin-right: 4px;"></i>
+                                    <?php echo e($record['created_by_name'] ?: 'Unknown'); ?>
                                 </td>
                                 <td>
                                     <?php

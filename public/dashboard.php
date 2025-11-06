@@ -30,8 +30,15 @@ $pending_forms = $pending_forms_stmt->fetch()['count'];
 $completed_forms_stmt = db_query("SELECT COUNT(*) as count FROM prehospital_forms WHERE created_by = ? AND status = 'completed'", [$user_id]);
 $completed_forms = $completed_forms_stmt->fetch()['count'];
 
-// Get recent forms
-$recent_forms_stmt = db_query("SELECT * FROM prehospital_forms WHERE created_by = ? ORDER BY created_at DESC LIMIT 10", [$user_id]);
+// Get recent forms with creator information
+$recent_forms_stmt = db_query("
+    SELECT pf.*, u.full_name as created_by_name
+    FROM prehospital_forms pf
+    LEFT JOIN users u ON pf.created_by = u.id
+    WHERE pf.created_by = ?
+    ORDER BY pf.created_at DESC
+    LIMIT 10
+", [$user_id]);
 $recent_forms = $recent_forms_stmt->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -561,6 +568,7 @@ $recent_forms = $recent_forms_stmt->fetchAll();
                                 <th>Age/Gender</th>
                                 <th>Vehicle</th>
                                 <th>Hospital</th>
+                                <th>Created By</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -568,7 +576,7 @@ $recent_forms = $recent_forms_stmt->fetchAll();
                         <tbody>
                             <?php if (empty($recent_forms)): ?>
                                 <tr>
-                                    <td colspan="8" class="text-center py-5">
+                                    <td colspan="9" class="text-center py-5">
                                         <div class="empty-state">
                                             <i class="bi bi-inbox"></i>
                                             <p class="mt-2 mb-3">No forms found</p>
@@ -593,6 +601,10 @@ $recent_forms = $recent_forms_stmt->fetchAll();
                                             <?php endif; ?>
                                         </td>
                                         <td><?php echo e($form['arrival_hospital_name'] ?: '-'); ?></td>
+                                        <td>
+                                            <i class="bi bi-person-circle" style="color: #6c757d;"></i>
+                                            <?php echo e($form['created_by_name'] ?: 'Unknown'); ?>
+                                        </td>
                                         <td>
                                             <?php
                                             $status_class = [
@@ -690,7 +702,15 @@ $recent_forms = $recent_forms_stmt->fetchAll();
                                 <span class="mobile-card-label">Hospital:</span>
                                 <span class="mobile-card-value"><?php echo e($form['arrival_hospital_name'] ?: '-'); ?></span>
                             </div>
-                            
+
+                            <div class="mobile-card-detail">
+                                <span class="mobile-card-label">Created By:</span>
+                                <span class="mobile-card-value">
+                                    <i class="bi bi-person-circle" style="color: #6c757d;"></i>
+                                    <?php echo e($form['created_by_name'] ?: 'Unknown'); ?>
+                                </span>
+                            </div>
+
                             <div class="mobile-card-actions">
                                 <a href="view_record.php?id=<?php echo $form['id']; ?>"
                                    class="btn btn-outline-primary btn-action" title="View">
