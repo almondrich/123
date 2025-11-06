@@ -97,11 +97,23 @@ function redirect($url) {
 }
 
 /**
- * Redirect back
+ * Redirect back with validation
  */
 function redirect_back() {
-    $referer = $_SERVER['HTTP_REFERER'] ?? 'index.php';
-    redirect($referer);
+    $default = 'index.php';
+    $referer = $_SERVER['HTTP_REFERER'] ?? $default;
+
+    // Security: Only allow redirects to same origin
+    $parsed = parse_url($referer);
+    $current_host = $_SERVER['HTTP_HOST'] ?? '';
+
+    // If no host in referer (relative URL) or same host, allow it
+    if (!isset($parsed['host']) || $parsed['host'] === $current_host) {
+        redirect($referer);
+    }
+
+    // Otherwise redirect to default
+    redirect($default);
 }
 
 /**
@@ -152,9 +164,9 @@ function handle_upload($file, $allowed_types = ['jpg', 'jpeg', 'png', 'pdf']) {
     
     $filename = bin2hex(random_bytes(16)) . '.' . $ext;
     $destination = UPLOAD_DIR . $filename;
-    
+
     if (!is_dir(UPLOAD_DIR)) {
-        mkdir(UPLOAD_DIR, 0755, true);
+        mkdir(UPLOAD_DIR, 0750, true);
     }
     
     if (move_uploaded_file($file['tmp_name'], $destination)) {
@@ -166,16 +178,26 @@ function handle_upload($file, $allowed_types = ['jpg', 'jpeg', 'png', 'pdf']) {
 
 /**
  * Get client IP address
+ * Security: Only trust proxy headers if explicitly enabled
  */
 function get_client_ip() {
     $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
-    
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-        $ip = $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        $ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+
+    // Only trust proxy headers if behind a known reverse proxy
+    // Set TRUST_PROXY_HEADERS to true in production if using nginx/cloudflare/etc
+    $trust_proxy = defined('TRUST_PROXY_HEADERS') && TRUST_PROXY_HEADERS === true;
+
+    if ($trust_proxy) {
+        // Only use X-Forwarded-For if explicitly trusted
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            // Get first IP in chain (original client)
+            $forwarded_ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = trim($forwarded_ips[0]);
+        } elseif (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        }
     }
-    
+
     return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '0.0.0.0';
 }
 

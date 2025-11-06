@@ -89,7 +89,7 @@ if (isset($_FILES['endorsement_attachment']) && $_FILES['endorsement_attachment'
     // Create uploads directory in public folder if it doesn't exist
     $uploadDir = '../public/uploads/endorsements/';
     if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
+        mkdir($uploadDir, 0750, true);
     }
 
     $targetPath = $uploadDir . $safeFileName;

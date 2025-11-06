@@ -692,7 +692,168 @@ function generatePlateNumber() {
     return plate;
 }
 
+// ============================================
+// CAMERA FUNCTIONS
+// ============================================
+
+let cameraStream = null;
+
+function initializeCameraButton() {
+    const openCameraBtn = document.getElementById('openCameraBtn');
+    if (openCameraBtn) {
+        openCameraBtn.addEventListener('click', function() {
+            openCamera();
+        });
+    }
+}
+
+function openCamera() {
+    const cameraContainer = document.getElementById('cameraContainer');
+    const video = document.getElementById('cameraVideo');
+    const openCameraBtn = document.getElementById('openCameraBtn');
+
+    // Check if browser supports getUserMedia
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('Camera access is not supported in your browser. Please use a modern browser or upload a file instead.');
+        return;
+    }
+
+    // Request camera access
+    navigator.mediaDevices.getUserMedia({
+        video: {
+            facingMode: 'environment',
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+        }
+    })
+    .then(function(stream) {
+        cameraStream = stream;
+        video.srcObject = stream;
+        cameraContainer.style.display = 'block';
+        openCameraBtn.style.display = 'none';
+    })
+    .catch(function(error) {
+        console.error('Error accessing camera:', error);
+        let errorMessage = 'Unable to access camera. ';
+
+        if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+            errorMessage += 'Please allow camera permissions in your browser settings.';
+        } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+            errorMessage += 'No camera device found. If using a PC, please connect a webcam or use the file upload option.';
+        } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+            errorMessage += 'Camera is already in use by another application.';
+        } else {
+            errorMessage += 'Error: ' + error.message;
+        }
+
+        alert(errorMessage);
+    });
+}
+
+function capturePhoto() {
+    const video = document.getElementById('cameraVideo');
+    const preview = document.getElementById('attachmentPreview');
+    const removeBtn = document.getElementById('removeAttachmentBtn');
+    const fileUpload = document.getElementById('fileUpload');
+
+    // Create canvas to capture image
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Convert canvas to blob and create file
+    canvas.toBlob(function(blob) {
+        // Create a file from the blob
+        const file = new File([blob], `endorsement_${Date.now()}.jpg`, { type: 'image/jpeg' });
+
+        // Create a DataTransfer to set the file input
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        fileUpload.files = dataTransfer.files;
+
+        // Display preview
+        const imageUrl = URL.createObjectURL(blob);
+        preview.src = imageUrl;
+        preview.style.display = 'block';
+        removeBtn.style.display = 'inline-block';
+
+        // Close camera
+        closeCamera();
+
+        alert('Photo captured successfully!');
+    }, 'image/jpeg', 0.9);
+}
+
+function closeCamera() {
+    const cameraContainer = document.getElementById('cameraContainer');
+    const video = document.getElementById('cameraVideo');
+    const openCameraBtn = document.getElementById('openCameraBtn');
+
+    // Stop all video tracks
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+    }
+
+    video.srcObject = null;
+    cameraContainer.style.display = 'none';
+    openCameraBtn.style.display = 'inline-block';
+}
+
+function validateFileUpload(input) {
+    const file = input.files[0];
+    const uploadError = document.getElementById('uploadError');
+    const preview = document.getElementById('attachmentPreview');
+    const removeBtn = document.getElementById('removeAttachmentBtn');
+
+    if (!file) return;
+
+    // Validate file size (5MB max)
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    if (file.size > maxSize) {
+        uploadError.textContent = 'File size exceeds 5MB limit.';
+        uploadError.style.display = 'block';
+        input.value = '';
+        return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+        uploadError.textContent = 'Invalid file format. Allowed: JPG, PNG, GIF, WebP';
+        uploadError.style.display = 'block';
+        input.value = '';
+        return;
+    }
+
+    // Clear error and show preview
+    uploadError.style.display = 'none';
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        removeBtn.style.display = 'inline-block';
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeAttachment() {
+    const fileUpload = document.getElementById('fileUpload');
+    const preview = document.getElementById('attachmentPreview');
+    const removeBtn = document.getElementById('removeAttachmentBtn');
+
+    fileUpload.value = '';
+    preview.src = '';
+    preview.style.display = 'none';
+    removeBtn.style.display = 'none';
+}
+
 function setupVehicleModals() {
+    // Initialize camera button
+    initializeCameraButton();
+
     // Ambulance selection
     const ambulanceRadio = document.getElementById('ambulance');
     if (ambulanceRadio) {

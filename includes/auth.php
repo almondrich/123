@@ -41,6 +41,12 @@ function require_admin() {
         set_flash('Access denied. Admin privileges required.', 'error');
         redirect('../public/index.php');
     }
+
+    // Session regeneration on admin access (prevent session fixation)
+    if (!isset($_SESSION['admin_session_regenerated'])) {
+        session_regenerate_id(true);
+        $_SESSION['admin_session_regenerated'] = true;
+    }
 }
 
 /**

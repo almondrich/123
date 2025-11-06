@@ -59,3 +59,9 @@ try {
 
 // Timezone
 date_default_timezone_set('Asia/Manila');
+
+// Generate CSP nonce for inline scripts/styles
+if (!isset($_SESSION['csp_nonce'])) {
+    $_SESSION['csp_nonce'] = bin2hex(random_bytes(16));
+}
+define('CSP_NONCE', $_SESSION['csp_nonce']);
