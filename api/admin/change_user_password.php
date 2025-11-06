@@ -47,8 +47,11 @@ if ($user_id <= 0) {
 
 if (empty($new_password)) {
     $errors[] = 'New password is required';
-} elseif (strlen($new_password) < 6) {
-    $errors[] = 'Password must be at least 6 characters';
+} else {
+    $password_validation = validate_password_strength($new_password);
+    if (!$password_validation['valid']) {
+        $errors = array_merge($errors, $password_validation['errors']);
+    }
 }
 
 if ($new_password !== $confirm_password) {

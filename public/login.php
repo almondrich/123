@@ -189,8 +189,7 @@ $csrf_token = generate_token();
         </div>
         
         <div class="login-footer">
-            <p><i class="bi bi-info-circle"></i> Default: admin / admin123</p>
-            <small>© 2025 Pre-Hospital Care System v1.0.0</small>
+           
         </div>
     </div>
     

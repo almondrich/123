@@ -9,6 +9,15 @@ if (!defined('APP_ACCESS')) {
     die('Direct access not permitted');
 }
 
+// Security: Disable error display in production
+// For production, set these in php.ini or .htaccess for better security
+ini_set('display_errors', '0');
+ini_set('display_startup_errors', '0');
+error_reporting(E_ALL); // Still log all errors, just don't display them
+
+// For development, uncomment this line to see errors:
+// ini_set('display_errors', '1');
+
 // Database credentials
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'pre_hospital_db');
@@ -26,6 +35,16 @@ define('MAX_FILE_SIZE', 5242880); // 5MB
 // Using Google's test keys for localhost testing - replace with your own keys for production
 define('RECAPTCHA_SITE_KEY', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI');
 define('RECAPTCHA_SECRET_KEY', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe');
+
+// Force HTTPS redirect (comment out for localhost development)
+// Uncomment the following lines when deploying to production with HTTPS
+/*
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    $redirect_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header("Location: " . $redirect_url, true, 301);
+    exit();
+}
+*/
 
 // Session configuration
 ini_set('session.cookie_httponly', 1);

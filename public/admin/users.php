@@ -565,7 +565,9 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="mb-3">
                             <label for="password" class="form-label">Password *</label>
                             <input type="password" class="form-control" id="password" name="password" required>
-                            <small class="text-muted">Minimum 6 characters</small>
+                            <small class="text-muted">
+                                Must be at least 8 characters with: uppercase, lowercase, number, and special character (!@#$%^&*)
+                            </small>
                         </div>
 
                         <div class="mb-3">
@@ -616,7 +618,9 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="mb-3">
                             <label for="newPassword" class="form-label">New Password *</label>
                             <input type="password" class="form-control" id="newPassword" name="new_password" required>
-                            <small class="text-muted">Minimum 6 characters</small>
+                            <small class="text-muted">
+                                Must be at least 8 characters with: uppercase, lowercase, number, and special character (!@#$%^&*)
+                            </small>
                         </div>
 
                         <div class="mb-3">

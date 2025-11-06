@@ -62,8 +62,11 @@ if (empty($email)) {
 
 if (empty($password)) {
     $errors[] = 'Password is required';
-} elseif (strlen($password) < 6) {
-    $errors[] = 'Password must be at least 6 characters';
+} else {
+    $password_validation = validate_password_strength($password);
+    if (!$password_validation['valid']) {
+        $errors = array_merge($errors, $password_validation['errors']);
+    }
 }
 
 if (!in_array($role, ['user', 'admin'])) {

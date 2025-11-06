@@ -139,6 +139,44 @@ function validate_datetime($datetime) {
 }
 
 /**
+ * Validate password strength
+ * Requirements:
+ * - Minimum 8 characters
+ * - At least one uppercase letter
+ * - At least one lowercase letter
+ * - At least one number
+ * - At least one special character
+ */
+function validate_password_strength($password) {
+    $errors = [];
+
+    if (strlen($password) < 8) {
+        $errors[] = 'Password must be at least 8 characters long';
+    }
+
+    if (!preg_match('/[A-Z]/', $password)) {
+        $errors[] = 'Password must contain at least one uppercase letter';
+    }
+
+    if (!preg_match('/[a-z]/', $password)) {
+        $errors[] = 'Password must contain at least one lowercase letter';
+    }
+
+    if (!preg_match('/[0-9]/', $password)) {
+        $errors[] = 'Password must contain at least one number';
+    }
+
+    if (!preg_match('/[^A-Za-z0-9]/', $password)) {
+        $errors[] = 'Password must contain at least one special character (!@#$%^&* etc.)';
+    }
+
+    return [
+        'valid' => empty($errors),
+        'errors' => $errors
+    ];
+}
+
+/**
  * Handle file upload
  */
 function handle_upload($file, $allowed_types = ['jpg', 'jpeg', 'png', 'pdf']) {
