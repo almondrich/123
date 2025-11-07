@@ -1,5 +1,5 @@
 /**
- * View Record Modal JavaScript
+ * View Record Modal JavaScript - Simplified for actual form fields
  * Handles fetching and displaying record data in a modal
  */
 
@@ -20,6 +20,7 @@ function viewRecordModal(recordId) {
     document.getElementById('recordData').style.display = 'none';
     document.getElementById('modalEditBtn').style.display = 'none';
     document.getElementById('modalPrintBtn').style.display = 'none';
+    document.getElementById('modalFormNumber').textContent = 'Loading...';
 
     // Fetch record data
     fetch(`api/get_record.php?id=${recordId}`)
@@ -47,185 +48,335 @@ function displayRecordData(record) {
     document.getElementById('modalEditBtn').style.display = 'inline-block';
     document.getElementById('modalPrintBtn').style.display = 'inline-block';
 
+    // Update form number in header
+    document.getElementById('modalFormNumber').textContent = `Form #${record.form_number || 'N/A'}`;
+
     // Update edit button link
     document.getElementById('modalEditBtn').href = `edit_record.php?id=${record.id}`;
 
     // Status badge
+    const statusIcons = {
+        'completed': 'bi-check-circle-fill',
+        'pending': 'bi-clock-fill',
+        'draft': 'bi-file-earmark-fill'
+    };
     const statusClass = {
         'completed': 'status-completed',
         'pending': 'status-pending',
         'draft': 'status-draft'
     }[record.status] || 'status-draft';
+    const statusIcon = statusIcons[record.status] || 'bi-file-earmark-fill';
 
-    // Build HTML content
+    // Build HTML content with cleaner structure - showing only actual form fields
     const html = `
+        <!-- Basic Information -->
         <div class="record-section">
-            <h5><i class="bi bi-info-circle me-2"></i>Basic Information</h5>
-            <div class="record-row">
-                <div class="record-field">
-                    <div class="record-field-label">Form Number</div>
-                    <div class="record-field-value"><strong>${escapeHtml(record.form_number)}</strong></div>
+            <h6 class="record-section-title">
+                <i class="bi bi-info-circle"></i>
+                Basic Information
+            </h6>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Form Number</span>
+                    <span class="info-value">${safe(record.form_number)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Form Date</div>
-                    <div class="record-field-value">${formatDate(record.form_date)}</div>
+                <div class="info-item">
+                    <span class="info-label">Form Date</span>
+                    <span class="info-value">${formatDate(record.form_date)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Status</div>
-                    <div class="record-field-value">
-                        <span class="status-badge ${statusClass}">${capitalizeFirst(record.status)}</span>
-                    </div>
+                <div class="info-item">
+                    <span class="info-label">Status</span>
+                    <span class="info-value">
+                        <span class="status-badge ${statusClass}">
+                            <i class="bi ${statusIcon}"></i>
+                            ${capitalize(record.status)}
+                        </span>
+                    </span>
                 </div>
-            </div>
-            <div class="record-row">
-                <div class="record-field">
-                    <div class="record-field-label">Created By</div>
-                    <div class="record-field-value">
-                        <i class="bi bi-person-circle me-1"></i>${escapeHtml(record.created_by_name || 'Unknown')}
-                    </div>
+                <div class="info-item">
+                    <span class="info-label">Departure Time</span>
+                    <span class="info-value">${formatTime(record.departure_time)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Created At</div>
-                    <div class="record-field-value">${formatDateTime(record.created_at)}</div>
+                <div class="info-item">
+                    <span class="info-label">Arrival Time</span>
+                    <span class="info-value">${formatTime(record.arrival_time)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Vehicle Used</span>
+                    <span class="info-value">${capitalize(record.vehicle_used)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Driver Name</span>
+                    <span class="info-value">${safe(record.driver_name)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Created By</span>
+                    <span class="info-value">
+                        <i class="bi bi-person-circle me-1" style="color: #3498db;"></i>${safe(record.created_by_name)}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Created At</span>
+                    <span class="info-value">${formatDateTime(record.created_at)}</span>
                 </div>
             </div>
         </div>
 
+        <!-- Patient Information -->
         <div class="record-section">
-            <h5><i class="bi bi-person me-2"></i>Patient Information</h5>
-            <div class="record-row">
-                <div class="record-field">
-                    <div class="record-field-label">Patient Name</div>
-                    <div class="record-field-value">${escapeHtml(record.patient_name)}</div>
+            <h6 class="record-section-title">
+                <i class="bi bi-person"></i>
+                Patient Information
+            </h6>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Patient Name</span>
+                    <span class="info-value">${safe(record.patient_name)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Age</div>
-                    <div class="record-field-value">${escapeHtml(record.age)}</div>
+                <div class="info-item">
+                    <span class="info-label">Date of Birth</span>
+                    <span class="info-value">${formatDate(record.date_of_birth)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Gender</div>
-                    <div class="record-field-value">${capitalizeFirst(record.gender)}</div>
+                <div class="info-item">
+                    <span class="info-label">Age</span>
+                    <span class="info-value">${safe(record.age)}</span>
                 </div>
-            </div>
-            <div class="record-row">
-                <div class="record-field">
-                    <div class="record-field-label">Address</div>
-                    <div class="record-field-value">${escapeHtml(record.address || '-')}</div>
+                <div class="info-item">
+                    <span class="info-label">Gender</span>
+                    <span class="info-value">${capitalize(record.gender)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Contact Number</div>
-                    <div class="record-field-value">${escapeHtml(record.contact_number || '-')}</div>
+                <div class="info-item">
+                    <span class="info-label">Civil Status</span>
+                    <span class="info-value">${capitalize(record.civil_status)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Occupation</span>
+                    <span class="info-value">${safe(record.occupation)}</span>
+                </div>
+                <div class="info-item" style="grid-column: span 2;">
+                    <span class="info-label">Address</span>
+                    <span class="info-value">${safe(record.address)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Zone</span>
+                    <span class="info-value">${safe(record.zone)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Contact Number</span>
+                    <span class="info-value">${safe(record.contact_number)}</span>
                 </div>
             </div>
         </div>
 
+        <!-- Location Information -->
         <div class="record-section">
-            <h5><i class="bi bi-geo-alt me-2"></i>Incident Details</h5>
-            <div class="record-row">
-                <div class="record-field">
-                    <div class="record-field-label">Place of Incident</div>
-                    <div class="record-field-value">${escapeHtml(record.place_of_incident || '-')}</div>
+            <h6 class="record-section-title">
+                <i class="bi bi-geo-alt"></i>
+                Location & Timeline
+            </h6>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Arrival Scene Location</span>
+                    <span class="info-value">${safe(record.arrival_scene_location)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Nature of Call</div>
-                    <div class="record-field-value">${escapeHtml(record.nature_of_call || '-')}</div>
+                <div class="info-item">
+                    <span class="info-label">Arrival Scene Time</span>
+                    <span class="info-value">${formatTime(record.arrival_scene_time)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Departure Scene Location</span>
+                    <span class="info-value">${safe(record.departure_scene_location)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Departure Scene Time</span>
+                    <span class="info-value">${formatTime(record.departure_scene_time)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Hospital Name</span>
+                    <span class="info-value">${safe(record.arrival_hospital_name)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Hospital Arrival Time</span>
+                    <span class="info-value">${formatTime(record.arrival_hospital_time)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Hospital Departure Time</span>
+                    <span class="info-value">${formatTime(record.departure_hospital_time)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Station Arrival Time</span>
+                    <span class="info-value">${formatTime(record.arrival_station_time)}</span>
                 </div>
             </div>
         </div>
 
+        <!-- Incident Information -->
         <div class="record-section">
-            <h5><i class="bi bi-clock me-2"></i>Timeline</h5>
-            <div class="record-row">
-                <div class="record-field">
-                    <div class="record-field-label">Call Time</div>
-                    <div class="record-field-value">${formatTime(record.call_received_time)}</div>
+            <h6 class="record-section-title">
+                <i class="bi bi-exclamation-triangle"></i>
+                Incident Details
+            </h6>
+            <div class="info-grid">
+                <div class="info-item" style="grid-column: span 2;">
+                    <span class="info-label">Place of Incident</span>
+                    <span class="info-value">${safe(record.place_of_incident)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Dispatch Time</div>
-                    <div class="record-field-value">${formatTime(record.dispatch_time)}</div>
+                <div class="info-item">
+                    <span class="info-label">Zone/Landmark</span>
+                    <span class="info-value">${safe(record.zone_landmark)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Arrival Scene Time</div>
-                    <div class="record-field-value">${formatTime(record.arrival_scene_time)}</div>
+                <div class="info-item">
+                    <span class="info-label">Incident Time</span>
+                    <span class="info-value">${formatTime(record.incident_time)}</span>
                 </div>
-            </div>
-            <div class="record-row">
-                <div class="record-field">
-                    <div class="record-field-label">Departure Scene Time</div>
-                    <div class="record-field-value">${formatTime(record.departure_scene_time)}</div>
+                <div class="info-item">
+                    <span class="info-label">Informant Name</span>
+                    <span class="info-value">${safe(record.informant_name)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Arrival Station Time</div>
-                    <div class="record-field-value">${formatTime(record.arrival_station_time)}</div>
+                <div class="info-item">
+                    <span class="info-label">Informant Address</span>
+                    <span class="info-value">${safe(record.informant_address)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Arrival Type</span>
+                    <span class="info-value">${capitalize(record.arrival_type)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Call Arrival Time</span>
+                    <span class="info-value">${formatTime(record.call_arrival_time)}</span>
                 </div>
             </div>
         </div>
 
+        <!-- Initial Vital Signs -->
         <div class="record-section">
-            <h5><i class="bi bi-hospital me-2"></i>Hospital & Transport</h5>
-            <div class="record-row">
-                <div class="record-field">
-                    <div class="record-field-label">Hospital Name</div>
-                    <div class="record-field-value">${escapeHtml(record.arrival_hospital_name || '-')}</div>
+            <h6 class="record-section-title">
+                <i class="bi bi-heart-pulse"></i>
+                Initial Vital Signs
+            </h6>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Time</span>
+                    <span class="info-value">${formatTime(record.initial_time)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Vehicle Used</div>
-                    <div class="record-field-value">${capitalizeFirst(record.vehicle_used || '-')}</div>
+                <div class="info-item">
+                    <span class="info-label">Blood Pressure</span>
+                    <span class="info-value">${safe(record.initial_bp)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Temperature (°C)</span>
+                    <span class="info-value">${safe(record.initial_temp)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Pulse (bpm)</span>
+                    <span class="info-value">${safe(record.initial_pulse)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Respiratory Rate</span>
+                    <span class="info-value">${safe(record.initial_resp_rate)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Pain Score (0-10)</span>
+                    <span class="info-value">${safe(record.initial_pain_score)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">SPO2 (%)</span>
+                    <span class="info-value">${safe(record.initial_spo2)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Spinal Injury</span>
+                    <span class="info-value">${capitalize(record.initial_spinal_injury)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Consciousness</span>
+                    <span class="info-value">${capitalize(record.initial_consciousness)}</span>
                 </div>
             </div>
         </div>
 
+        ${record.followup_time ? `
+        <!-- Follow-up Vital Signs -->
         <div class="record-section">
-            <h5><i class="bi bi-heart-pulse me-2"></i>Vital Signs</h5>
-            <div class="record-row">
-                <div class="record-field">
-                    <div class="record-field-label">Blood Pressure</div>
-                    <div class="record-field-value">${escapeHtml(record.blood_pressure || '-')}</div>
+            <h6 class="record-section-title">
+                <i class="bi bi-arrow-repeat"></i>
+                Follow-up Vital Signs
+            </h6>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Time</span>
+                    <span class="info-value">${formatTime(record.followup_time)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Heart Rate</div>
-                    <div class="record-field-value">${escapeHtml(record.heart_rate || '-')}</div>
+                <div class="info-item">
+                    <span class="info-label">Blood Pressure</span>
+                    <span class="info-value">${safe(record.followup_bp)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Respiratory Rate</div>
-                    <div class="record-field-value">${escapeHtml(record.respiratory_rate || '-')}</div>
+                <div class="info-item">
+                    <span class="info-label">Temperature (°C)</span>
+                    <span class="info-value">${safe(record.followup_temp)}</span>
                 </div>
-            </div>
-            <div class="record-row">
-                <div class="record-field">
-                    <div class="record-field-label">Temperature</div>
-                    <div class="record-field-value">${escapeHtml(record.temperature || '-')}</div>
+                <div class="info-item">
+                    <span class="info-label">Pulse (bpm)</span>
+                    <span class="info-value">${safe(record.followup_pulse)}</span>
                 </div>
-                <div class="record-field">
-                    <div class="record-field-label">Oxygen Saturation</div>
-                    <div class="record-field-value">${escapeHtml(record.oxygen_saturation || '-')}</div>
+                <div class="info-item">
+                    <span class="info-label">Respiratory Rate</span>
+                    <span class="info-value">${safe(record.followup_resp_rate)}</span>
                 </div>
-            </div>
-        </div>
-
-        ${record.chief_complaint ? `
-        <div class="record-section">
-            <h5><i class="bi bi-clipboard-pulse me-2"></i>Chief Complaint</h5>
-            <div class="record-field">
-                <div class="record-field-value">${escapeHtml(record.chief_complaint)}</div>
+                <div class="info-item">
+                    <span class="info-label">Pain Score (0-10)</span>
+                    <span class="info-value">${safe(record.followup_pain_score)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">SPO2 (%)</span>
+                    <span class="info-value">${safe(record.followup_spo2)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Consciousness</span>
+                    <span class="info-value">${capitalize(record.followup_consciousness)}</span>
+                </div>
             </div>
         </div>
         ` : ''}
 
-        ${record.treatment_provided ? `
+        <!-- Team Information -->
         <div class="record-section">
-            <h5><i class="bi bi-bandaid me-2"></i>Treatment Provided</h5>
-            <div class="record-field">
-                <div class="record-field-value">${escapeHtml(record.treatment_provided)}</div>
+            <h6 class="record-section-title">
+                <i class="bi bi-people"></i>
+                Team Information
+            </h6>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Team Leader</span>
+                    <span class="info-value">${safe(record.team_leader)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Data Recorder</span>
+                    <span class="info-value">${safe(record.data_recorder)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Logistic</span>
+                    <span class="info-value">${safe(record.logistic)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">First Aider</span>
+                    <span class="info-value">${safe(record.first_aider)}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Second Aider</span>
+                    <span class="info-value">${safe(record.second_aider)}</span>
+                </div>
             </div>
         </div>
-        ` : ''}
 
-        ${record.notes ? `
+        ${record.team_leader_notes ? `
+        <!-- Team Leader Notes -->
         <div class="record-section">
-            <h5><i class="bi bi-journal-text me-2"></i>Additional Notes</h5>
-            <div class="record-field">
-                <div class="record-field-value">${escapeHtml(record.notes)}</div>
+            <h6 class="record-section-title">
+                <i class="bi bi-journal-text"></i>
+                Team Leader Notes
+            </h6>
+            <div class="text-section">
+                <div class="info-value">${safe(record.team_leader_notes)}</div>
             </div>
         </div>
         ` : ''}
@@ -241,8 +392,9 @@ function showError(message) {
     document.getElementById('modalLoading').style.display = 'none';
     document.getElementById('recordData').style.display = 'block';
     document.getElementById('recordData').innerHTML = `
-        <div class="alert alert-danger" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i>${escapeHtml(message)}
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2" style="font-size: 1.5rem;"></i>
+            <div>${safe(message)}</div>
         </div>
     `;
 }
@@ -257,10 +409,19 @@ function printRecord() {
 }
 
 /**
+ * Helper: Safe output (returns empty string or value)
+ */
+function safe(value) {
+    if (value === null || value === undefined || value === '') {
+        return '<span class="info-value empty">Not provided</span>';
+    }
+    return escapeHtml(String(value));
+}
+
+/**
  * Helper: Escape HTML
  */
 function escapeHtml(text) {
-    if (!text) return '-';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
@@ -269,39 +430,52 @@ function escapeHtml(text) {
 /**
  * Helper: Capitalize first letter
  */
-function capitalizeFirst(text) {
-    if (!text) return '-';
-    return text.charAt(0).toUpperCase() + text.slice(1);
+function capitalize(text) {
+    if (!text) return safe(text);
+    return escapeHtml(text.charAt(0).toUpperCase() + text.slice(1));
 }
 
 /**
- * Helper: Format date
+ * Helper: Format date (e.g., Jan 15, 2025)
  */
 function formatDate(dateStr) {
-    if (!dateStr) return '-';
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    if (!dateStr) return safe(dateStr);
+    try {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    } catch (e) {
+        return safe(dateStr);
+    }
 }
 
 /**
- * Helper: Format date time
+ * Helper: Format date time (e.g., Jan 15, 2025, 10:30 AM)
  */
 function formatDateTime(dateStr) {
-    if (!dateStr) return '-';
-    const date = new Date(dateStr);
-    return date.toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
+    if (!dateStr) return safe(dateStr);
+    try {
+        const date = new Date(dateStr);
+        return date.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    } catch (e) {
+        return safe(dateStr);
+    }
 }
 
 /**
- * Helper: Format time
+ * Helper: Format time (e.g., 10:30 AM or just display as is)
  */
 function formatTime(timeStr) {
-    if (!timeStr) return '-';
-    return timeStr;
+    if (!timeStr) return safe(timeStr);
+    // If it's already in a good format, return it
+    return escapeHtml(timeStr);
 }
