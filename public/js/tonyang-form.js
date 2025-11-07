@@ -82,27 +82,27 @@ function updateNavigation() {
     const submitBtn = document.getElementById('submitBtn');
     const updateBtn = document.getElementById('updateBtn');
 
-    prevBtn.style.display = currentTab === 0 ? 'none' : 'block';
+    if (prevBtn) prevBtn.style.display = currentTab === 0 ? 'none' : 'block';
 
     if (document.getElementById('editForm')) {
         // Edit form navigation
         if (currentTab === totalTabs - 1) {
-            nextBtn.style.display = 'none';
-            updateBtn.style.display = 'block';
+            if (nextBtn) nextBtn.style.display = 'none';
+            if (updateBtn) updateBtn.style.display = 'block';
         } else {
-            nextBtn.style.display = 'block';
-            updateBtn.style.display = 'none';
+            if (nextBtn) nextBtn.style.display = 'block';
+            if (updateBtn) updateBtn.style.display = 'none';
         }
-        submitBtn.style.display = 'none'; // Hide submit button in edit mode
+        if (submitBtn) submitBtn.style.display = 'none'; // Hide submit button in edit mode
     } else {
         // Create form navigation
         if (currentTab === totalTabs - 1) {
-            nextBtn.style.display = 'none';
-            submitBtn.style.display = 'block';
+            if (nextBtn) nextBtn.style.display = 'none';
+            if (submitBtn) submitBtn.style.display = 'block';
             generateFormSummary(); // Generate summary when reaching the last tab
         } else {
-            nextBtn.style.display = 'block';
-            submitBtn.style.display = 'none';
+            if (nextBtn) nextBtn.style.display = 'block';
+            if (submitBtn) submitBtn.style.display = 'none';
         }
         if (updateBtn) updateBtn.style.display = 'none'; // Hide update button in create mode
     }
@@ -400,13 +400,26 @@ function submitForm() {
     data.personalBelongings = selectedBelongings;
     data.otherBelongingsSpecify = document.getElementById('otherBelongings').value;
 
-    // Add injury data
-    data.injuries = injuries;
+    // Add injury data to form as hidden input
+    const form = document.getElementById('preHospitalForm') || document.getElementById('editForm');
 
-    console.log('Form submitted:', data);
+    // Remove existing injuries input if any
+    const existingInjuriesInput = form.querySelector('input[name="injuries"]');
+    if (existingInjuriesInput) {
+        existingInjuriesInput.remove();
+    }
+
+    // Create new hidden input with injuries data
+    const injuriesInput = document.createElement('input');
+    injuriesInput.type = 'hidden';
+    injuriesInput.name = 'injuries';
+    injuriesInput.value = JSON.stringify(injuries);
+    form.appendChild(injuriesInput);
+
+    console.log('Form submitted with injuries:', injuries);
 
     // Submit the form
-    document.getElementById('preHospitalForm').submit();
+    form.submit();
 }
 
 function printForm() {

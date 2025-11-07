@@ -58,7 +58,7 @@ try {
     $vehicle_used = !empty($_POST['vehicle_used']) ? sanitize($_POST['vehicle_used']) : null;
     $vehicle_details = !empty($_POST['vehicle_details']) ? sanitize($_POST['vehicle_details']) : null;
     $driver_name = !empty($_POST['driver_name']) ? sanitize($_POST['driver_name']) : null;
-    $arrival_station = !empty($_POST['arrival_station']) ? sanitize($_POST['arrival_station']) : null;
+    $arrival_station_time = !empty($_POST['arrival_station_time']) ? sanitize($_POST['arrival_station_time']) : null;
 
     // Scene Information
     $arrival_scene_location = !empty($_POST['arrival_scene_location']) ? sanitize($_POST['arrival_scene_location']) : null;
@@ -310,7 +310,7 @@ try {
         $vehicle_used,
         $vehicle_details,
         $driver_name,
-        $arrival_station,
+        $arrival_station_time,
         $arrival_scene_location,
         $arrival_scene_time,
         $departure_scene_location,

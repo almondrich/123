@@ -45,6 +45,14 @@ $csrf_token = generate_token();
 // Get current user
 $current_user = get_auth_user();
 
+// Helper function to clean time values
+function clean_time($time) {
+    if (empty($time) || $time === '00:00:00' || $time === '0') {
+        return '';
+    }
+    return $time;
+}
+
 // Decode JSON fields
 $persons_present = json_decode($record['persons_present'] ?? '[]', true);
 $personal_belongings = json_decode($record['personal_belongings'] ?? '[]', true);
@@ -132,13 +140,13 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                             </div>
                             <div>
                                 <label for="depTime" class="form-label required-field">Departure Time</label>
-                                <input type="time" class="form-control" id="depTime" name="departure_time" 
-                                       value="<?php echo e($record['departure_time']); ?>" required>
+                                <input type="time" class="form-control" id="depTime" name="departure_time"
+                                       value="<?php echo e(clean_time($record['departure_time'])); ?>" required>
                             </div>
                             <div>
                                 <label for="arrTime" class="form-label">Arrival Time</label>
-                                <input type="time" class="form-control" id="arrTime" name="arrival_time" 
-                                       value="<?php echo e($record['arrival_time']); ?>">
+                                <input type="time" class="form-control" id="arrTime" name="arrival_time"
+                                       value="<?php echo e(clean_time($record['arrival_time'])); ?>">
                             </div>
                         </div>
 
@@ -173,7 +181,7 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                             <div>
                                 <label for="arrSceneTime" class="form-label">Arrival at Scene - Time</label>
                                 <input type="time" class="form-control" id="arrSceneTime" name="arrival_scene_time"
-                                       value="<?php echo e($record['arrival_scene_time']); ?>">
+                                       value="<?php echo e(clean_time($record['arrival_scene_time'])); ?>">
                             </div>
                         </div>
 
@@ -186,7 +194,7 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                             <div>
                                 <label for="depSceneTime" class="form-label">Departure from Scene - Time</label>
                                 <input type="time" class="form-control" id="depSceneTime" name="departure_scene_time"
-                                       value="<?php echo e($record['departure_scene_time']); ?>">
+                                       value="<?php echo e(clean_time($record['departure_scene_time'])); ?>">
                             </div>
                         </div>
 
@@ -199,7 +207,7 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                             <div>
                                 <label for="arrHospTime" class="form-label">Arrival at Hospital - Time</label>
                                 <input type="time" class="form-control" id="arrHospTime" name="arrival_hospital_time"
-                                       value="<?php echo e($record['arrival_hospital_time']); ?>">
+                                       value="<?php echo e(clean_time($record['arrival_hospital_time'])); ?>">
                             </div>
                         </div>
 
@@ -212,20 +220,20 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                             <div>
                                 <label for="depHospTime" class="form-label">Departure from Hospital - Time</label>
                                 <input type="time" class="form-control" id="depHospTime" name="departure_hospital_time"
-                                       value="<?php echo e($record['departure_hospital_time']); ?>">
+                                       value="<?php echo e(clean_time($record['departure_hospital_time'])); ?>">
                             </div>
                         </div>
 
                         <div class="grid-2 mb-section">
                             <div>
-                                <label for="driver" class="form-label">Driver</label>
-                                <input type="text" class="form-control" id="driver" name="driver_name" 
-                                       value="<?php echo e($record['driver_name']); ?>" placeholder="Driver name">
+                                <label for="arrStation" class="form-label">Arrival at Station</label>
+                                <input type="time" class="form-control" id="arrStation" name="arrival_station_time"
+                                       value="<?php echo e(clean_time($record['arrival_station_time'])); ?>">
                             </div>
                             <div>
-                                <label for="arrStation" class="form-label">Arrival at Station</label>
-                                <input type="time" class="form-control" id="arrStation" name="arrival_station" 
-                                       value="<?php echo e($record['arrival_station_time']); ?>">
+                                <label for="driver" class="form-label">Driver</label>
+                                <input type="text" class="form-control" id="driver" name="driver_name"
+                                       value="<?php echo e($record['driver_name']); ?>" placeholder="Driver name">
                             </div>
                         </div>
 
@@ -336,7 +344,7 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                             </div>
                             <div>
                                 <label for="placeOfIncident" class="form-label">Place of Incident</label>
-                                <input type="text" class="form-control" id="place_of_incident" name="place_of_incident"
+                                <input type="text" class="form-control" id="placeOfIncident" name="place_of_incident"
                                        value="<?php echo e($record['place_of_incident']); ?>">
                             </div>
                         </div>
@@ -350,7 +358,7 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                             <div>
                                 <label for="incidentTime" class="form-label">Time of Incident</label>
                                 <input type="time" class="form-control" id="incidentTime" name="incident_time"
-                                       value="<?php echo e($record['incident_time']); ?>">
+                                       value="<?php echo e(clean_time($record['incident_time'])); ?>">
                             </div>
                         </div>
 
@@ -390,7 +398,7 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                             <div>
                                 <label for="callArrTime" class="form-label">Call/Arrival Time</label>
                                 <input type="time" class="form-control" id="callArrTime" name="call_arrival_time"
-                                       value="<?php echo e($record['call_arrival_time']); ?>">
+                                       value="<?php echo e(clean_time($record['call_arrival_time'])); ?>">
                             </div>
                             <div>
                                 <label for="cpNumber" class="form-label">Contact Number</label>
@@ -546,7 +554,7 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                             <div>
                                 <label for="initialTime" class="form-label">Time</label>
                                 <input type="time" class="form-control" id="initialTime" name="initial_time"
-                                       value="<?php echo e($record['initial_time']); ?>">
+                                       value="<?php echo e(clean_time($record['initial_time'])); ?>">
                             </div>
                             <div>
                                 <label for="initialBP" class="form-label">Blood Pressure</label>
@@ -649,7 +657,7 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                             <div>
                                 <label for="followupTime" class="form-label">Time</label>
                                 <input type="time" class="form-control" id="followupTime" name="followup_time"
-                                       value="<?php echo e($record['followup_time']); ?>">
+                                       value="<?php echo e(clean_time($record['followup_time'])); ?>">
                             </div>
                             <div>
                                 <label for="followupBP" class="form-label">Blood Pressure</label>
@@ -783,14 +791,14 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                                     <div class="body-view">
                                         <div class="view-label">FRONT VIEW</div>
                                         <div class="body-image-container" id="frontContainer">
-                                            <img src="body-front.png" alt="Body Front" class="body-image">
+                                            <img src="../public/images/body-front.png" alt="Body Front" class="body-image">
                                         </div>
                                     </div>
 
                                     <div class="body-view">
                                         <div class="view-label">BACK VIEW</div>
                                         <div class="body-image-container" id="backContainer">
-                                            <img src="body-back.png" alt="Body Back" class="body-image">
+                                            <img src="../public/images/body-back.png" alt="Body Back" class="body-image">
                                         </div>
                                     </div>
                                 </div>
@@ -928,7 +936,7 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                                 <div>
                                     <label for="timeOfDelivery" class="form-label">Delivery Time</label>
                                     <input type="time" class="form-control" id="timeOfDelivery" name="delivery_time"
-                                           value="<?php echo e($record['ob_delivery_time']); ?>">
+                                           value="<?php echo e(clean_time($record['ob_delivery_time'])); ?>">
                                 </div>
                                 <div>
                                     <label class="form-label">Placenta</label>
@@ -963,10 +971,6 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                             </div>
                         </div>
 
-                        <div class="mb-section">
-                            <label for="othersComplaint" class="form-label">Other Complaints</label>
-                            <textarea class="form-control" id="othersComplaint" name="other_complaints" rows="2"><?php echo e($record['other_complaints']); ?></textarea>
-                        </div>
                     </div>
                 </div>
 
@@ -1009,6 +1013,14 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                         </div>
 
                         <div class="section-title">
+                            <i class="bi bi-pencil-square"></i> Team Leader Notes
+                        </div>
+
+                        <div class="mb-section">
+                            <textarea class="form-control" id="teamLeaderNotes" name="team_leader_notes" rows="3" placeholder="Enter team leader notes and observations..."><?php echo e($record['team_leader_notes']); ?></textarea>
+                        </div>
+
+                        <div class="section-title">
                             <i class="bi bi-building"></i> Hospital Endorsement
                         </div>
 
@@ -1025,50 +1037,39 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                             </div>
                         </div>
 
-                        <div class="grid-2 mb-section">
-                            <div>
-                                <label class="form-label">Received by (Signature)</label>
-                                <div class="signature-box">
-                                    <i class="bi bi-pen"></i>
-                                    <p>Signature over printed name</p>
-                                </div>
-                                <input type="hidden" name="received_by_signature" id="receivedBySignature" value="<?php echo e($record['received_by']); ?>">
-                            </div>
+                        <div class="grid-2">
                             <div>
                                 <label for="dateTime" class="form-label">Date & Time</label>
                                 <input type="datetime-local" class="form-control" id="dateTime" name="endorsement_datetime"
                                        value="<?php echo e($record['endorsement_datetime']); ?>">
                             </div>
-                        </div>
-
-                        <div class="section-title">
-                            <i class="bi bi-pencil-square"></i> Team Leader Notes
-                        </div>
-
-                        <div class="mb-section">
-                            <textarea class="form-control" id="teamLeaderNotes" name="team_leader_notes" rows="3" placeholder="Enter team leader notes and observations..."><?php echo e($record['team_leader_notes']); ?></textarea>
-                        </div>
-
-                        <div class="waiver-section">
-                            <h6><i class="bi bi-file-earmark-text"></i> WAIVER - REFUSAL OF TREATMENT/TRANSPORTATION</h6>
-                            <p>I, the undersigned have been advised that assistance on my behalf is necessary and refusal of assistance and/or transportation for further treatment may result in death or impair my health condition. Nevertheless, I refuse to accept treatment and/or transport and assume all risks and consequences of my decision and release the Rescue 118 responders from any liability arising from any delay or refusal.</p>
-
-                            <div class="grid-2">
-                                <div>
-                                    <label class="form-label">Patient Name & Signature</label>
-                                    <div class="signature-box">
-                                        <i class="bi bi-pen"></i>
-                                        <p>Patient signature</p>
+                            <div>
+                                <label class="form-label">ENDORSEMENT ATTACHMENT</label>
+                                <div class="attachment-section">
+                                    <div class="attachment-controls">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" id="openCameraBtn" onclick="openCamera()">
+                                            <i class="bi bi-camera"></i> Open Camera
+                                        </button>
+                                        <input type="file" class="form-control form-control-sm" id="fileUpload" name="endorsement_attachment" accept="image/jpeg,image/png,image/gif,image/webp" style="display: inline-block; width: auto;" onchange="validateFileUpload(this)">
+                                        <small class="text-muted">Max file size: 5MB. Allowed formats: JPG, PNG, GIF, WebP</small>
                                     </div>
-                                    <input type="hidden" name="patient_signature" id="patientSignature" value="<?php echo e($record['waiver_patient_signature']); ?>">
-                                </div>
-                                <div>
-                                    <label class="form-label">Witness Name & Signature</label>
-                                    <div class="signature-box">
-                                        <i class="bi bi-pen"></i>
-                                        <p>Witness signature</p>
+                                    <div id="cameraContainer" style="display: none; margin-top: 10px;">
+                                        <video id="cameraVideo" autoplay playsinline style="width: 100%; max-width: 300px;"></video>
+                                        <br>
+                                        <button type="button" class="btn btn-success btn-sm" id="captureBtn" onclick="capturePhoto()">Capture Photo</button>
+                                        <button type="button" class="btn btn-secondary btn-sm" id="closeCameraBtn" onclick="closeCamera()">Close Camera</button>
                                     </div>
-                                    <input type="hidden" name="witness_signature" id="witnessSignature" value="<?php echo e($record['waiver_witness_signature']); ?>">
+                                    <div id="previewContainer" style="margin-top: 10px;">
+                                        <?php if (!empty($record['endorsement_attachment'])): ?>
+                                        <img id="attachmentPreview" src="<?php echo e($record['endorsement_attachment']); ?>" alt="Attachment Preview" style="max-width: 200px;">
+                                        <?php else: ?>
+                                        <img id="attachmentPreview" src="" alt="Attachment Preview" style="max-width: 200px; display: none;">
+                                        <?php endif; ?>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" id="removeAttachmentBtn" style="<?php echo !empty($record['endorsement_attachment']) ? '' : 'display: none;'; ?>" onclick="removeAttachment()">
+                                            <i class="bi bi-trash"></i> Remove
+                                        </button>
+                                    </div>
+                                    <div id="uploadError" class="text-danger" style="display: none;"></div>
                                 </div>
                             </div>
                         </div>
@@ -1076,14 +1077,6 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
                         <div class="alert alert-success" style="margin-top: 1.5rem;">
                             <h5 class="alert-heading"><i class="bi bi-check-circle"></i> Ready to Update</h5>
                             <p class="mb-3">Review all information before submitting. Navigate back using tabs to check previous sections.</p>
-                            <div class="d-flex gap-2 flex-wrap">
-                                <button type="button" class="btn btn-outline-primary" onclick="printForm()">
-                                    <i class="bi bi-printer"></i> Print Form
-                                </button>
-                                <button type="button" class="btn btn-outline-danger" onclick="clearForm()">
-                                    <i class="bi bi-arrow-clockwise"></i> Clear All
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1108,13 +1101,79 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
         </div>
     </div>
 
+    <!-- Ambulance Selection Modal -->
+    <div class="modal fade" id="ambulanceModal" tabindex="-1" aria-labelledby="ambulanceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ambulanceModalLabel">Select Ambulance</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Please select an ambulance from the list below:</p>
+                    <div id="ambulanceList">
+                        <!-- Ambulance options will be generated here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmAmbulance">Confirm Selection</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fire Truck Selection Modal -->
+    <div class="modal fade" id="fireTruckModal" tabindex="-1" aria-labelledby="fireTruckModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fireTruckModalLabel">Select Fire Truck Type</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Please select a fire truck type:</p>
+                    <div class="vehicle-option" data-type="penetrator">
+                        <div class="vehicle-name">Penetrator</div>
+                        <div class="vehicle-details">Specialized for rescue operations and penetration</div>
+                    </div>
+                    <div class="vehicle-option" data-type="tanker">
+                        <div class="vehicle-name">Tanker</div>
+                        <div class="vehicle-details">Equipped with large water tank for fire suppression</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmFireTruck">Confirm Selection</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/tonyang-form.js"></script>
     <script>
         // Override submit function for edit mode
         function updateRecord() {
             if (confirm('Are you sure you want to update this record?')) {
-                document.getElementById('editForm').submit();
+                const form = document.getElementById('editForm');
+
+                // Remove existing injuries input if any
+                const existingInjuriesInput = form.querySelector('input[name="injuries"]');
+                if (existingInjuriesInput) {
+                    existingInjuriesInput.remove();
+                }
+
+                // Create new hidden input with injuries data
+                const injuriesInput = document.createElement('input');
+                injuriesInput.type = 'hidden';
+                injuriesInput.name = 'injuries';
+                injuriesInput.value = JSON.stringify(injuries);
+                form.appendChild(injuriesInput);
+
+                console.log('Updating record with injuries:', injuries);
+
+                form.submit();
             }
         }
 
@@ -1124,12 +1183,133 @@ $chief_complaints = json_decode($record['chief_complaints'] ?? '[]', true);
             const today = new Date();
             let age = today.getFullYear() - dob.getFullYear();
             const monthDiff = today.getMonth() - dob.getMonth();
-            
+
             if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
                 age--;
             }
-            
+
             document.getElementById('age').value = age;
+        });
+
+        // Update progress bar based on active tab
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('#formTabs button[data-bs-toggle="tab"]');
+            const progressBar = document.getElementById('progressBar');
+
+            tabs.forEach((tab, index) => {
+                tab.addEventListener('shown.bs.tab', function() {
+                    const progress = ((index + 1) / tabs.length) * 100;
+                    progressBar.style.width = progress + '%';
+                });
+            });
+
+            // Set initial progress
+            const activeTab = document.querySelector('#formTabs button.active');
+            if (activeTab) {
+                const activeIndex = Array.from(tabs).indexOf(activeTab);
+                const progress = ((activeIndex + 1) / tabs.length) * 100;
+                progressBar.style.width = progress + '%';
+            }
+
+            // Load existing injuries for edit mode
+            const injuriesDataField = document.getElementById('injuriesData');
+            if (injuriesDataField && injuriesDataField.value) {
+                try {
+                    const existingInjuries = JSON.parse(injuriesDataField.value);
+                    if (existingInjuries && existingInjuries.length > 0) {
+                        // Function to render injury markers
+                        const renderInjuries = function() {
+                            // Clear the injuries array and counter
+                            injuries = [];
+                            injuryCounter = 0;
+
+                            // Remove any existing markers
+                            document.querySelectorAll('.injury-marker').forEach(marker => marker.remove());
+
+                            existingInjuries.forEach(dbInjury => {
+                                // Convert database format to JavaScript format
+                                const injury = {
+                                    id: parseInt(dbInjury.injury_number),
+                                    type: dbInjury.injury_type,
+                                    x: parseFloat(dbInjury.coordinate_x),
+                                    y: parseFloat(dbInjury.coordinate_y),
+                                    view: dbInjury.body_view,
+                                    notes: dbInjury.notes || ''
+                                };
+
+                                injuries.push(injury);
+                                if (injury.id > injuryCounter) {
+                                    injuryCounter = injury.id;
+                                }
+
+                                // Create marker on the diagram
+                                const container = document.getElementById(injury.view === 'front' ? 'frontContainer' : 'backContainer');
+                                if (container) {
+                                    const image = container.querySelector('.body-image');
+                                    if (!image) return;
+
+                                    const container_rect = container.getBoundingClientRect();
+                                    const image_rect = image.getBoundingClientRect();
+
+                                    const containerX = image_rect.left - container_rect.left + (injury.x / 100) * image_rect.width;
+                                    const containerY = image_rect.top - container_rect.top + (injury.y / 100) * image_rect.height;
+
+                                    const marker = document.createElement('div');
+                                    marker.className = `injury-marker ${injury.type}`;
+                                    marker.style.left = containerX + 'px';
+                                    marker.style.top = containerY + 'px';
+                                    marker.textContent = injury.id;
+                                    marker.dataset.id = injury.id;
+                                    marker.title = `Injury #${injury.id} - ${injury.type}`;
+
+                                    container.appendChild(marker);
+                                }
+                            });
+
+                            // Update the injury list display
+                            if (typeof updateInjuryList === 'function') {
+                                updateInjuryList();
+                            }
+                        };
+
+                        // Wait for body images to load before rendering markers
+                        const frontImage = document.querySelector('#frontContainer .body-image');
+                        const backImage = document.querySelector('#backContainer .body-image');
+
+                        let imagesLoaded = 0;
+                        const totalImages = 2;
+
+                        const imageLoadHandler = function() {
+                            imagesLoaded++;
+                            if (imagesLoaded === totalImages) {
+                                renderInjuries();
+                            }
+                        };
+
+                        if (frontImage) {
+                            if (frontImage.complete) {
+                                imageLoadHandler();
+                            } else {
+                                frontImage.addEventListener('load', imageLoadHandler);
+                            }
+                        } else {
+                            imagesLoaded++;
+                        }
+
+                        if (backImage) {
+                            if (backImage.complete) {
+                                imageLoadHandler();
+                            } else {
+                                backImage.addEventListener('load', imageLoadHandler);
+                            }
+                        } else {
+                            imagesLoaded++;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading existing injuries:', e);
+                }
+            }
         });
     </script>
 </body>
