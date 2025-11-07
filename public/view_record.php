@@ -323,34 +323,57 @@ function format_time($time) {
             </div>
         </div>
 
-        <!-- Injuries -->
-        <?php if (!empty($injuries)): ?>
+        <!-- Injury Mapping -->
         <div class="section-header">
-            <i class="bi bi-bandaid-fill"></i>
-            INJURIES MARKED (<?php echo count($injuries); ?>)
+            <i class="bi bi-person-bounding-box"></i>
+            INJURY MAPPING
         </div>
-        <div class="injuries-container">
-        <?php foreach ($injuries as $injury): ?>
-            <div class="injury-item">
-                <div class="injury-number">
-                    <i class="bi bi-exclamation-triangle-fill"></i>
-                    Injury #<?php echo $injury['injury_number']; ?>
-                </div>
-                <div class="injury-details">
-                    <div class="injury-detail">
-                        <strong>Type:</strong>
-                        <span class="badge-status badge-danger"><?php echo ucfirst($injury['injury_type']); ?></span>
+        <div class="body-diagram-container">
+            <div class="body-diagram-content">
+                <div class="body-views">
+                    <div class="body-view">
+                        <div class="view-label">FRONT VIEW</div>
+                        <div class="body-image-container" id="frontContainer">
+                            <img src="images/body-front.png" alt="Body Front" class="body-image">
+                        </div>
                     </div>
-                    <div class="injury-detail">
-                        <strong>View:</strong>
-                        <span class="badge-status badge-info"><?php echo ucfirst($injury['body_view']); ?> View</span>
-                    </div>
-                    <div class="injury-detail">
-                        <strong>Notes:</strong> <?php echo e($injury['notes'] ?: 'N/A'); ?>
+
+                    <div class="body-view">
+                        <div class="view-label">BACK VIEW</div>
+                        <div class="body-image-container" id="backContainer">
+                            <img src="images/body-back.png" alt="Body Back" class="body-image">
+                        </div>
                     </div>
                 </div>
             </div>
-        <?php endforeach; ?>
+        </div>
+
+        <?php if (!empty($injuries)): ?>
+        <div class="section-header">
+            <i class="bi bi-bandaid-fill"></i>
+            INJURIES DETAILS (<?php echo count($injuries); ?>)
+        </div>
+        <div class="injuries-table-container">
+            <table class="injuries-table">
+                <thead>
+                    <tr>
+                        <th>Injury #</th>
+                        <th>Type</th>
+                        <th>View</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($injuries as $injury): ?>
+                    <tr>
+                        <td><?php echo $injury['injury_number']; ?></td>
+                        <td><?php echo ucfirst($injury['injury_type']); ?></td>
+                        <td><?php echo ucfirst($injury['body_view']); ?> View</td>
+                        <td><?php echo e($injury['notes'] ?: 'N/A'); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
         <?php endif; ?>
 
@@ -452,5 +475,31 @@ function format_time($time) {
             </div>
         </div><!-- End form-container -->
     </div><!-- End record-wrapper -->
+
+    <script>
+        // Function to render injury markers on the body diagram
+        function renderInjuryMarkers() {
+            const injuries = <?php echo json_encode($injuries); ?>;
+
+            injuries.forEach(injury => {
+                const containerId = injury.body_view === 'front' ? 'frontContainer' : 'backContainer';
+                const container = document.getElementById(containerId);
+
+                if (container) {
+                    const marker = document.createElement('div');
+                    marker.className = `injury-marker ${injury.injury_type}`;
+                    marker.style.left = injury.coordinate_x + '%';
+                    marker.style.top = injury.coordinate_y + '%';
+                    marker.textContent = injury.injury_number;
+                    marker.title = `${injury.injury_type.charAt(0).toUpperCase() + injury.injury_type.slice(1)} - ${injury.notes || 'No notes'}`;
+
+                    container.appendChild(marker);
+                }
+            });
+        }
+
+        // Initialize markers when page loads
+        document.addEventListener('DOMContentLoaded', renderInjuryMarkers);
+    </script>
 </body>
 </html>

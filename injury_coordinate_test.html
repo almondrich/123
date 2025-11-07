@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Injury Coordinate Visual Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; }
+        .diagram-container {
+            position: relative;
+            display: inline-block;
+            border: 2px solid #333;
+            margin: 20px;
+        }
+        .body-image {
+            display: block;
+            width: 300px;
+            height: 600px;
+            background: #e0e0e0;
+        }
+        .injury-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: red;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            z-index: 10;
+        }
+        .info { background: #e3f2fd; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }
+        th { background: #4CAF50; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Injury Coordinate Visual Test</h1>
+        <div class="info">
+            <strong>Form:</strong> PHC-20251107-A64184F9<br>
+            <strong>Patient:</strong> SUYU BALONG HAROLD<br>
+            <strong>Total Injuries:</strong> 5
+        </div>
+
+        <h2>Injury Markers on Body Diagram</h2>
+        <div id="frontContainer" class="diagram-container">
+            <div class="body-image" style="background: url('../images/body-front.png') center/contain no-repeat;"></div>
+        </div>
+        <div id="backContainer" class="diagram-container">
+            <div class="body-image" style="background: url('../images/body-back.png') center/contain no-repeat;"></div>
+        </div>
+
+        <h2>Injury Data</h2>
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Type</th>
+                <th>View</th>
+                <th>X (%)</th>
+                <th>Y (%)</th>
+                <th>Notes</th>
+            </tr><tr>
+                <td>1</td>
+                <td>laceration</td>
+                <td>front</td>
+                <td>49.00</td>
+                <td>8.00</td>
+                <td>-</td>
+            </tr><tr>
+                <td>2</td>
+                <td>laceration</td>
+                <td>front</td>
+                <td>52.00</td>
+                <td>37.00</td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        const injuries = [{"id":4,"form_id":7,"injury_number":1,"injury_type":"laceration","body_view":"front","coordinate_x":49,"coordinate_y":8,"notes":"","form_number":"PHC-20251107-A64184F9","patient_name":"SUYU BALONG HAROLD"},{"id":5,"form_id":7,"injury_number":2,"injury_type":"laceration","body_view":"front","coordinate_x":52,"coordinate_y":37,"notes":"","form_number":"PHC-20251107-A64184F9","patient_name":"SUYU BALONG HAROLD"}];
+
+        window.addEventListener("load", function() {
+            injuries.forEach(injury => {
+                const container = document.getElementById(injury.body_view + "Container");
+                if (!container) return;
+
+                const image = container.querySelector(".body-image");
+                const container_rect = container.getBoundingClientRect();
+                const image_rect = image.getBoundingClientRect();
+
+                // Calculate position using CURRENT logic from edit_record.php
+                const containerX = image_rect.left - container_rect.left + (injury.coordinate_x / 100) * image_rect.width;
+                const containerY = image_rect.top - container_rect.top + (injury.coordinate_y / 100) * image_rect.height;
+
+                const marker = document.createElement("div");
+                marker.className = "injury-marker";
+                marker.style.left = containerX + "px";
+                marker.style.top = containerY + "px";
+                marker.textContent = injury.injury_number;
+                marker.title = `Injury #${injury.injury_number} - ${injury.injury_type}\nX: ${injury.coordinate_x}%, Y: ${injury.coordinate_y}%`;
+
+                container.appendChild(marker);
+
+                console.log(`Injury #${injury.injury_number}:`, {
+                    stored: {x: injury.coordinate_x, y: injury.coordinate_y},
+                    containerRect: container_rect,
+                    imageRect: image_rect,
+                    calculated: {x: containerX, y: containerY}
+                });
+            });
+        });
+    </script>
+</body>
+</html>

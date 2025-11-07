@@ -144,14 +144,12 @@ try {
     $departure_hospital_time = !empty($_POST['departure_hospital_time']) ? sanitize($_POST['departure_hospital_time']) : null;
     $arrival_station_time = !empty($_POST['arrival_station_time']) ? sanitize($_POST['arrival_station_time']) : null;
     
-    // Persons Present (collect checkboxes)
-    $persons_present = [];
-    $person_fields = ['police', 'brgyOfficials', 'relatives', 'bystanders', 'nonePresent'];
-    foreach ($person_fields as $field) {
-        if (isset($_POST[$field])) {
-            $persons_present[] = $field;
-        }
+    // Persons Present (collect checkboxes from array)
+    $persons_present = isset($_POST['persons_present']) ? $_POST['persons_present'] : [];
+    if (!is_array($persons_present)) {
+        $persons_present = [$persons_present];
     }
+    $persons_present = array_map('sanitize', $persons_present);
     $persons_present_json = json_encode($persons_present);
     
     // Patient Information (REQUIRED)
@@ -197,24 +195,28 @@ try {
     $personal_belongings_json = json_encode($personal_belongings);
     $other_belongings = sanitize($_POST['other_belongings'] ?? null);
     
-    // Emergency Call Type
-    $emergency_medical = isset($_POST['emergency_medical']) ? 1 : 0;
+    // Emergency Call Type (from array)
+    $emergency_types = isset($_POST['emergency_type']) ? $_POST['emergency_type'] : [];
+    if (!is_array($emergency_types)) {
+        $emergency_types = [$emergency_types];
+    }
+    $emergency_types = array_map('sanitize', $emergency_types);
+
+    $emergency_medical = in_array('medical', $emergency_types) ? 1 : 0;
     $emergency_medical_details = sanitize($_POST['emergency_medical_details'] ?? null);
-    $emergency_trauma = isset($_POST['emergency_trauma']) ? 1 : 0;
+    $emergency_trauma = in_array('trauma', $emergency_types) ? 1 : 0;
     $emergency_trauma_details = sanitize($_POST['emergency_trauma_details'] ?? null);
-    $emergency_ob = isset($_POST['emergency_ob']) ? 1 : 0;
+    $emergency_ob = in_array('ob', $emergency_types) ? 1 : 0;
     $emergency_ob_details = sanitize($_POST['emergency_ob_details'] ?? null);
-    $emergency_general = isset($_POST['emergency_general']) ? 1 : 0;
+    $emergency_general = in_array('general', $emergency_types) ? 1 : 0;
     $emergency_general_details = sanitize($_POST['emergency_general_details'] ?? null);
     
-    // Care Management
-    $care_management = [];
-    $care_fields = ['immobilization', 'cpr', 'bandaging', 'woundCare', 'cCollar', 'aed', 'ked'];
-    foreach ($care_fields as $field) {
-        if (isset($_POST[$field])) {
-            $care_management[] = $field;
-        }
+    // Care Management (from array)
+    $care_management = isset($_POST['care_management']) ? $_POST['care_management'] : [];
+    if (!is_array($care_management)) {
+        $care_management = [$care_management];
     }
+    $care_management = array_map('sanitize', $care_management);
     $care_management_json = json_encode($care_management);
     $oxygen_lpm = sanitize($_POST['oxygen_lpm'] ?? null);
     $other_care = sanitize($_POST['other_care'] ?? null);
@@ -242,14 +244,12 @@ try {
     $followup_spinal_injury = !empty($_POST['followup_spinal_injury']) ? sanitize($_POST['followup_spinal_injury']) : null;
     $followup_consciousness = !empty($_POST['followup_consciousness']) ? sanitize($_POST['followup_consciousness']) : null;
     
-    // Chief Complaints
-    $chief_complaints = [];
-    $complaint_fields = ['chestPain', 'headache', 'blurredVision', 'difficultyBreathing', 'dizziness', 'bodyMalaise'];
-    foreach ($complaint_fields as $field) {
-        if (isset($_POST[$field])) {
-            $chief_complaints[] = $field;
-        }
+    // Chief Complaints (from array)
+    $chief_complaints = isset($_POST['chief_complaints']) ? $_POST['chief_complaints'] : [];
+    if (!is_array($chief_complaints)) {
+        $chief_complaints = [$chief_complaints];
     }
+    $chief_complaints = array_map('sanitize', $chief_complaints);
     $chief_complaints_json = json_encode($chief_complaints);
     $other_complaints = sanitize($_POST['other_complaints'] ?? null);
     

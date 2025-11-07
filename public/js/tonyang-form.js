@@ -184,6 +184,17 @@ function generateFormSummary() {
     summaryHTML += `<tr><td><strong>Departure Time:</strong></td><td>${document.getElementById('depTime').value || 'Not specified'}</td></tr>`;
     summaryHTML += `<tr><td><strong>Arrival Time:</strong></td><td>${document.getElementById('arrTime').value || 'Not specified'}</td></tr>`;
 
+    // Scene and Hospital Arrival/Departure Times
+    summaryHTML += `<tr><td><strong>Arrival at Scene - Location:</strong></td><td>${document.getElementById('arrSceneLocation').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Arrival at Scene - Time:</strong></td><td>${document.getElementById('arrSceneTime').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Departure from Scene - Location:</strong></td><td>${document.getElementById('depSceneLocation').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Departure from Scene - Time:</strong></td><td>${document.getElementById('depSceneTime').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Arrival at Hospital - Name:</strong></td><td>${document.getElementById('arrHospName').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Arrival at Hospital - Time:</strong></td><td>${document.getElementById('arrHospTime').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Departure from Hospital - Location:</strong></td><td>${document.getElementById('depHospLocation').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Departure from Hospital - Time:</strong></td><td>${document.getElementById('depHospTime').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Arrival at Station Time:</strong></td><td>${document.getElementById('arrStation').value || 'Not specified'}</td></tr>`;
+
     const vehicleUsed = document.querySelector('input[name="vehicle_used"]:checked');
     summaryHTML += `<tr><td><strong>Vehicle Used:</strong></td><td>${vehicleUsed ? vehicleUsed.value : 'Not specified'}</td></tr>`;
 
@@ -212,6 +223,26 @@ function generateFormSummary() {
     summaryHTML += `<tr><td><strong>Address:</strong></td><td>${document.getElementById('address').value || 'Not specified'}</td></tr>`;
     summaryHTML += `<tr><td><strong>Occupation:</strong></td><td>${document.getElementById('occupation').value || 'Not specified'}</td></tr>`;
     summaryHTML += `<tr><td><strong>Place of Incident:</strong></td><td>${document.getElementById('placeOfIncident').value || 'Not specified'}</td></tr>`;
+
+    // Additional Patient Information Fields
+    summaryHTML += `<tr><td><strong>Zone:</strong></td><td>${document.getElementById('zone').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Zone/Landmark:</strong></td><td>${document.getElementById('zoneLandmark').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Time of Incident:</strong></td><td>${document.getElementById('incidentTime').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Informant Name:</strong></td><td>${document.getElementById('informant').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Informant Address:</strong></td><td>${document.getElementById('informantAddress').value || 'Not specified'}</td></tr>`;
+
+    const arrivalType = document.querySelector('input[name="arrival_type"]:checked');
+    summaryHTML += `<tr><td><strong>Walk In / Call:</strong></td><td>${arrivalType ? arrivalType.value : 'Not specified'}</td></tr>`;
+
+    summaryHTML += `<tr><td><strong>Call/Arrival Time:</strong></td><td>${document.getElementById('callArrTime').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Contact Number:</strong></td><td>${document.getElementById('cpNumber').value || 'Not specified'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Relationship to Victim:</strong></td><td>${document.getElementById('relationshipVictim').value || 'Not specified'}</td></tr>`;
+
+    // Personal Belongings
+    const personalBelongings = Array.from(document.querySelectorAll('input[name="personal_belongings[]"]:checked')).map(cb => cb.value);
+    summaryHTML += `<tr><td><strong>Personal Belongings:</strong></td><td>${personalBelongings.length > 0 ? personalBelongings.join(', ') : 'None'}</td></tr>`;
+    summaryHTML += `<tr><td><strong>Other Belongings:</strong></td><td>${document.getElementById('otherBelongings').value || 'None'}</td></tr>`;
+
     summaryHTML += '</tbody></table>';
     summaryHTML += '</div>';
 
@@ -223,6 +254,20 @@ function generateFormSummary() {
 
     const emergencyTypes = Array.from(document.querySelectorAll('input[name="emergency_type[]"]:checked')).map(cb => cb.value);
     summaryHTML += `<tr><td><strong>Emergency Types:</strong></td><td>${emergencyTypes.length > 0 ? emergencyTypes.join(', ') : 'None specified'}</td></tr>`;
+
+    // Emergency Type Details
+    if (emergencyTypes.includes('medical')) {
+        summaryHTML += `<tr><td><strong>Medical Details:</strong></td><td>${document.getElementById('medicalSpecify').value || 'Not specified'}</td></tr>`;
+    }
+    if (emergencyTypes.includes('trauma')) {
+        summaryHTML += `<tr><td><strong>Trauma Details:</strong></td><td>${document.getElementById('traumaSpecify').value || 'Not specified'}</td></tr>`;
+    }
+    if (emergencyTypes.includes('ob')) {
+        summaryHTML += `<tr><td><strong>OB Details:</strong></td><td>${document.getElementById('obSpecify').value || 'Not specified'}</td></tr>`;
+    }
+    if (emergencyTypes.includes('general')) {
+        summaryHTML += `<tr><td><strong>General Details:</strong></td><td>${document.getElementById('generalSpecify').value || 'Not specified'}</td></tr>`;
+    }
 
     const careManagement = Array.from(document.querySelectorAll('input[name="care_management[]"]:checked')).map(cb => cb.value);
     summaryHTML += `<tr><td><strong>Care Management:</strong></td><td>${careManagement.length > 0 ? careManagement.join(', ') : 'None specified'}</td></tr>`;
@@ -246,8 +291,15 @@ function generateFormSummary() {
     summaryHTML += `<tr><td><strong>Pain Score:</strong></td><td>${document.getElementById('initialPainScore').value || 'Not specified'}</td></tr>`;
     summaryHTML += `<tr><td><strong>SPO2:</strong></td><td>${document.getElementById('initialSPO2').value || 'Not specified'}%</td></tr>`;
 
+    const initialSpinalInjury = document.querySelector('input[name="initial_spinal_injury"]:checked');
+    summaryHTML += `<tr><td><strong>Spinal Injury:</strong></td><td>${initialSpinalInjury ? initialSpinalInjury.value : 'Not specified'}</td></tr>`;
+
     const initialConsciousness = document.querySelector('input[name="initial_consciousness"]:checked');
     summaryHTML += `<tr><td><strong>Level of Consciousness:</strong></td><td>${initialConsciousness ? initialConsciousness.value : 'Not specified'}</td></tr>`;
+
+    const initialHelmet = document.querySelector('input[name="initial_helmet"]:checked');
+    summaryHTML += `<tr><td><strong>Helmet Status:</strong></td><td>${initialHelmet ? initialHelmet.value : 'Not specified'}</td></tr>`;
+
     summaryHTML += '</tbody></table>';
 
     summaryHTML += '<h7>Follow-up:</h7>';
@@ -260,6 +312,9 @@ function generateFormSummary() {
     summaryHTML += `<tr><td><strong>Resp Rate:</strong></td><td>${document.getElementById('followupResp').value || 'Not specified'}</td></tr>`;
     summaryHTML += `<tr><td><strong>Pain Score:</strong></td><td>${document.getElementById('followupPainScore').value || 'Not specified'}</td></tr>`;
     summaryHTML += `<tr><td><strong>SPO2:</strong></td><td>${document.getElementById('followupSPO2').value || 'Not specified'}%</td></tr>`;
+
+    const followupSpinalInjury = document.querySelector('input[name="followup_spinal_injury"]:checked');
+    summaryHTML += `<tr><td><strong>Spinal Injury:</strong></td><td>${followupSpinalInjury ? followupSpinalInjury.value : 'Not specified'}</td></tr>`;
 
     const followupConsciousness = document.querySelector('input[name="followup_consciousness"]:checked');
     summaryHTML += `<tr><td><strong>Level of Consciousness:</strong></td><td>${followupConsciousness ? followupConsciousness.value : 'Not specified'}</td></tr>`;
@@ -277,13 +332,33 @@ function generateFormSummary() {
 
     summaryHTML += `<tr><td><strong>Other Complaints:</strong></td><td>${document.getElementById('othersComplaint').value || 'None'}</td></tr>`;
 
-    summaryHTML += `<tr><td><strong>Injuries Marked:</strong></td><td>${injuries.length}</td></tr>`;
+    // Detailed Injury Mapping
+    summaryHTML += `<tr><td colspan="2"><strong>Injuries Marked: ${injuries.length}</strong></td></tr>`;
+    if (injuries.length > 0) {
+        summaryHTML += '<tr><td colspan="2">';
+        summaryHTML += '<table class="summary-table" style="margin-top: 5px; background: #f8f9fa;">';
+        summaryHTML += '<thead><tr><th>No.</th><th>Type</th><th>View</th><th>Position (X, Y)</th><th>Notes</th></tr></thead>';
+        summaryHTML += '<tbody>';
+        injuries.forEach(injury => {
+            const xCoord = injury.x ? injury.x.toFixed(2) : '0.00';
+            const yCoord = injury.y ? injury.y.toFixed(2) : '0.00';
+            summaryHTML += `<tr>`;
+            summaryHTML += `<td>${injury.id}</td>`;
+            summaryHTML += `<td>${injury.type}</td>`;
+            summaryHTML += `<td>${injury.view}</td>`;
+            summaryHTML += `<td>(${xCoord}%, ${yCoord}%)</td>`;
+            summaryHTML += `<td>${injury.notes || 'None'}</td>`;
+            summaryHTML += `</tr>`;
+        });
+        summaryHTML += '</tbody></table>';
+        summaryHTML += '</td></tr>';
+    }
 
-    // FAST Assessment
-    const faceDrooping = document.querySelector('input[name="face_drooping"]:checked');
-    const armWeakness = document.querySelector('input[name="arm_weakness"]:checked');
-    const speechDifficulty = document.querySelector('input[name="speech_difficulty"]:checked');
-    const timeToCall = document.querySelector('input[name="time_to_call"]:checked');
+    // FAST Assessment (FIXED field names)
+    const faceDrooping = document.querySelector('input[name="fast_face_drooping"]:checked');
+    const armWeakness = document.querySelector('input[name="fast_arm_weakness"]:checked');
+    const speechDifficulty = document.querySelector('input[name="fast_speech_difficulty"]:checked');
+    const timeToCall = document.querySelector('input[name="fast_time_to_call"]:checked');
 
     summaryHTML += '<tr><td colspan="2"><strong>FAST Assessment:</strong></td></tr>';
     summaryHTML += `<tr><td><strong>Face Drooping:</strong></td><td>${faceDrooping ? faceDrooping.value : 'Not assessed'}</td></tr>`;
@@ -297,6 +372,10 @@ function generateFormSummary() {
     summaryHTML += '<tr><td colspan="2"><strong>OB Patient Info:</strong></td></tr>';
     summaryHTML += `<tr><td><strong>Baby Status:</strong></td><td>${document.getElementById('babyDelivery').value || 'Not applicable'}</td></tr>`;
     summaryHTML += `<tr><td><strong>Delivery Time:</strong></td><td>${document.getElementById('timeOfDelivery').value || 'Not applicable'}</td></tr>`;
+
+    const obPlacenta = document.querySelector('input[name="ob_placenta"]:checked');
+    summaryHTML += `<tr><td><strong>Placenta:</strong></td><td>${obPlacenta ? obPlacenta.value : 'Not applicable'}</td></tr>`;
+
     summaryHTML += `<tr><td><strong>LMP:</strong></td><td>${document.getElementById('lmp').value || 'Not applicable'}</td></tr>`;
     summaryHTML += `<tr><td><strong>AOG:</strong></td><td>${document.getElementById('aog').value || 'Not applicable'}</td></tr>`;
     summaryHTML += `<tr><td><strong>EDC:</strong></td><td>${document.getElementById('edc').value || 'Not applicable'}</td></tr>`;
@@ -325,6 +404,15 @@ function generateFormSummary() {
     summaryHTML += `<tr><td><strong>Endorsement:</strong></td><td>${document.getElementById('endorsement').value || 'Not specified'}</td></tr>`;
     summaryHTML += `<tr><td><strong>Hospital Name:</strong></td><td>${document.getElementById('hospital').value || 'Not specified'}</td></tr>`;
     summaryHTML += `<tr><td><strong>Date & Time:</strong></td><td>${document.getElementById('dateTime').value || 'Not specified'}</td></tr>`;
+
+    // Check if endorsement file is uploaded
+    const endorsementFile = document.getElementById('endorsementAttachment');
+    if (endorsementFile && endorsementFile.files.length > 0) {
+        summaryHTML += `<tr><td><strong>Endorsement Attachment:</strong></td><td>${endorsementFile.files[0].name}</td></tr>`;
+    } else {
+        summaryHTML += `<tr><td><strong>Endorsement Attachment:</strong></td><td>No file uploaded</td></tr>`;
+    }
+
     summaryHTML += '</tbody></table>';
     summaryHTML += '</div>';
 
@@ -604,17 +692,9 @@ function repositionMarkers() {
     injuries.forEach(injury => {
         const marker = document.querySelector(`.injury-marker[data-id="${injury.id}"]`);
         if (marker) {
-            const container = marker.parentElement;
-            const image = container.querySelector('.body-image');
-            const container_rect = container.getBoundingClientRect();
-            const image_rect = image.getBoundingClientRect();
-
-            // Recalculate marker position relative to container
-            const containerX = image_rect.left - container_rect.left + (injury.x / 100) * image_rect.width;
-            const containerY = image_rect.top - container_rect.top + (injury.y / 100) * image_rect.height;
-
-            marker.style.left = containerX + 'px';
-            marker.style.top = containerY + 'px';
+            // Use simple percentage positioning (matches view_record.php)
+            marker.style.left = injury.x + '%';
+            marker.style.top = injury.y + '%';
         }
     });
 }

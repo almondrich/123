@@ -186,11 +186,11 @@ $current_user = get_auth_user();
                         <div class="grid-2 mb-section">
                             <div>
                                 <label for="arrStation" class="form-label">Arrival at Station</label>
-                                <input type="time" class="form-control" id="arrStation" name="arrival_station">
+                                <input type="time" class="form-control" id="arrStation" name="arrival_station_time">
                             </div>
                             <div>
                                 <label for="driver" class="form-label">Driver</label>
-                                <input type="text" class="form-control" id="driver" name="driver" placeholder="Driver name">
+                                <input type="text" class="form-control" id="driver" name="driver_name" placeholder="Driver name">
                             </div>
                         </div>
 
@@ -387,28 +387,28 @@ $current_user = get_auth_user();
                                     <input class="form-check-input" type="checkbox" id="medical" name="emergency_type[]" value="medical">
                                     <label class="form-check-label" for="medical"><strong>Medical</strong></label>
                                 </div>
-                                <input type="text" class="form-control" id="medicalSpecify" name="medical_specify" placeholder="Specify medical condition">
+                                <input type="text" class="form-control" id="medicalSpecify" name="emergency_medical_details" placeholder="Specify medical condition">
                             </div>
                             <div>
                                 <div class="form-check mb-2">
                                     <input class="form-check-input" type="checkbox" id="trauma" name="emergency_type[]" value="trauma">
                                     <label class="form-check-label" for="trauma"><strong>Trauma</strong></label>
                                 </div>
-                                <input type="text" class="form-control" id="traumaSpecify" name="trauma_specify" placeholder="Specify trauma type">
+                                <input type="text" class="form-control" id="traumaSpecify" name="emergency_trauma_details" placeholder="Specify trauma type">
                             </div>
                             <div>
                                 <div class="form-check mb-2">
                                     <input class="form-check-input" type="checkbox" id="ob" name="emergency_type[]" value="ob">
                                     <label class="form-check-label" for="ob"><strong>OB</strong></label>
                                 </div>
-                                <input type="text" class="form-control" id="obSpecify" name="ob_specify" placeholder="Specify OB condition">
+                                <input type="text" class="form-control" id="obSpecify" name="emergency_ob_details" placeholder="Specify OB condition">
                             </div>
                             <div>
                                 <div class="form-check mb-2">
                                     <input class="form-check-input" type="checkbox" id="general" name="emergency_type[]" value="general">
                                     <label class="form-check-label" for="general"><strong>General</strong></label>
                                 </div>
-                                <input type="text" class="form-control" id="generalSpecify" name="general_specify" placeholder="Specify general condition">
+                                <input type="text" class="form-control" id="generalSpecify" name="emergency_general_details" placeholder="Specify general condition">
                             </div>
                         </div>
 
@@ -491,7 +491,7 @@ $current_user = get_auth_user();
                         <div class="grid-4 mb-section">
                             <div>
                                 <label for="initialResp" class="form-label">Resp. Rate</label>
-                                <input type="number" class="form-control" id="initialResp" name="initial_resp" placeholder="16">
+                                <input type="number" class="form-control" id="initialResp" name="initial_resp_rate" placeholder="16">
                             </div>
                             <div>
                                 <label for="initialPainScore" class="form-label">Pain Score (0-10)</label>
@@ -579,7 +579,7 @@ $current_user = get_auth_user();
                         <div class="grid-4 mb-section">
                             <div>
                                 <label for="followupResp" class="form-label">Resp. Rate</label>
-                                <input type="number" class="form-control" id="followupResp" name="followup_resp" placeholder="16">
+                                <input type="number" class="form-control" id="followupResp" name="followup_resp_rate" placeholder="16">
                             </div>
                             <div>
                                 <label for="followupPainScore" class="form-label">Pain Score (0-10)</label>
@@ -741,7 +741,7 @@ $current_user = get_auth_user();
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" name="injuries_data" id="injuriesData">
+                        <input type="hidden" name="injuries" id="injuriesData">
 
                         <div class="fast-assessment">
                             <h6><i class="bi bi-exclamation-triangle-fill"></i> FOR Stroke Victim - F.A.S.T. Assessment</h6>
@@ -751,11 +751,11 @@ $current_user = get_auth_user();
                                         <label class="form-label">Face Drooping</label>
                                         <div class="inline-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="face_drooping" id="facePos" value="positive">
+                                                <input class="form-check-input" type="radio" name="fast_face_drooping" id="facePos" value="positive">
                                                 <label class="form-check-label" for="facePos">(+)</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="face_drooping" id="faceNeg" value="negative">
+                                                <input class="form-check-input" type="radio" name="fast_face_drooping" id="faceNeg" value="negative">
                                                 <label class="form-check-label" for="faceNeg">(++)</label>
                                             </div>
                                         </div>
@@ -764,11 +764,11 @@ $current_user = get_auth_user();
                                         <label class="form-label">Arm Weakness</label>
                                         <div class="inline-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="arm_weakness" id="armPos" value="positive">
+                                                <input class="form-check-input" type="radio" name="fast_arm_weakness" id="armPos" value="positive">
                                                 <label class="form-check-label" for="armPos">(+)</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="arm_weakness" id="armNeg" value="negative">
+                                                <input class="form-check-input" type="radio" name="fast_arm_weakness" id="armNeg" value="negative">
                                                 <label class="form-check-label" for="armNeg">(++)</label>
                                             </div>
                                         </div>
@@ -777,11 +777,11 @@ $current_user = get_auth_user();
                                         <label class="form-label">Speech Difficulty</label>
                                         <div class="inline-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="speech_difficulty" id="speechPos" value="positive">
+                                                <input class="form-check-input" type="radio" name="fast_speech_difficulty" id="speechPos" value="positive">
                                                 <label class="form-check-label" for="speechPos">(+)</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="speech_difficulty" id="speechNeg" value="negative">
+                                                <input class="form-check-input" type="radio" name="fast_speech_difficulty" id="speechNeg" value="negative">
                                                 <label class="form-check-label" for="speechNeg">(++)</label>
                                             </div>
                                         </div>
@@ -790,11 +790,11 @@ $current_user = get_auth_user();
                                         <label class="form-label">Time to Call</label>
                                         <div class="inline-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="time_to_call" id="timePos" value="positive">
+                                                <input class="form-check-input" type="radio" name="fast_time_to_call" id="timePos" value="positive">
                                                 <label class="form-check-label" for="timePos">(+)</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="time_to_call" id="timeNeg" value="negative">
+                                                <input class="form-check-input" type="radio" name="fast_time_to_call" id="timeNeg" value="negative">
                                                 <label class="form-check-label" for="timeNeg">(++)</label>
                                             </div>
                                         </div>
@@ -802,7 +802,7 @@ $current_user = get_auth_user();
                                 </div>
                                 <div>
                                     <label for="fastDetails" class="form-label">S.A.M.P.L.E.</label>
-                                    <textarea class="form-control" id="fastDetails" name="sample_details" rows="5" placeholder="Signs/Symptoms, Allergies, Medications, Pertinent history, Last oral intake, Events"></textarea>
+                                    <textarea class="form-control" id="fastDetails" name="fast_sample_details" rows="5" placeholder="Signs/Symptoms, Allergies, Medications, Pertinent history, Last oral intake, Events"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -812,36 +812,36 @@ $current_user = get_auth_user();
                             <div class="grid-3" style="gap: 1rem;">
                                 <div>
                                     <label for="babyDelivery" class="form-label">Baby Status</label>
-                                    <input type="text" class="form-control" id="babyDelivery" name="baby_status">
+                                    <input type="text" class="form-control" id="babyDelivery" name="ob_baby_status">
                                 </div>
                                 <div>
                                     <label for="timeOfDelivery" class="form-label">Delivery Time</label>
-                                    <input type="time" class="form-control" id="timeOfDelivery" name="delivery_time">
+                                    <input type="time" class="form-control" id="timeOfDelivery" name="ob_delivery_time">
                                 </div>
                                 <div>
                                     <label class="form-label">Placenta</label>
                                     <div class="inline-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="placenta" id="placentaIn" value="in">
+                                            <input class="form-check-input" type="radio" name="ob_placenta" id="placentaIn" value="in">
                                             <label class="form-check-label" for="placentaIn">In</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="placenta" id="placentaOut" value="out">
+                                            <input class="form-check-input" type="radio" name="ob_placenta" id="placentaOut" value="out">
                                             <label class="form-check-label" for="placentaOut">Out</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div>
                                     <label for="lmp" class="form-label">LMP</label>
-                                    <input type="date" class="form-control" id="lmp" name="lmp">
+                                    <input type="date" class="form-control" id="lmp" name="ob_lmp">
                                 </div>
                                 <div>
                                     <label for="aog" class="form-label">AOG</label>
-                                    <input type="text" class="form-control" id="aog" name="aog" placeholder="Weeks">
+                                    <input type="text" class="form-control" id="aog" name="ob_aog" placeholder="Weeks">
                                 </div>
                                 <div>
                                     <label for="edc" class="form-label">EDC</label>
-                                    <input type="date" class="form-control" id="edc" name="edc">
+                                    <input type="date" class="form-control" id="edc" name="ob_edc">
                                 </div>
                             </div>
                         </div>
@@ -881,11 +881,11 @@ $current_user = get_auth_user();
                         <div class="grid-2 mb-section">
                             <div>
                                 <label for="aider1" class="form-label">1st Aider</label>
-                                <input type="text" class="form-control" id="aider1" name="aider1" placeholder="Name">
+                                <input type="text" class="form-control" id="aider1" name="first_aider" placeholder="Name">
                             </div>
                             <div>
                                 <label for="aider2" class="form-label">2nd Aider</label>
-                                <input type="text" class="form-control" id="aider2" name="aider2" placeholder="Name">
+                                <input type="text" class="form-control" id="aider2" name="second_aider" placeholder="Name">
                             </div>
                         </div>
 

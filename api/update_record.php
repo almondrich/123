@@ -125,13 +125,13 @@ try {
 
     // Emergency Call Types
     $emergency_medical = isset($_POST['emergency_type']) && in_array('medical', $_POST['emergency_type']) ? 1 : 0;
-    $emergency_medical_details = !empty($_POST['medical_specify']) ? sanitize($_POST['medical_specify']) : null;
+    $emergency_medical_details = !empty($_POST['emergency_medical_details']) ? sanitize($_POST['emergency_medical_details']) : null;
     $emergency_trauma = isset($_POST['emergency_type']) && in_array('trauma', $_POST['emergency_type']) ? 1 : 0;
-    $emergency_trauma_details = !empty($_POST['trauma_specify']) ? sanitize($_POST['trauma_specify']) : null;
+    $emergency_trauma_details = !empty($_POST['emergency_trauma_details']) ? sanitize($_POST['emergency_trauma_details']) : null;
     $emergency_ob = isset($_POST['emergency_type']) && in_array('ob', $_POST['emergency_type']) ? 1 : 0;
-    $emergency_ob_details = !empty($_POST['ob_specify']) ? sanitize($_POST['ob_specify']) : null;
+    $emergency_ob_details = !empty($_POST['emergency_ob_details']) ? sanitize($_POST['emergency_ob_details']) : null;
     $emergency_general = isset($_POST['emergency_type']) && in_array('general', $_POST['emergency_type']) ? 1 : 0;
-    $emergency_general_details = !empty($_POST['general_specify']) ? sanitize($_POST['general_specify']) : null;
+    $emergency_general_details = !empty($_POST['emergency_general_details']) ? sanitize($_POST['emergency_general_details']) : null;
 
     // Care Management
     $care_management = isset($_POST['care_management']) ? $_POST['care_management'] : [];
@@ -148,7 +148,7 @@ try {
     $initial_bp = !empty($_POST['initial_bp']) ? sanitize($_POST['initial_bp']) : null;
     $initial_temp = (!empty($_POST['initial_temp']) && $_POST['initial_temp'] !== '') ? (float)$_POST['initial_temp'] : null;
     $initial_pulse = (!empty($_POST['initial_pulse']) && $_POST['initial_pulse'] !== '') ? (int)$_POST['initial_pulse'] : null;
-    $initial_resp_rate = (!empty($_POST['initial_resp']) && $_POST['initial_resp'] !== '') ? (int)$_POST['initial_resp'] : null;
+    $initial_resp_rate = (!empty($_POST['initial_resp_rate']) && $_POST['initial_resp_rate'] !== '') ? (int)$_POST['initial_resp_rate'] : null;
     $initial_pain_score = (!empty($_POST['initial_pain_score']) && $_POST['initial_pain_score'] !== '') ? (int)$_POST['initial_pain_score'] : null;
     $initial_spo2 = (!empty($_POST['initial_spo2']) && $_POST['initial_spo2'] !== '') ? (int)$_POST['initial_spo2'] : null;
     $initial_spinal_injury = !empty($_POST['initial_spinal_injury']) ? sanitize($_POST['initial_spinal_injury']) : null;
@@ -160,7 +160,7 @@ try {
     $followup_bp = !empty($_POST['followup_bp']) ? sanitize($_POST['followup_bp']) : null;
     $followup_temp = (!empty($_POST['followup_temp']) && $_POST['followup_temp'] !== '') ? (float)$_POST['followup_temp'] : null;
     $followup_pulse = (!empty($_POST['followup_pulse']) && $_POST['followup_pulse'] !== '') ? (int)$_POST['followup_pulse'] : null;
-    $followup_resp_rate = (!empty($_POST['followup_resp']) && $_POST['followup_resp'] !== '') ? (int)$_POST['followup_resp'] : null;
+    $followup_resp_rate = (!empty($_POST['followup_resp_rate']) && $_POST['followup_resp_rate'] !== '') ? (int)$_POST['followup_resp_rate'] : null;
     $followup_pain_score = (!empty($_POST['followup_pain_score']) && $_POST['followup_pain_score'] !== '') ? (int)$_POST['followup_pain_score'] : null;
     $followup_spo2 = (!empty($_POST['followup_spo2']) && $_POST['followup_spo2'] !== '') ? (int)$_POST['followup_spo2'] : null;
     $followup_spinal_injury = !empty($_POST['followup_spinal_injury']) ? sanitize($_POST['followup_spinal_injury']) : null;
@@ -176,27 +176,27 @@ try {
     $other_complaints = !empty($_POST['other_complaints']) ? sanitize($_POST['other_complaints']) : null;
 
     // FAST Assessment
-    $fast_face_drooping = !empty($_POST['face_drooping']) ? sanitize($_POST['face_drooping']) : null;
-    $fast_arm_weakness = !empty($_POST['arm_weakness']) ? sanitize($_POST['arm_weakness']) : null;
-    $fast_speech_difficulty = !empty($_POST['speech_difficulty']) ? sanitize($_POST['speech_difficulty']) : null;
-    $fast_time_to_call = !empty($_POST['time_to_call']) ? sanitize($_POST['time_to_call']) : null;
-    $fast_sample_details = !empty($_POST['sample_details']) ? sanitize($_POST['sample_details']) : null;
+    $fast_face_drooping = !empty($_POST['fast_face_drooping']) ? sanitize($_POST['fast_face_drooping']) : null;
+    $fast_arm_weakness = !empty($_POST['fast_arm_weakness']) ? sanitize($_POST['fast_arm_weakness']) : null;
+    $fast_speech_difficulty = !empty($_POST['fast_speech_difficulty']) ? sanitize($_POST['fast_speech_difficulty']) : null;
+    $fast_time_to_call = !empty($_POST['fast_time_to_call']) ? sanitize($_POST['fast_time_to_call']) : null;
+    $fast_sample_details = !empty($_POST['fast_sample_details']) ? sanitize($_POST['fast_sample_details']) : null;
 
     // OB Information
-    $ob_baby_status = !empty($_POST['baby_status']) ? sanitize($_POST['baby_status']) : null;
-    $ob_delivery_time = !empty($_POST['delivery_time']) ? sanitize($_POST['delivery_time']) : null;
-    $ob_placenta = !empty($_POST['placenta']) ? sanitize($_POST['placenta']) : null;
-    $ob_lmp = !empty($_POST['lmp']) ? sanitize($_POST['lmp']) : null;
-    $ob_aog = !empty($_POST['aog']) ? sanitize($_POST['aog']) : null;
-    $ob_edc = !empty($_POST['edc']) ? sanitize($_POST['edc']) : null;
+    $ob_baby_status = !empty($_POST['ob_baby_status']) ? sanitize($_POST['ob_baby_status']) : null;
+    $ob_delivery_time = !empty($_POST['ob_delivery_time']) ? sanitize($_POST['ob_delivery_time']) : null;
+    $ob_placenta = !empty($_POST['ob_placenta']) ? sanitize($_POST['ob_placenta']) : null;
+    $ob_lmp = !empty($_POST['ob_lmp']) ? sanitize($_POST['ob_lmp']) : null;
+    $ob_aog = !empty($_POST['ob_aog']) ? sanitize($_POST['ob_aog']) : null;
+    $ob_edc = !empty($_POST['ob_edc']) ? sanitize($_POST['ob_edc']) : null;
 
     // Team Information
     $team_leader_notes = !empty($_POST['team_leader_notes']) ? sanitize($_POST['team_leader_notes']) : null;
     $team_leader = !empty($_POST['team_leader']) ? sanitize($_POST['team_leader']) : null;
     $data_recorder = !empty($_POST['data_recorder']) ? sanitize($_POST['data_recorder']) : null;
     $logistic = !empty($_POST['logistic']) ? sanitize($_POST['logistic']) : null;
-    $first_aider = !empty($_POST['aider1']) ? sanitize($_POST['aider1']) : null;
-    $second_aider = !empty($_POST['aider2']) ? sanitize($_POST['aider2']) : null;
+    $first_aider = !empty($_POST['first_aider']) ? sanitize($_POST['first_aider']) : null;
+    $second_aider = !empty($_POST['second_aider']) ? sanitize($_POST['second_aider']) : null;
 
     // Hospital Endorsement
     $endorsement = !empty($_POST['endorsement']) ? sanitize($_POST['endorsement']) : null;
