@@ -117,8 +117,8 @@ try {
     $form_number = 'PHC-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(4)));
     
     // Basic Information
-    $departure_time = sanitize($_POST['departure_time'] ?? null);
-    $arrival_time = sanitize($_POST['arrival_time'] ?? null);
+    $departure_time = !empty($_POST['departure_time']) ? sanitize($_POST['departure_time']) : null;
+    $arrival_time = !empty($_POST['arrival_time']) ? sanitize($_POST['arrival_time']) : null;
     $vehicle_used = sanitize($_POST['vehicle_used'] ?? null);
     $vehicle_details = sanitize($_POST['vehicle_details'] ?? null);
     $driver_name = sanitize($_POST['driver_name'] ?? null);
@@ -133,16 +133,16 @@ try {
     
     // Scene Information
     $arrival_scene_location = sanitize($_POST['arrival_scene_location'] ?? null);
-    $arrival_scene_time = sanitize($_POST['arrival_scene_time'] ?? null);
+    $arrival_scene_time = !empty($_POST['arrival_scene_time']) ? sanitize($_POST['arrival_scene_time']) : null;
     $departure_scene_location = sanitize($_POST['departure_scene_location'] ?? null);
-    $departure_scene_time = sanitize($_POST['departure_scene_time'] ?? null);
+    $departure_scene_time = !empty($_POST['departure_scene_time']) ? sanitize($_POST['departure_scene_time']) : null;
     
     // Hospital Information
     $arrival_hospital_name = sanitize($_POST['arrival_hospital_name'] ?? null);
-    $arrival_hospital_time = sanitize($_POST['arrival_hospital_time'] ?? null);
+    $arrival_hospital_time = !empty($_POST['arrival_hospital_time']) ? sanitize($_POST['arrival_hospital_time']) : null;
     $departure_hospital_location = sanitize($_POST['departure_hospital_location'] ?? null);
-    $departure_hospital_time = sanitize($_POST['departure_hospital_time'] ?? null);
-    $arrival_station_time = sanitize($_POST['arrival_station_time'] ?? null);
+    $departure_hospital_time = !empty($_POST['departure_hospital_time']) ? sanitize($_POST['departure_hospital_time']) : null;
+    $arrival_station_time = !empty($_POST['arrival_station_time']) ? sanitize($_POST['arrival_station_time']) : null;
     
     // Persons Present (collect checkboxes)
     $persons_present = [];
@@ -178,13 +178,13 @@ try {
     $occupation = sanitize($_POST['occupation'] ?? null);
     $place_of_incident = sanitize($_POST['place_of_incident'] ?? null);
     $zone_landmark = sanitize($_POST['zone_landmark'] ?? null);
-    $incident_time = sanitize($_POST['incident_time'] ?? null);
+    $incident_time = !empty($_POST['incident_time']) ? sanitize($_POST['incident_time']) : null;
     
     // Informant Details
     $informant_name = sanitize($_POST['informant_name'] ?? null);
     $informant_address = sanitize($_POST['informant_address'] ?? null);
     $arrival_type = sanitize($_POST['arrival_type'] ?? null);
-    $call_arrival_time = sanitize($_POST['call_arrival_time'] ?? null);
+    $call_arrival_time = !empty($_POST['call_arrival_time']) ? sanitize($_POST['call_arrival_time']) : null;
     $contact_number = sanitize($_POST['contact_number'] ?? null);
     $relationship_victim = sanitize($_POST['relationship_victim'] ?? null);
     
@@ -262,7 +262,7 @@ try {
     
     // OB Information
     $ob_baby_status = sanitize($_POST['ob_baby_status'] ?? null);
-    $ob_delivery_time = sanitize($_POST['ob_delivery_time'] ?? null);
+    $ob_delivery_time = !empty($_POST['ob_delivery_time']) ? sanitize($_POST['ob_delivery_time']) : null;
     $ob_placenta = sanitize($_POST['ob_placenta'] ?? null);
     $ob_lmp = sanitize($_POST['ob_lmp'] ?? null);
     $ob_aog = sanitize($_POST['ob_aog'] ?? null);
@@ -280,7 +280,7 @@ try {
     $endorsement = sanitize($_POST['endorsement'] ?? null);
     $hospital_name = sanitize($_POST['hospital_name'] ?? null);
     $received_by = sanitize($_POST['received_by'] ?? null);
-    $endorsement_datetime = sanitize($_POST['endorsement_datetime'] ?? null);
+    $endorsement_datetime = !empty($_POST['endorsement_datetime']) ? sanitize($_POST['endorsement_datetime']) : null;
     $endorsement_attachment = $endorsement_attachment_path; // Store the file path
     
     // Get current user ID

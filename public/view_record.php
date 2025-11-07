@@ -36,6 +36,15 @@ $injuries = $injury_stmt->fetchAll();
 
 // Get current user
 $current_user = get_auth_user();
+
+// Helper function to format time with AM/PM
+function format_time($time) {
+    if (empty($time) || $time === '00:00:00' || $time === '0') {
+        return 'N/A';
+    }
+    // Convert 24-hour time to 12-hour format with AM/PM
+    return date('g:i A', strtotime($time));
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -538,11 +547,11 @@ $current_user = get_auth_user();
             </div>
             <div class="form-group">
                 <label>Departure Time</label>
-                <div class="value"><?php echo e($record['departure_time'] ?: 'N/A'); ?></div>
+                <div class="value"><?php echo format_time($record['departure_time']); ?></div>
             </div>
             <div class="form-group">
                 <label>Arrival Time</label>
-                <div class="value"><?php echo e($record['arrival_time'] ?: 'N/A'); ?></div>
+                <div class="value"><?php echo format_time($record['arrival_time']); ?></div>
             </div>
         </div>
         <div class="form-row">
@@ -565,7 +574,7 @@ $current_user = get_auth_user();
             </div>
             <div class="form-group">
                 <label>Arrival Scene Time</label>
-                <div class="value"><?php echo e($record['arrival_scene_time'] ?: 'N/A'); ?></div>
+                <div class="value"><?php echo format_time($record['arrival_scene_time']); ?></div>
             </div>
         </div>
         <div class="form-row">
@@ -575,7 +584,7 @@ $current_user = get_auth_user();
             </div>
             <div class="form-group">
                 <label>Departure Scene Time</label>
-                <div class="value"><?php echo e($record['departure_scene_time'] ?: 'N/A'); ?></div>
+                <div class="value"><?php echo format_time($record['departure_scene_time']); ?></div>
             </div>
         </div>
 
@@ -636,7 +645,7 @@ $current_user = get_auth_user();
             </div>
             <div class="form-group">
                 <label>Incident Time</label>
-                <div class="value"><?php echo e($record['incident_time'] ?: 'N/A'); ?></div>
+                <div class="value"><?php echo format_time($record['incident_time']); ?></div>
             </div>
         </div>
 
@@ -665,7 +674,7 @@ $current_user = get_auth_user();
             </div>
             <div class="form-group">
                 <label>Call Arrival Time</label>
-                <div class="value"><?php echo e($record['call_arrival_time'] ?: 'N/A'); ?></div>
+                <div class="value"><?php echo format_time($record['call_arrival_time']); ?></div>
             </div>
         </div>
         <div class="form-row">
@@ -777,7 +786,7 @@ $current_user = get_auth_user();
             </div>
             <div class="form-group">
                 <label>Arrival Hospital Time</label>
-                <div class="value"><?php echo e($record['arrival_hospital_time'] ?: 'N/A'); ?></div>
+                <div class="value"><?php echo format_time($record['arrival_hospital_time']); ?></div>
             </div>
         </div>
         <div class="form-row">
@@ -787,13 +796,13 @@ $current_user = get_auth_user();
             </div>
             <div class="form-group">
                 <label>Departure Hospital Time</label>
-                <div class="value"><?php echo e($record['departure_hospital_time'] ?: 'N/A'); ?></div>
+                <div class="value"><?php echo format_time($record['departure_hospital_time']); ?></div>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label>Arrival Station Time</label>
-                <div class="value"><?php echo e($record['arrival_station_time'] ?: 'N/A'); ?></div>
+                <div class="value"><?php echo format_time($record['arrival_station_time']); ?></div>
             </div>
         </div>
 
