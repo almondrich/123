@@ -21,7 +21,7 @@ $current_user = get_auth_user();
 
 // Pagination
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$per_page = 20;
+$per_page = 10; // Show 10 records per page for better pagination visibility
 $offset = ($page - 1) * $per_page;
 
 // Search and filter
@@ -324,10 +324,10 @@ $records = $stmt->fetchAll();
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="view_record.php?id=<?php echo $record['id']; ?>"
+                                    <button onclick="viewRecordModal(<?php echo $record['id']; ?>)"
                                        class="btn btn-table btn-view" title="View">
                                         <i class="fas fa-eye"></i>
-                                    </a>
+                                    </button>
                                     <a href="edit_record.php?id=<?php echo $record['id']; ?>"
                                        class="btn btn-table btn-edit" title="Edit">
                                         <i class="fas fa-edit"></i>
@@ -381,7 +381,11 @@ $records = $stmt->fetchAll();
         <i class="fas fa-arrow-up"></i>
     </button>
 
+    <!-- Include View Record Modal -->
+    <?php include '../includes/view_record_modal.php'; ?>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/view-record-modal.js"></script>
     <script>
     // Skeleton Loader
     document.addEventListener('DOMContentLoaded', function() {

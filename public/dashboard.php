@@ -30,15 +30,25 @@ $pending_forms = $pending_forms_stmt->fetch()['count'];
 $completed_forms_stmt = db_query("SELECT COUNT(*) as count FROM prehospital_forms WHERE created_by = ? AND status = 'completed'", [$user_id]);
 $completed_forms = $completed_forms_stmt->fetch()['count'];
 
-// Get recent forms with creator information
+// Pagination for recent forms
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$per_page = 5; // Show 5 records per page for better pagination visibility
+$offset = ($page - 1) * $per_page;
+
+// Get total count for pagination
+$count_stmt = db_query("SELECT COUNT(*) as total FROM prehospital_forms WHERE created_by = ?", [$user_id]);
+$total_records = $count_stmt->fetch()['total'];
+$total_pages = ceil($total_records / $per_page);
+
+// Get recent forms with creator information and pagination
 $recent_forms_stmt = db_query("
     SELECT pf.*, u.full_name as created_by_name
     FROM prehospital_forms pf
     LEFT JOIN users u ON pf.created_by = u.id
     WHERE pf.created_by = ?
     ORDER BY pf.created_at DESC
-    LIMIT 10
-", [$user_id]);
+    LIMIT ? OFFSET ?
+", [$user_id, $per_page, $offset]);
 $recent_forms = $recent_forms_stmt->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -621,10 +631,10 @@ $recent_forms = $recent_forms_stmt->fetchAll();
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="view_record.php?id=<?php echo $form['id']; ?>"
+                                                <button onclick="viewRecordModal(<?php echo $form['id']; ?>)"
                                                    class="btn btn-outline-primary btn-action" title="View">
                                                     <i class="bi bi-eye"></i>
-                                                </a>
+                                                </button>
                                                 <a href="edit_record.php?id=<?php echo $form['id']; ?>"
                                                    class="btn btn-outline-success btn-action" title="Edit">
                                                     <i class="bi bi-pencil"></i>
@@ -712,10 +722,10 @@ $recent_forms = $recent_forms_stmt->fetchAll();
                             </div>
 
                             <div class="mobile-card-actions">
-                                <a href="view_record.php?id=<?php echo $form['id']; ?>"
+                                <button onclick="viewRecordModal(<?php echo $form['id']; ?>)"
                                    class="btn btn-outline-primary btn-action" title="View">
                                     <i class="bi bi-eye me-1 d-none d-sm-inline"></i> View
-                                </a>
+                                </button>
                                 <a href="edit_record.php?id=<?php echo $form['id']; ?>"
                                    class="btn btn-outline-success btn-action" title="Edit">
                                     <i class="bi bi-pencil me-1 d-none d-sm-inline"></i> Edit
@@ -729,10 +739,45 @@ $recent_forms = $recent_forms_stmt->fetchAll();
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
+
+            <!-- Pagination -->
+            <?php if ($total_pages > 1): ?>
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item <?php echo $page <= 1 ? 'disabled' : ''; ?>">
+                            <a class="page-link" href="?page=<?php echo $page - 1; ?>">
+                                Previous
+                            </a>
+                        </li>
+
+                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                            <?php if ($i == 1 || $i == $total_pages || abs($i - $page) <= 2): ?>
+                                <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>">
+                                        <?php echo $i; ?>
+                                    </a>
+                                </li>
+                            <?php elseif (abs($i - $page) == 3): ?>
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            <?php endif; ?>
+                        <?php endfor; ?>
+
+                        <li class="page-item <?php echo $page >= $total_pages ? 'disabled' : ''; ?>">
+                            <a class="page-link" href="?page=<?php echo $page + 1; ?>">
+                                Next
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            <?php endif; ?>
         </div>
     </div>
 
+    <!-- Include View Record Modal -->
+    <?php include '../includes/view_record_modal.php'; ?>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/view-record-modal.js"></script>
     <script>
         function deleteRecord(id) {
             if (confirm('Are you sure you want to delete this record? This action cannot be undone.')) {

@@ -5,9 +5,11 @@
 
 body {
     background-color: #f5f5f5;
-    padding: clamp(15px, 3vw, 20px);
+    padding: 0;
+    margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     scroll-behavior: smooth;
+    min-height: 100vh;
 }
 
 * {
@@ -18,30 +20,29 @@ body {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-    padding: clamp(20px, 4vw, 30px);
-    margin: 0 auto;
-    width: 100%;
-    max-width: 98vw;
+    padding: 30px;
+    margin: 20px;
+    max-width: 100%;
 }
 
 /* ========================================
    Header Section
    ======================================== */
 .header-section {
-    margin-bottom: clamp(25px, 5vw, 30px);
-    padding-bottom: clamp(15px, 3vw, 20px);
+    margin-bottom: 30px;
+    padding-bottom: 20px;
     border-bottom: 2px solid #e0e0e0;
 }
 
 .header-section h1 {
-    font-size: clamp(1.5rem, 4vw, 1.75rem);
+    font-size: 1.75rem;
     font-weight: 600;
     color: #212529;
-    margin-bottom: clamp(5px, 1.5vw, 8px);
+    margin-bottom: 8px;
 }
 
 .header-section h2 {
-    font-size: clamp(1.1rem, 3vw, 1.25rem);
+    font-size: 1.125rem;
     color: #6c757d;
     margin: 0;
     font-weight: 500;
@@ -52,18 +53,19 @@ body {
    ======================================== */
 .stats-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: clamp(12px, 2.5vw, 15px);
-    margin-bottom: clamp(25px, 5vw, 30px);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
 }
 
 .stat-card {
     background-color: #ffffff;
     border: 1px solid #dee2e6;
-    padding: clamp(15px, 3.5vw, 20px);
+    padding: 20px;
     border-radius: 6px;
     border-left: 4px solid #0d6efd;
     transition: box-shadow 0.2s;
+    min-height: 100px;
 }
 
 .stat-card:hover {
@@ -71,8 +73,8 @@ body {
 }
 
 .stat-card h3 {
-    font-size: clamp(1.5rem, 4vw, 1.75rem);
-    margin-bottom: clamp(5px, 1.5vw, 8px);
+    font-size: 1.75rem;
+    margin-bottom: 8px;
     font-weight: 600;
     color: #212529;
 }
@@ -80,7 +82,7 @@ body {
 .stat-card p {
     margin: 0;
     color: #6c757d;
-    font-size: clamp(0.85rem, 2.3vw, 0.9rem);
+    font-size: 0.9rem;
 }
 
 .stat-card:nth-child(1) { border-left-color: #0d6efd; }
@@ -96,9 +98,9 @@ body {
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: clamp(10px, 2.5vw, 15px);
-    margin-bottom: clamp(20px, 4vw, 25px);
-    padding: clamp(15px, 3vw, 20px);
+    gap: 15px;
+    margin-bottom: 25px;
+    padding: 20px;
     background-color: #f8f9fa;
     border-radius: 6px;
 }
@@ -110,10 +112,10 @@ body {
 
 .search-box input {
     width: 100%;
-    padding: clamp(8px, 2vw, 10px);
+    padding: 10px 15px;
     border: 1px solid #ced4da;
     border-radius: 4px;
-    font-size: clamp(0.85rem, 2.3vw, 0.9rem);
+    font-size: 0.9rem;
 }
 
 .search-box input:focus {
@@ -124,7 +126,7 @@ body {
 
 .action-buttons {
     display: flex;
-    gap: clamp(8px, 2vw, 10px);
+    gap: 10px;
     flex-wrap: wrap;
 }
 
@@ -132,8 +134,8 @@ body {
    Custom Buttons
    ======================================== */
 .btn-custom {
-    padding: clamp(8px, 2vw, 10px) clamp(15px, 3.5vw, 18px);
-    font-size: clamp(0.85rem, 2.3vw, 0.9rem);
+    padding: 10px 18px;
+    font-size: 0.9rem;
     border-radius: 4px;
     text-decoration: none;
     transition: all 0.2s;
@@ -141,7 +143,7 @@ body {
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: clamp(5px, 1.5vw, 8px);
+    gap: 8px;
     white-space: nowrap;
     font-weight: 500;
 }
@@ -193,7 +195,8 @@ body {
     width: 100%;
     border-collapse: collapse;
     background-color: white;
-    font-size: clamp(0.8rem, 2.2vw, 0.875rem);
+    font-size: 0.875rem;
+    table-layout: auto;
 }
 
 .custom-table thead {
@@ -202,7 +205,7 @@ body {
 }
 
 .custom-table th {
-    padding: clamp(12px, 2.5vw, 15px);
+    padding: 15px 12px;
     text-align: left;
     font-weight: 600;
     white-space: nowrap;
@@ -211,7 +214,7 @@ body {
 }
 
 .custom-table td {
-    padding: clamp(10px, 2.5vw, 12px);
+    padding: 12px;
     border-bottom: 1px solid #dee2e6;
     color: #212529;
 }
@@ -228,9 +231,9 @@ body {
    Badges
    ======================================== */
 .badge-custom {
-    padding: clamp(4px, 1.2vw, 5px) clamp(8px, 2vw, 10px);
+    padding: 5px 10px;
     border-radius: 4px;
-    font-size: clamp(0.7rem, 2vw, 0.75rem);
+    font-size: 0.75rem;
     font-weight: 500;
     white-space: nowrap;
 }
@@ -257,14 +260,16 @@ body {
    Table Action Buttons
    ======================================== */
 .btn-table {
-    padding: clamp(5px, 1.5vw, 6px) clamp(10px, 2.5vw, 12px);
-    font-size: clamp(0.75rem, 2vw, 0.8rem);
+    padding: 6px 12px;
+    font-size: 0.8rem;
     border: 1px solid;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s;
     margin: 2px;
     font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .btn-view {
@@ -329,19 +334,20 @@ body {
 .skeleton-card {
     background-color: #ffffff;
     border: 1px solid #dee2e6;
-    padding: clamp(15px, 3.5vw, 20px);
+    padding: 20px;
     border-radius: 6px;
     border-left: 4px solid #e0e0e0;
+    min-height: 100px;
 }
 
 .skeleton-title {
-    height: clamp(1.5rem, 4vw, 1.75rem);
-    margin-bottom: clamp(5px, 1.5vw, 8px);
+    height: 1.75rem;
+    margin-bottom: 8px;
     border-radius: 4px;
 }
 
 .skeleton-text {
-    height: clamp(0.85rem, 2.3vw, 0.9rem);
+    height: 0.9rem;
     border-radius: 4px;
     margin-bottom: 5px;
 }
@@ -368,7 +374,7 @@ body {
 
 .skeleton-cell {
     display: table-cell;
-    padding: clamp(10px, 2.5vw, 12px);
+    padding: 12px;
     border-bottom: 1px solid #dee2e6;
 }
 
@@ -443,15 +449,16 @@ body {
 .filters-card {
     background: #f8f9fa;
     border-radius: 6px;
-    padding: clamp(15px, 3vw, 20px);
-    margin-bottom: clamp(15px, 3vw, 20px);
+    padding: 20px;
+    margin-bottom: 20px;
     border: 1px solid #dee2e6;
 }
 
 .form-control, .form-select {
     border: 1px solid #dee2e6;
     border-radius: 4px;
-    font-size: clamp(0.85rem, 2.3vw, 0.875rem);
+    font-size: 0.875rem;
+    padding: 8px 12px;
 }
 
 .form-control:focus, .form-select:focus {
@@ -460,16 +467,72 @@ body {
 }
 
 /* ========================================
+   Pagination Styles
+   ======================================== */
+.pagination {
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.pagination .page-link {
+    color: #0d6efd;
+    border: 1px solid #dee2e6;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.pagination .page-link:hover {
+    background-color: #e7f1ff;
+    border-color: #0d6efd;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    font-weight: 600;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #f8f9fa;
+}
+
+/* ========================================
    Responsive Design - Tablet
    ======================================== */
 @media (max-width: 768px) {
+    .records-container {
+        padding: 20px;
+        margin: 15px;
+    }
+
+    .header-section h1 {
+        font-size: 1.5rem;
+    }
+
+    .header-section h2 {
+        font-size: 1rem;
+    }
+
     .stats-cards {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat-card {
+        padding: 15px;
+        min-height: 90px;
+    }
+
+    .stat-card h3 {
+        font-size: 1.5rem;
     }
 
     .action-section {
         flex-direction: column;
         align-items: stretch;
+        padding: 15px;
     }
 
     .search-box {
@@ -478,6 +541,11 @@ body {
 
     .action-buttons {
         justify-content: center;
+    }
+
+    .btn-custom {
+        padding: 9px 16px;
+        font-size: 0.875rem;
     }
 
     .back-to-top {
@@ -503,15 +571,65 @@ body {
    ======================================== */
 @media (max-width: 576px) {
     body {
-        padding: clamp(10px, 2vw, 15px);
+        padding: 0;
     }
 
     .records-container {
-        padding: clamp(15px, 3vw, 20px);
+        padding: 15px;
+        margin: 10px;
+    }
+
+    .header-section {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+    }
+
+    .header-section h1 {
+        font-size: 1.35rem;
+    }
+
+    .header-section h2 {
+        font-size: 0.9rem;
     }
 
     .stats-cards {
         grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        padding: 15px;
+        min-height: 80px;
+    }
+
+    .stat-card h3 {
+        font-size: 1.4rem;
+    }
+
+    .stat-card p {
+        font-size: 0.85rem;
+    }
+
+    .action-section {
+        padding: 15px;
+        margin-bottom: 20px;
+        gap: 12px;
+    }
+
+    .search-box input {
+        padding: 10px 12px;
+        font-size: 0.875rem;
+    }
+
+    .btn-custom {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
+
+    .filters-card {
+        padding: 15px;
+        margin-bottom: 15px;
     }
 
     .back-to-top {
@@ -532,18 +650,18 @@ body {
 
     /* Adjust button sizes for mobile */
     .btn-table {
-        padding: clamp(4px, 1.2vw, 5px) clamp(8px, 2vw, 9px);
-        font-size: clamp(0.7rem, 1.8vw, 0.75rem);
+        padding: 5px 9px;
+        font-size: 0.75rem;
         margin: 1px;
     }
 
     /* Adjust table font size for mobile */
     .custom-table {
-        font-size: clamp(0.75rem, 2vw, 0.8rem);
+        font-size: 0.8rem;
     }
 
     .custom-table th,
     .custom-table td {
-        padding: clamp(8px, 2vw, 10px);
+        padding: 10px 8px;
     }
 }

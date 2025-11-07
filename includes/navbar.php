@@ -16,9 +16,9 @@ $current_user = get_auth_user();
 $user_full = $current_user['full_name'] ?? 'Guest';
 $user_role = strtolower($current_user['role'] ?? 'guest');
 ?>
-<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color: #2c3e50;">
   <div class="container">
-    <a class="navbar-brand fw-bold d-flex align-items-center" href="<?= $base_path ?>dashboard.php">
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="<?= $base_path ?>dashboard.php" style="color: #ffffff;">
         <img src="<?= $base_path ?>uploads/logo.png" alt="Logo" style="height: 40px; margin-right: 10px;">
         RESQ-link
     </a>
@@ -83,24 +83,62 @@ $user_role = strtolower($current_user['role'] ?? 'guest');
 </nav>
 
 <style>
+.navbar {
+  background-color: #2c3e50 !important;
+}
+
 .navbar .nav-link {
   display: flex;
   align-items: center;
   gap: 4px;
   font-weight: 500;
-  color: #555;
+  color: #ecf0f1 !important;
+  transition: all 0.3s ease;
 }
+
 .navbar .nav-link:hover {
-  color: #0d6efd;
+  color: #3498db !important;
+  background-color: rgba(52, 152, 219, 0.1);
+  border-radius: 4px;
 }
+
 .navbar .nav-link.active {
-  color: #0d6efd;
+  color: #3498db !important;
   font-weight: 600;
+  background-color: rgba(52, 152, 219, 0.15);
+  border-radius: 4px;
 }
+
+.navbar-brand {
+  color: #ffffff !important;
+  font-size: 1.25rem;
+}
+
+.navbar-brand:hover {
+  color: #3498db !important;
+}
+
+.dropdown-toggle {
+  color: #ecf0f1 !important;
+}
+
+.dropdown-toggle:hover {
+  color: #3498db !important;
+}
+
+.rounded-circle.bg-primary {
+  background-color: #3498db !important;
+}
+
 .dropdown-menu .material-icons {
   font-size: 18px;
   vertical-align: middle;
   margin-right: 4px;
+}
+
+.navbar .material-icons {
+  color: inherit;
+  font-size: 20px;
 }
 </style>
 
