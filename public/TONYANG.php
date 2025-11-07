@@ -906,6 +906,10 @@ $current_user = get_auth_user();
 
                         <div class="grid-2">
                             <div>
+                                <label for="dateTime" class="form-label">Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="dateTime" name="endorsement_datetime">
+                            </div>
+                            <div>
                                 <label class="form-label">ENDORSEMENT ATTACHMENT</label>
                                 <div class="attachment-section">
                                     <div class="attachment-controls">
@@ -929,10 +933,6 @@ $current_user = get_auth_user();
                                     </div>
                                     <div id="uploadError" class="text-danger" style="display: none;"></div>
                                 </div>
-                            </div>
-                            <div>
-                                <label for="dateTime" class="form-label">Date & Time</label>
-                                <input type="datetime-local" class="form-control" id="dateTime" name="endorsement_datetime">
                             </div>
                         </div>
                     </div>
