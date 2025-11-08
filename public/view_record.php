@@ -53,7 +53,7 @@ function format_time($time) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Record - <?php echo e($record['form_number']); ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="css/view-record.css" rel="stylesheet">
+    <link href="css/view-record.css?v=<?php echo time(); ?>" rel="stylesheet">
 </head>
 <body>
     <div class="record-wrapper">
@@ -101,11 +101,35 @@ function format_time($time) {
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Departure Time</label>
+                <label>Form Number</label>
+                <div class="value"><?php echo e($record['form_number']); ?></div>
+            </div>
+            <div class="form-group">
+                <label>Form Date</label>
+                <div class="value"><?php echo date('F d, Y', strtotime($record['form_date'])); ?></div>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <div class="value">
+                    <?php
+                    $status_class = [
+                        'completed' => 'badge-success',
+                        'pending' => 'badge-info',
+                        'draft' => 'badge-info'
+                    ];
+                    $class = $status_class[$record['status']] ?? 'badge-info';
+                    ?>
+                    <span class="badge-status <?php echo $class; ?>"><?php echo ucfirst($record['status']); ?></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Departure Time (From Station)</label>
                 <div class="value"><?php echo format_time($record['departure_time']); ?></div>
             </div>
             <div class="form-group">
-                <label>Arrival Time</label>
+                <label>Arrival Time (To Station)</label>
                 <div class="value"><?php echo format_time($record['arrival_time']); ?></div>
             </div>
         </div>
@@ -180,6 +204,10 @@ function format_time($time) {
                 <label>Occupation</label>
                 <div class="value"><?php echo e($record['occupation'] ?: 'N/A'); ?></div>
             </div>
+            <div class="form-group">
+                <label>Contact Number</label>
+                <div class="value"><?php echo e($record['contact_number'] ?: 'N/A'); ?></div>
+            </div>
         </div>
         <div class="form-row">
             <div class="form-group full-width">
@@ -192,6 +220,12 @@ function format_time($time) {
                 <label>Zone</label>
                 <div class="value"><?php echo e($record['zone'] ?: 'N/A'); ?></div>
             </div>
+        </div>
+
+        <!-- Incident Details -->
+        <div class="section-header">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            INCIDENT DETAILS
         </div>
         <div class="form-row">
             <div class="form-group full-width" data-field="place_of_incident">
@@ -221,8 +255,8 @@ function format_time($time) {
                 <div class="value"><?php echo e($record['informant_name'] ?: 'N/A'); ?></div>
             </div>
             <div class="form-group">
-                <label>Contact Number</label>
-                <div class="value"><?php echo e($record['contact_number'] ?: 'N/A'); ?></div>
+                <label>Relationship to Victim</label>
+                <div class="value"><?php echo e($record['relationship_victim'] ?: 'N/A'); ?></div>
             </div>
         </div>
         <div class="form-row">
@@ -239,12 +273,6 @@ function format_time($time) {
             <div class="form-group">
                 <label>Call Arrival Time</label>
                 <div class="value"><?php echo format_time($record['call_arrival_time']); ?></div>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group full-width">
-                <label>Relationship to Victim</label>
-                <div class="value"><?php echo e($record['relationship_victim'] ?: 'N/A'); ?></div>
             </div>
         </div>
         <div class="form-row">
@@ -277,6 +305,10 @@ function format_time($time) {
             <div class="vital-box">
                 <h4><i class="bi bi-clipboard-pulse"></i> Initial Assessment</h4>
                 <div class="form-group">
+                    <label>Time</label>
+                    <div class="value"><?php echo format_time($record['initial_time']); ?></div>
+                </div>
+                <div class="form-group">
                     <label>Blood Pressure</label>
                     <div class="value"><?php echo e($record['initial_bp'] ?: 'N/A'); ?></div>
                 </div>
@@ -289,8 +321,20 @@ function format_time($time) {
                     <div class="value"><?php echo $record['initial_pulse'] ? $record['initial_pulse'] . ' BPM' : 'N/A'; ?></div>
                 </div>
                 <div class="form-group">
-                    <label>SPO2</label>
+                    <label>Respiratory Rate</label>
+                    <div class="value"><?php echo $record['initial_resp_rate'] ? $record['initial_resp_rate'] . ' /min' : 'N/A'; ?></div>
+                </div>
+                <div class="form-group">
+                    <label>Pain Score</label>
+                    <div class="value"><?php echo $record['initial_pain_score'] !== null ? $record['initial_pain_score'] . '/10' : 'N/A'; ?></div>
+                </div>
+                <div class="form-group">
+                    <label>SpO2</label>
                     <div class="value"><?php echo $record['initial_spo2'] ? $record['initial_spo2'] . '%' : 'N/A'; ?></div>
+                </div>
+                <div class="form-group">
+                    <label>Spinal Injury</label>
+                    <div class="value"><?php echo ucfirst($record['initial_spinal_injury'] ?: 'N/A'); ?></div>
                 </div>
                 <div class="form-group">
                     <label>Consciousness</label>
@@ -300,6 +344,10 @@ function format_time($time) {
 
             <div class="vital-box">
                 <h4><i class="bi bi-arrow-repeat"></i> Follow-up Assessment</h4>
+                <div class="form-group">
+                    <label>Time</label>
+                    <div class="value"><?php echo format_time($record['followup_time']); ?></div>
+                </div>
                 <div class="form-group">
                     <label>Blood Pressure</label>
                     <div class="value"><?php echo e($record['followup_bp'] ?: 'N/A'); ?></div>
@@ -313,7 +361,15 @@ function format_time($time) {
                     <div class="value"><?php echo $record['followup_pulse'] ? $record['followup_pulse'] . ' BPM' : 'N/A'; ?></div>
                 </div>
                 <div class="form-group">
-                    <label>SPO2</label>
+                    <label>Respiratory Rate</label>
+                    <div class="value"><?php echo $record['followup_resp_rate'] ? $record['followup_resp_rate'] . ' /min' : 'N/A'; ?></div>
+                </div>
+                <div class="form-group">
+                    <label>Pain Score</label>
+                    <div class="value"><?php echo $record['followup_pain_score'] !== null ? $record['followup_pain_score'] . '/10' : 'N/A'; ?></div>
+                </div>
+                <div class="form-group">
+                    <label>SpO2</label>
                     <div class="value"><?php echo $record['followup_spo2'] ? $record['followup_spo2'] . '%' : 'N/A'; ?></div>
                 </div>
                 <div class="form-group">
@@ -377,10 +433,10 @@ function format_time($time) {
         </div>
         <?php endif; ?>
 
-        <!-- Hospital & Team Information -->
+        <!-- Hospital Information -->
         <div class="section-header">
             <i class="bi bi-hospital-fill"></i>
-            HOSPITAL & TEAM INFORMATION
+            HOSPITAL INFORMATION
         </div>
         <div class="form-row">
             <div class="form-group">
@@ -404,11 +460,16 @@ function format_time($time) {
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Arrival Station Time</label>
+                <label>Arrival Back to Station Time</label>
                 <div class="value"><?php echo format_time($record['arrival_station_time']); ?></div>
             </div>
         </div>
 
+        <!-- Team Information -->
+        <div class="section-header">
+            <i class="bi bi-people-fill"></i>
+            TEAM INFORMATION
+        </div>
         <div class="form-row">
             <div class="form-group">
                 <label>Team Leader</label>
@@ -418,12 +479,12 @@ function format_time($time) {
                 <label>Data Recorder</label>
                 <div class="value"><?php echo e($record['data_recorder'] ?: 'N/A'); ?></div>
             </div>
-        </div>
-        <div class="form-row">
             <div class="form-group">
                 <label>Logistic</label>
                 <div class="value"><?php echo e($record['logistic'] ?: 'N/A'); ?></div>
             </div>
+        </div>
+        <div class="form-row">
             <div class="form-group">
                 <label>1st Aider</label>
                 <div class="value"><?php echo e($record['first_aider'] ?: 'N/A'); ?></div>
@@ -435,9 +496,12 @@ function format_time($time) {
         </div>
 
         <?php if ($record['team_leader_notes']): ?>
+        <div class="section-header">
+            <i class="bi bi-journal-text"></i>
+            TEAM LEADER NOTES
+        </div>
         <div class="form-row">
             <div class="form-group full-width">
-                <label>Team Leader Notes</label>
                 <div class="value multiline"><?php echo nl2br(e($record['team_leader_notes'])); ?></div>
             </div>
         </div>
