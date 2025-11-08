@@ -36,73 +36,94 @@ body {
 
 /* Header Section - Government Style (Matches Official Form) */
 .header {
-    background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
-    color: white;
-    text-align: center;
-    padding: 18px 15px 16px;
+    background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
+    color: #000;
+    padding: 20px 25px;
     position: relative;
-    border-bottom: 3px solid #daa520;
-    border-top: 5px solid #000;
+    border-bottom: 1px solid #cbd5e1;
 }
 
-.header::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: #fff;
-    opacity: 0.3;
+.header-logos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e2e8f0;
 }
 
-.header .logo {
-    width: 65px;
-    height: auto;
-    margin-bottom: 8px;
-    filter: brightness(0) invert(1);
-    border: 2px solid rgba(255,255,255,0.5);
-    border-radius: 50%;
-    padding: 4px;
-    background: rgba(255,255,255,0.1);
+.logo-left,
+.logo-right {
+    flex-shrink: 0;
 }
 
-.header h1 {
-    font-size: 19px;
-    font-weight: 800;
-    margin-bottom: 10px;
+.seal-logo,
+.mdrrmo-logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.header-center {
+    flex: 1;
+    text-align: center;
+}
+
+.header-office {
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+}
+
+.header-rescue {
+    font-size: 32px;
+    font-weight: 900;
+    color: #dc2626;
+    letter-spacing: 4px;
+    margin-bottom: 4px;
+    text-shadow: 2px 2px 4px rgba(220, 38, 38, 0.2);
+}
+
+.header-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1e293b;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-}
-
-.header h1 i {
-    margin-right: 8px;
-    font-size: 20px;
+    letter-spacing: 0.5px;
 }
 
 .header .form-meta {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    margin-top: 10px;
+    gap: 12px;
+    margin-top: 0;
     flex-wrap: wrap;
+    background: transparent;
+    padding: 0;
+    border: none;
 }
 
 .header .form-meta-item {
     display: flex;
     align-items: center;
-    gap: 6px;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 6px 14px;
-    border-radius: 4px;
+    gap: 8px;
+    background: white;
+    padding: 8px 16px;
+    border-radius: 6px;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .header .form-meta-item i {
     font-size: 16px;
+    color: #64748b;
 }
 
 /* Status Badge */
@@ -494,6 +515,68 @@ body {
     border-bottom: none;
 }
 
+/* Waiver Section */
+.waiver-section {
+    margin: 25px 0 20px 0;
+    border: 2px solid #1e3a8a;
+    background: #f8fafc;
+    padding: 0;
+    page-break-inside: avoid;
+}
+
+.waiver-header {
+    background: #1e3a8a;
+    color: white;
+    padding: 10px 15px;
+    font-weight: 800;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.waiver-content {
+    padding: 15px 20px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.waiver-content p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #1f2937;
+    text-align: justify;
+}
+
+.waiver-signature {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 20px;
+    background: white;
+}
+
+.signature-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.signature-line {
+    border-bottom: 2px solid #1e3a8a;
+    min-height: 50px;
+}
+
+.signature-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #4b5563;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
 /* Responsive Design - Tablet */
 @media (max-width: 992px) {
     .record-content {
@@ -530,16 +613,31 @@ body {
     }
 
     .header {
-        padding: 16px 12px;
+        padding: 15px 12px;
     }
 
-    .header h1 {
-        font-size: 16px;
-        letter-spacing: 1px;
+    .header-logos {
+        gap: 15px;
+        padding-bottom: 12px;
     }
 
-    .header .logo {
-        width: 55px;
+    .seal-logo,
+    .mdrrmo-logo {
+        width: 65px;
+        height: 65px;
+    }
+
+    .header-office {
+        font-size: 11px;
+    }
+
+    .header-rescue {
+        font-size: 22px;
+        letter-spacing: 2.5px;
+    }
+
+    .header-title {
+        font-size: 10px;
     }
 
     .header .form-meta {
@@ -548,7 +646,7 @@ body {
 
     .header .form-meta-item {
         font-size: 11px;
-        padding: 4px 10px;
+        padding: 6px 12px;
     }
 
     .form-row {
@@ -589,6 +687,16 @@ body {
         font-size: 13px;
         padding: 7px 9px;
     }
+
+    .waiver-signature {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 15px;
+    }
+
+    .signature-line {
+        min-height: 40px;
+    }
 }
 
 /* Print Styles - Optimized for 2 Pages Legal Size (8.5" x 13") */
@@ -619,66 +727,76 @@ body {
     .header {
         background: white !important;
         color: #000 !important;
-        border-bottom: 3px double #000;
-        padding: 6px 8px 5px;
-        border-top: none;
+        border-bottom: 2px solid #000;
+        border-top: 2px solid #000;
+        padding: 10px 12px;
         position: relative;
     }
 
-    .header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
-        background: repeating-linear-gradient(
-            90deg,
-            #000 0px,
-            #000 15px,
-            transparent 15px,
-            transparent 30px
-        );
+    .header-logos {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #666;
     }
 
-    .header .logo {
-        width: 40px;
+    .seal-logo,
+    .mdrrmo-logo {
+        width: 55px;
+        height: 55px;
         filter: none;
-        border: 1px solid #000;
-        padding: 2px;
-        background: white;
+        border: none;
     }
 
-    .header h1 {
-        font-size: 12pt;
+    .header-center {
+        flex: 1;
+        text-align: center;
+    }
+
+    .header-office {
+        font-size: 8.5pt;
+        font-weight: 600;
         color: #000;
-        font-weight: 800;
-        letter-spacing: 1.5px;
-        margin: 5px 0 4px;
-        border-top: 1px solid #000;
-        border-bottom: 1px solid #000;
-        padding: 4px 0;
+        margin-bottom: 3px;
+        letter-spacing: 0.3px;
     }
 
-    .header h1 i {
-        display: inline;
-        font-size: 11pt;
+    .header-rescue {
+        font-size: 18pt;
+        font-weight: 900;
+        color: #000;
+        letter-spacing: 2.5px;
+        margin-bottom: 2px;
+    }
+
+    .header-title {
+        font-size: 8.5pt;
+        font-weight: 700;
+        color: #000;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
     }
 
     .header .form-meta {
-        border: 1px solid #000;
-        padding: 3px;
-        margin-top: 4px;
-        background: #f5f5f5;
+        border: none;
+        border-top: 1px solid #ddd;
+        padding: 6px 0 0 0;
+        margin-top: 6px;
+        background: transparent;
+        gap: 10px;
     }
 
     .header .form-meta-item {
-        background: white;
+        background: #f9fafb;
         color: #000;
-        font-size: 7pt;
-        border: 1px solid #000;
-        padding: 2px 6px;
+        font-size: 7.5pt;
+        border: 1px solid #cbd5e1;
+        padding: 3px 8px;
         font-weight: 700;
+        border-radius: 2px;
     }
 
     .record-content {
@@ -686,49 +804,51 @@ body {
     }
 
     .section-header {
-        background: #000 !important;
+        background: #1e3a8a !important;
         color: #fff !important;
         font-size: 9pt;
-        padding: 2px 6px;
-        margin: 6px 0 3px 0;
+        padding: 4px 8px;
+        margin: 8px 0 4px 0;
         page-break-after: avoid;
         border: none;
-        border-left: 4px solid #666;
-        font-weight: 800;
-        letter-spacing: 1px;
+        border-left: 3px solid #60a5fa;
+        font-weight: 700;
+        letter-spacing: 0.8px;
     }
 
     .section-header i {
         display: inline;
-        color: #fff;
+        color: #93c5fd;
         font-size: 8pt;
     }
 
     .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
-        gap: 2px 5px;
-        margin-bottom: 2px;
+        gap: 3px 6px;
+        margin-bottom: 3px;
         page-break-inside: avoid;
-        border: 1px solid #ccc;
-        padding: 3px 5px;
-        background: #fafafa;
+        border: none;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 5px 2px;
+        background: transparent;
     }
 
     .form-group {
         display: flex;
         flex-direction: row;
         align-items: baseline;
-        gap: 2px;
+        gap: 3px;
         padding: 0;
     }
 
     .form-group label {
         font-size: 7pt;
-        min-width: 70px;
+        min-width: 75px;
         flex-shrink: 0;
-        font-weight: 800;
+        font-weight: 700;
         text-transform: uppercase;
+        color: #4b5563;
     }
 
     .form-group label::after {
@@ -738,9 +858,9 @@ body {
 
     .form-group .value {
         font-size: 7.5pt;
-        padding: 1px 3px;
+        padding: 2px 4px;
         background: white !important;
-        border-bottom: 1px solid #333 !important;
+        border-bottom: 1px solid #d1d5db !important;
         min-height: 0;
         font-weight: 600;
         flex: 1;
@@ -760,33 +880,34 @@ body {
 
     .vital-box {
         padding: 0;
-        border: 2px double #000;
+        border: 1px solid #cbd5e1;
         background: white !important;
     }
 
     .vital-box h4 {
         font-size: 8pt;
         color: #fff;
-        background: #000 !important;
+        background: #0f766e !important;
         margin: 0;
-        padding: 2px 5px;
-        border-bottom: 1px solid #000;
-        font-weight: 800;
+        padding: 3px 6px;
+        border-bottom: none;
+        font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
 
     .vital-box h4 i {
         display: inline;
-        margin-right: 2px;
+        margin-right: 3px;
         font-size: 7pt;
+        color: #5eead4;
     }
 
     .vital-box .form-group {
         margin: 0;
-        padding: 1px 5px;
-        border-bottom: 1px dotted #ccc;
-        background: #fafafa;
+        padding: 2px 6px;
+        border-bottom: 1px solid #f1f5f9;
+        background: white;
     }
 
     .vital-box .form-group:last-child {
@@ -795,15 +916,16 @@ body {
 
     .vital-box .form-group label {
         font-size: 7pt;
-        min-width: 60px;
+        min-width: 65px;
         font-weight: 700;
+        color: #475569;
     }
 
     .vital-box .form-group .value {
         font-size: 7.5pt;
         font-weight: 700;
-        border-bottom: 1px solid #333 !important;
-        padding: 0 2px;
+        border-bottom: 1px solid #cbd5e1 !important;
+        padding: 1px 3px;
     }
 
     .badge-status {
@@ -817,30 +939,30 @@ body {
 
     .body-diagram-container {
         page-break-inside: avoid;
-        padding: 4px;
-        border: 2px double #000;
+        padding: 6px;
+        border: 1px solid #cbd5e1;
         background: white;
-        margin: 3px 0;
+        margin: 5px 0;
     }
 
     .body-views {
-        gap: 6px;
+        gap: 8px;
         display: grid;
         grid-template-columns: 1fr 1fr;
     }
 
     .body-view {
-        border: 1px solid #000;
+        border: 1px solid #cbd5e1;
         padding: 0;
     }
 
     .view-label {
-        background: #000 !important;
+        background: #64748b !important;
         color: #fff !important;
         border: none;
         font-size: 7pt;
-        padding: 2px 5px;
-        font-weight: 800;
+        padding: 3px 6px;
+        font-weight: 700;
         letter-spacing: 0.5px;
         margin: 0;
     }
@@ -857,7 +979,7 @@ body {
     }
 
     .injuries-table-container {
-        border: 2px double #000;
+        border: 1px solid #cbd5e1;
         margin: 5px 0;
         page-break-inside: avoid;
     }
@@ -869,28 +991,28 @@ body {
 
     .injuries-table th,
     .injuries-table td {
-        padding: 3px 5px;
-        border: 1px solid #333;
+        padding: 4px 6px;
+        border: 1px solid #e2e8f0;
     }
 
     .injuries-table thead {
-        background: #000 !important;
+        background: #7c3aed !important;
     }
 
     .injuries-table th {
         color: #fff !important;
-        font-weight: 800;
+        font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.3px;
         font-size: 7pt;
     }
 
     .injuries-table tbody tr {
-        background: #fafafa;
+        background: white;
     }
 
     .injuries-table tbody tr:nth-child(even) {
-        background: white;
+        background: #fafbfc;
     }
 
     .injury-marker {
@@ -899,6 +1021,66 @@ body {
         font-size: 8px;
         border-width: 2px;
         font-weight: 800;
+    }
+
+    /* Waiver Section - Print Styles */
+    .waiver-section {
+        margin: 8px 0;
+        border: 2px solid #000;
+        background: white;
+        page-break-inside: avoid;
+    }
+
+    .waiver-header {
+        background: white !important;
+        color: #000 !important;
+        padding: 4px 8px;
+        font-weight: 800;
+        font-size: 8pt;
+        text-align: center;
+        border-bottom: 2px solid #000;
+        letter-spacing: 0.5px;
+    }
+
+    .waiver-content {
+        padding: 6px 10px;
+        background: white;
+        border-bottom: 1px dashed #666;
+    }
+
+    .waiver-content p {
+        margin: 0;
+        font-size: 7pt;
+        line-height: 1.4;
+        color: #000;
+        text-align: justify;
+    }
+
+    .waiver-signature {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        padding: 10px;
+        background: white;
+    }
+
+    .signature-box {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .signature-line {
+        border-bottom: 1px solid #000;
+        min-height: 30px;
+    }
+
+    .signature-label {
+        font-size: 7pt;
+        font-weight: 700;
+        text-align: center;
+        color: #000;
+        letter-spacing: 0.3px;
     }
 
     /* Page break controls for 2-page layout */

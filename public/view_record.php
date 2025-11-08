@@ -73,8 +73,19 @@ function format_time($time) {
         <div class="form-container">
             <!-- Header -->
             <div class="header">
-                <img src="uploads/logo.png" alt="Logo" class="logo">
-                <h1><i class="bi bi-file-medical-fill"></i> PRE-HOSPITAL CARE FORM</h1>
+                <div class="header-logos">
+                    <div class="logo-left">
+                        <img src="uploads/baggao.png" alt="Baggao Seal" class="seal-logo">
+                    </div>
+                    <div class="header-center">
+                        <div class="header-office">Municipal Disaster Risk Reduction & Management Office</div>
+                        <div class="header-rescue">RESCUE 116</div>
+                        <div class="header-title">PRE-HOSPITAL CARE REPORT (Form 12.2025)</div>
+                    </div>
+                    <div class="logo-right">
+                        <img src="uploads/mdrrmo.png" alt="MDRRMO Logo" class="mdrrmo-logo">
+                    </div>
+                </div>
                 <div class="form-meta">
                     <div class="form-meta-item">
                         <i class="bi bi-hash"></i>
@@ -533,6 +544,26 @@ function format_time($time) {
             <div class="form-group">
                 <label>Last Updated</label>
                 <div class="value"><?php echo date('F d, Y g:i A', strtotime($record['updated_at'])); ?></div>
+            </div>
+        </div>
+
+        <!-- Waiver Section -->
+        <div class="waiver-section">
+            <div class="waiver-header">
+                WAIVER (PATIENT'S/VICTIM'S REFUSAL OF TREATMENT AND/OR TRANSPORTATION)
+            </div>
+            <div class="waiver-content">
+                <p>I, the undersigned have been advised that the assistance on my behalf is necessary and that refusal of said assistance and/or transportation for further treatment may result in death or imperil my health condition. Nevertheless, I refuse to accept treatment and/or transport and assume all risk and consequences of my decision and release the Rescue 116 members from any liability arising from my refusal.</p>
+            </div>
+            <div class="waiver-signature">
+                <div class="signature-box">
+                    <div class="signature-line"></div>
+                    <div class="signature-label">Name & Signature of Patient</div>
+                </div>
+                <div class="signature-box">
+                    <div class="signature-line"></div>
+                    <div class="signature-label">Name & Signature of Witness</div>
+                </div>
             </div>
         </div>
 
