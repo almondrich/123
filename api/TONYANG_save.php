@@ -286,10 +286,114 @@ try {
     // Get current user ID
     $created_by = $_SESSION['user_id'];
     
-    // Limit check - prevent huge inserts
-    $injuries_data = isset($_POST['injuries']) ? json_decode($_POST['injuries'], true) : [];
+    // Secure JSON decoding with validation
+    $injuries_json = $_POST['injuries'] ?? '[]';
+    
+    // Handle empty injuries - allow empty array
+    if (empty($injuries_json) || trim($injuries_json) === '') {
+        $injuries_json = '[]';
+    }
+    
+    // Validate JSON size (prevent huge payloads)
+    if (strlen($injuries_json) > 100000) { // 100KB max
+        throw new Exception('Injuries data too large (max 100KB)');
+    }
+    
+    // Decode with depth limit to prevent memory exhaustion
+    $injuries_data = json_decode($injuries_json, true, 10); // Max depth 10
+    
+    // Validate JSON decode was successful
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        error_log("JSON decode error: " . json_last_error_msg() . " | JSON: " . substr($injuries_json, 0, 200));
+        throw new Exception('Invalid JSON format in injuries data: ' . json_last_error_msg());
+    }
+    
+    // Ensure it's an array (handle null/empty cases)
+    if (!is_array($injuries_data)) {
+        $injuries_data = [];
+    }
+    
+    // Limit array size
     if (count($injuries_data) > 100) {
         throw new Exception('Too many injuries marked (max 100)');
+    }
+    
+    // Validate each injury entry structure and types (only if injuries exist)
+    if (!empty($injuries_data)) {
+        foreach ($injuries_data as $index => $injury) {
+            if (!is_array($injury)) {
+                throw new Exception("Invalid injury entry at index $index: expected object");
+            }
+            
+            // Validate required fields exist
+            if (!isset($injury['id']) || !isset($injury['type']) || !isset($injury['view'])) {
+                throw new Exception("Missing required injury fields at index $index (required: id, type, view)");
+            }
+            
+            // Validate data types - id can be numeric (int or string representation)
+            $id_value = $injury['id'];
+            if (!is_numeric($id_value) && !ctype_digit((string)$id_value)) {
+                throw new Exception("Invalid injury ID at index $index: must be numeric");
+            }
+            
+            // Convert ID to integer for consistency
+            $injury['id'] = (int)$id_value;
+            
+            // Validate type and view are strings
+            if (!is_string($injury['type']) || !is_string($injury['view'])) {
+                throw new Exception("Invalid injury data types at index $index: type and view must be strings");
+            }
+            
+            // Validate injury type (whitelist) - case insensitive
+            $allowed_types = ['laceration', 'fracture', 'burn', 'contusion', 'abrasion', 'other'];
+            if (!in_array(strtolower(trim($injury['type'])), $allowed_types)) {
+                throw new Exception("Invalid injury type at index $index: '" . $injury['type'] . "' (allowed: " . implode(', ', $allowed_types) . ")");
+            }
+            
+            // Validate view (front or back) - case insensitive
+            $allowed_views = ['front', 'back'];
+            if (!in_array(strtolower(trim($injury['view'])), $allowed_views)) {
+                throw new Exception("Invalid injury view at index $index: '" . $injury['view'] . "' (allowed: front, back)");
+            }
+            
+            // Validate coordinates are numeric and within bounds (0-100 for percentages)
+            // Coordinates are optional but if present, must be valid
+            if (isset($injury['x'])) {
+                if (!is_numeric($injury['x'])) {
+                    throw new Exception("Invalid X coordinate at index $index: must be numeric");
+                }
+                $x = (float)$injury['x'];
+                if ($x < 0 || $x > 100) {
+                    throw new Exception("Invalid X coordinate at index $index: must be between 0 and 100");
+                }
+                $injury['x'] = $x; // Normalize to float
+            } else {
+                $injury['x'] = 0; // Default to 0 if not provided
+            }
+            
+            if (isset($injury['y'])) {
+                if (!is_numeric($injury['y'])) {
+                    throw new Exception("Invalid Y coordinate at index $index: must be numeric");
+                }
+                $y = (float)$injury['y'];
+                if ($y < 0 || $y > 100) {
+                    throw new Exception("Invalid Y coordinate at index $index: must be between 0 and 100");
+                }
+                $injury['y'] = $y; // Normalize to float
+            } else {
+                $injury['y'] = 0; // Default to 0 if not provided
+            }
+            
+            // Validate notes field (optional, but if present must be string)
+            if (isset($injury['notes']) && !is_string($injury['notes'])) {
+                $injury['notes'] = ''; // Default to empty string
+            } else if (!isset($injury['notes'])) {
+                $injury['notes'] = ''; // Default to empty string if not provided
+            }
+            
+            // Update the array with normalized values
+            $injuries_data[$index] = $injury;
+        }
     }
     
     // Insert main form

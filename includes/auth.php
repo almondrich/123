@@ -19,9 +19,26 @@ function is_logged_in() {
  * Require login - redirect if not authenticated
  */
 function require_login() {
+    // Check if session exists and is valid
     if (!is_logged_in()) {
         set_flash('Please login to access this page', 'error');
         redirect('../public/login.php');
+    }
+    
+    // Check session timeout (if last_activity is set)
+    if (isset($_SESSION['last_activity'])) {
+        $session_timeout = 3600; // 1 hour
+        if (time() - $_SESSION['last_activity'] > $session_timeout) {
+            // Session expired - destroy and redirect to login
+            logout_user();
+            set_flash('Your session has expired. Please login again.', 'error');
+            redirect('../public/login.php');
+        }
+        // Update last activity time
+        $_SESSION['last_activity'] = time();
+    } else {
+        // Set initial activity time if not set
+        $_SESSION['last_activity'] = time();
     }
 }
 

@@ -28,19 +28,33 @@ if (!verify_token($_POST['csrf_token'] ?? '')) {
 }
 
 try {
+    // Validate record ID format and range
     $record_id = isset($_POST['record_id']) ? (int)$_POST['record_id'] : 0;
     
-    if ($record_id <= 0) {
+    if ($record_id <= 0 || $record_id > 2147483647) {
         throw new Exception('Invalid record ID');
     }
     
+    // Verify ID format (prevent injection attempts)
+    if (isset($_POST['record_id']) && !preg_match('/^\d+$/', (string)$_POST['record_id'])) {
+        throw new Exception('Invalid record ID format');
+    }
+    
     // Check if record exists
-    $check_sql = "SELECT id, form_number FROM prehospital_forms WHERE id = ?";
+    $check_sql = "SELECT id, form_number, created_by FROM prehospital_forms WHERE id = ?";
     $check_stmt = db_query($check_sql, [$record_id]);
     $existing_record = $check_stmt->fetch();
     
     if (!$existing_record) {
         throw new Exception('Record not found');
+    }
+    
+    // AUTHORIZATION CHECK: Verify user has permission to update this record
+    // Users can only update their own records unless they are admins
+    $current_user = get_auth_user();
+    if ($existing_record['created_by'] != $current_user['id'] && !is_admin()) {
+        log_security_event('unauthorized_access_attempt', "Attempted to update record ID: $record_id without permission", 'warning');
+        throw new Exception('Access denied. You do not have permission to update this record.');
     }
     
     // Start transaction

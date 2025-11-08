@@ -561,3 +561,56 @@ function json_response($data, $status_code = 200) {
     echo json_encode($data);
     exit();
 }
+
+/**
+ * Set security headers
+ * Call this function at the start of each page/API endpoint
+ */
+function set_security_headers() {
+    // Prevent clickjacking
+    header("X-Frame-Options: DENY");
+    
+    // Prevent MIME type sniffing
+    header("X-Content-Type-Options: nosniff");
+    
+    // Enable XSS protection (legacy browsers)
+    header("X-XSS-Protection: 1; mode=block");
+    
+    // Referrer Policy
+    header("Referrer-Policy: strict-origin-when-cross-origin");
+    
+    // Permissions Policy (formerly Feature-Policy)
+    header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
+    
+    // HSTS - Only if HTTPS is enabled
+    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+        header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
+    }
+    
+    // Content Security Policy with nonce
+    if (defined('CSP_NONCE')) {
+        $csp_nonce = CSP_NONCE;
+        header("Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-$csp_nonce' https://cdn.jsdelivr.net https://www.google.com https://www.gstatic.com; style-src 'self' 'nonce-$csp_nonce' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https://www.google.com; frame-src https://www.google.com;");
+    }
+}
+
+/**
+ * Validate record ID
+ * Returns validated integer ID or throws exception
+ */
+function validate_record_id($id, $source = 'input') {
+    // Cast to integer
+    $id = (int)$id;
+    
+    // Check range
+    if ($id <= 0 || $id > 2147483647) {
+        throw new Exception('Invalid record ID');
+    }
+    
+    // If source is provided, validate format
+    if ($source !== 'input' && isset($_GET[$source]) && !preg_match('/^\d+$/', (string)$_GET[$source])) {
+        throw new Exception('Invalid record ID format');
+    }
+    
+    return $id;
+}

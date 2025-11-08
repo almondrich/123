@@ -11,11 +11,27 @@ require_once '../includes/auth.php';
 // Require authentication
 require_login();
 
+// Rate limiting - prevent abuse and resource exhaustion
+if (!check_rate_limit('export_records', 10, 3600)) { // 10 exports per hour
+    set_flash('Too many export requests. Please wait before exporting again.', 'error');
+    redirect('../public/records.php');
+}
+
 // Get filters
 $search = isset($_GET['search']) ? sanitize($_GET['search']) : '';
 $status_filter = isset($_GET['status']) ? sanitize($_GET['status']) : '';
 $date_from = isset($_GET['date_from']) ? sanitize($_GET['date_from']) : '';
 $date_to = isset($_GET['date_to']) ? sanitize($_GET['date_to']) : '';
+
+// Validate date formats if provided
+if (!empty($date_from) && !validate_date($date_from)) {
+    set_flash('Invalid date_from format', 'error');
+    redirect('../public/records.php');
+}
+if (!empty($date_to) && !validate_date($date_to)) {
+    set_flash('Invalid date_to format', 'error');
+    redirect('../public/records.php');
+}
 
 // Build query
 $where_conditions = [];
@@ -46,7 +62,8 @@ if (!empty($date_to)) {
 
 $where_sql = !empty($where_conditions) ? "WHERE " . implode(" AND ", $where_conditions) : "";
 
-// Get records
+// Get records with result limit to prevent resource exhaustion
+// Limit to 10,000 records per export to prevent memory issues
 $sql = "SELECT 
     form_number, form_date, patient_name, age, gender, civil_status,
     address, occupation, place_of_incident, incident_time,
@@ -55,10 +72,14 @@ $sql = "SELECT
     team_leader, status, created_at
     FROM prehospital_forms 
     $where_sql 
-    ORDER BY created_at DESC";
+    ORDER BY created_at DESC
+    LIMIT 10000";
 
 $stmt = db_query($sql, $params);
 $records = $stmt->fetchAll();
+
+// Log export activity
+log_activity('export_records', "Exported " . count($records) . " records");
 
 // Set headers for CSV download
 $filename = 'prehospital_records_' . date('Y-m-d_His') . '.csv';

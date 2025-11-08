@@ -16,11 +16,18 @@ header("X-XSS-Protection: 1; mode=block");
 // Require authentication
 require_login();
 
-// Get record ID
+// Get and validate record ID
 $record_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-if ($record_id <= 0) {
+// Validate record ID format and range
+if ($record_id <= 0 || $record_id > 2147483647) {
     set_flash('Invalid record ID', 'error');
+    redirect('records.php');
+}
+
+// Verify ID format (prevent injection attempts)
+if (isset($_GET['id']) && !preg_match('/^\d+$/', (string)$_GET['id'])) {
+    set_flash('Invalid record ID format', 'error');
     redirect('records.php');
 }
 
@@ -34,6 +41,15 @@ if (!$record) {
     redirect('records.php');
 }
 
+// AUTHORIZATION CHECK: Verify user has permission to edit this record
+// Users can only edit their own records unless they are admins
+$current_user = get_auth_user();
+if ($record['created_by'] != $current_user['id'] && !is_admin()) {
+    log_security_event('unauthorized_access_attempt', "Attempted to edit record ID: $record_id without permission", 'warning');
+    set_flash('Access denied. You do not have permission to edit this record.', 'error');
+    redirect('records.php');
+}
+
 // Get injuries for this record
 $injury_sql = "SELECT * FROM injuries WHERE form_id = ? ORDER BY injury_number";
 $injury_stmt = db_query($injury_sql, [$record_id]);
@@ -41,9 +57,6 @@ $injuries = $injury_stmt->fetchAll();
 
 // Generate CSRF token
 $csrf_token = generate_token();
-
-// Get current user
-$current_user = get_auth_user();
 
 // Helper function to clean time values
 function clean_time($time) {

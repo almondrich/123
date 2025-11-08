@@ -11,11 +11,18 @@ require_once '../includes/auth.php';
 // Require authentication
 require_login();
 
-// Get record ID
+// Get and validate record ID
 $record_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-if ($record_id <= 0) {
+// Validate record ID format and range
+if ($record_id <= 0 || $record_id > 2147483647) {
     set_flash('Invalid record ID', 'error');
+    redirect('records.php');
+}
+
+// Verify ID format (prevent injection attempts)
+if (isset($_GET['id']) && !preg_match('/^\d+$/', (string)$_GET['id'])) {
+    set_flash('Invalid record ID format', 'error');
     redirect('records.php');
 }
 
@@ -29,13 +36,19 @@ if (!$record) {
     redirect('records.php');
 }
 
+// AUTHORIZATION CHECK: Verify user has permission to view this record
+// Users can only view their own records unless they are admins
+$current_user = get_auth_user();
+if ($record['created_by'] != $current_user['id'] && !is_admin()) {
+    log_security_event('unauthorized_access_attempt', "Attempted to view record ID: $record_id without permission", 'warning');
+    set_flash('Access denied. You do not have permission to view this record.', 'error');
+    redirect('records.php');
+}
+
 // Get injuries for this record
 $injury_sql = "SELECT * FROM injuries WHERE form_id = ? ORDER BY injury_number";
 $injury_stmt = db_query($injury_sql, [$record_id]);
 $injuries = $injury_stmt->fetchAll();
-
-// Get current user
-$current_user = get_auth_user();
 
 // Helper function to format time with AM/PM
 function format_time($time) {

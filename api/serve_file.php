@@ -20,20 +20,38 @@ if (empty($filePath)) {
     die('Invalid file path');
 }
 
-// Security: Ensure file path is within uploads_private directory
-$realPath = realpath($filePath);
-$uploadDir = realpath(UPLOAD_DIR);
+// Security: Prevent path traversal attacks
+// Remove any directory traversal attempts and sanitize filename
+$filePath = basename($filePath); // Remove any path components
+$filePath = preg_replace('/[^a-zA-Z0-9._-]/', '', $filePath); // Only allow safe characters
 
-if (!$realPath || !$uploadDir || strpos($realPath, $uploadDir) !== 0) {
-    http_response_code(403);
-    die('Access denied');
+// Construct full path from upload directory only (prevent path traversal)
+$uploadDir = realpath(UPLOAD_DIR);
+if (!$uploadDir || !is_dir($uploadDir)) {
+    http_response_code(500);
+    error_log("Upload directory not found: " . UPLOAD_DIR);
+    die('Upload directory not found');
 }
 
-// Check if file exists
-if (!file_exists($realPath)) {
+// Build secure path - only within upload directory
+$realPath = $uploadDir . DIRECTORY_SEPARATOR . $filePath;
+
+// Verify file exists and is a regular file (not directory)
+if (!file_exists($realPath) || !is_file($realPath)) {
     http_response_code(404);
     die('File not found');
 }
+
+// Double-check path is within upload directory (prevent symlink attacks)
+$realPathResolved = realpath($realPath);
+if (!$realPathResolved || strpos($realPathResolved, $uploadDir) !== 0) {
+    http_response_code(403);
+    error_log("Path traversal attempt detected: " . ($_GET['file'] ?? ''));
+    die('Access denied');
+}
+
+// Use resolved path for final operations
+$realPath = $realPathResolved;
 
 // Get file info
 $fileSize = filesize($realPath);

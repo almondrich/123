@@ -50,6 +50,8 @@ if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
 ini_set('session.cookie_httponly', 1);
 ini_set('session.use_only_cookies', 1);
 ini_set('session.cookie_samesite', 'Strict');
+ini_set('session.gc_maxlifetime', 3600); // 1 hour
+ini_set('session.cookie_lifetime', 0); // Until browser closes
 
 // Add secure flag if HTTPS is enabled
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
@@ -58,6 +60,23 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+
+// Session timeout check - require re-login after inactivity
+if (isset($_SESSION['last_activity'])) {
+    $session_timeout = 3600; // 1 hour
+    if (time() - $_SESSION['last_activity'] > $session_timeout) {
+        // Session expired
+        session_unset();
+        session_destroy();
+        // Don't redirect here as it may break API calls - let individual pages handle it
+    } else {
+        // Update last activity time
+        $_SESSION['last_activity'] = time();
+    }
+} else {
+    // Set initial activity time
+    $_SESSION['last_activity'] = time();
 }
 
 // PDO Database Connection
