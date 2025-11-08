@@ -48,7 +48,7 @@ header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
 
 // Log file access
-log_activity('file_access', 'Accessed file: ' . basename($realPath));
+log_security_event('file_access', 'Accessed file: ' . basename($realPath), 'info');
 
 // Output file content
 readfile($realPath);

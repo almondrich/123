@@ -1,31 +1,34 @@
-# Pre-Hospital Care System - TODO
+# Security Logs Enhancement TODO
 
-## Completed Tasks
-- [x] Update statistics cards CSS for better mobile display (dashboard.php)
-  - Reduced padding: 0.75rem on mobile, 0.875rem on tablet
-  - Scaled icons: 32px (mobile), 36px (tablet), 48px (desktop)
-  - Optimized typography with responsive font sizes
-- [x] Enhance records.php design following annex4 pattern
-  - Created external CSS file (css/records-style.css)
-  - Implemented skeleton loaders for cards and table
-  - Added search functionality with live filtering
-  - Added back-to-top button with scroll detection
-  - Implemented responsive design with clamp() functions
-- [x] Fix mobile record cards overlapping issue
-  - Redesigned action buttons layout using CSS Grid
+## Current Status
+- Separate activity and security logging implemented
+- Activity logs: General user actions (form submissions, logins, etc.)
+- Security logs: Security-related events with enhanced metadata
 
-## Pending Enhancements
-- [x] Add responsive column hiding for records table on mobile
-  - Tablet (< 768px): Hides Incident Location and Vehicle columns
-  - Mobile (< 576px): Additionally hides Age/Gender and Hospital columns
-  - Mobile shows only: Form #, Date, Patient Name, Status, Actions
-- [ ] Test all changes across different devices and browsers
-- [ ] Optimize database queries with indexes for large datasets
-- [ ] Add export functionality (PDF, Excel) for records
-- [ ] Implement bulk actions (delete, export selected records)
+## Implemented Features
+- [x] Separate log_activity() for general user actions
+- [x] Separate log_security_event() for security events with full metadata
+- [x] Enhanced security metadata (IP, user agent, session ID, request details)
+- [x] Authentication security events (failed logins, account locks)
+- [x] Rate limiting violations logging
+- [x] Admin actions logging (user management, password changes)
+- [x] File operations logging (uploads, downloads, access)
+- [x] Form operations logging (create, update, delete)
+- [x] Updated all existing log calls to use appropriate logging functions
 
-## Notes
-- Dashboard now uses progressive responsive scaling (576px, 768px breakpoints)
-- Records page follows annex4 design pattern with custom CSS classes
-- All inline CSS removed from records.php for better maintainability
-- Consider adding loading states for API calls and form submissions
+## Database Schema Requirements
+### activity_logs table:
+- id, user_id, action, details, ip_address, created_at
+
+### security_logs table:
+- id, user_id, action, details, ip_address, user_agent, session_id, request_method, request_uri, severity, created_at
+
+## Next Steps
+- [x] Create database migration scripts for security_logs table
+- [ ] Test logging by simulating failed logins
+- [ ] Test logging by triggering rate limits
+- [ ] Test logging by performing admin actions
+- [ ] Verify logs contain proper metadata
+- [ ] Verify activity logs vs security logs separation
+- [ ] Consider adding log retention policies
+- [ ] Consider adding log monitoring/alerting system

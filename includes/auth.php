@@ -94,6 +94,8 @@ function login_user($username, $password, $recaptcha_response = null) {
     if (!password_verify($password, $user['password'])) {
         // Record failed attempt
         record_failed_attempt($username, 5, 15);
+        // Log failed login attempt
+        log_security_event('login_failed', "Failed login attempt for username: $username", 'warning');
         return ['success' => false, 'message' => 'Invalid username or password'];
     }
 

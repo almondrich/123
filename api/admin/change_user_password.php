@@ -84,6 +84,9 @@ try {
     $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
     $stmt->execute([$password_hash, $user_id]);
 
+    // Log admin action
+    log_security_event('admin_password_changed', "Changed password for user: {$user['username']}", 'warning');
+
     set_flash('success', "Password for '{$user['username']}' updated successfully!");
     header('Location: ../../public/admin/users.php');
     exit;

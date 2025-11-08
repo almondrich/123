@@ -208,9 +208,13 @@ function handle_upload($file, $allowed_types = ['jpg', 'jpeg', 'png', 'pdf']) {
     }
     
     if (move_uploaded_file($file['tmp_name'], $destination)) {
+        // Log successful file upload
+        log_activity('file_upload', "File uploaded: $filename (original: " . $file['name'] . ")");
         return ['success' => true, 'filename' => $filename];
     }
-    
+
+    // Log failed file upload
+    log_security_event('file_upload_failed', "File upload failed: " . $file['name'], 'warning');
     return ['success' => false, 'message' => 'Failed to move uploaded file'];
 }
 
@@ -308,6 +312,8 @@ function check_ip_rate_limit($action, $max_attempts = 5, $time_window = 300) {
 
         // Check if limit exceeded
         if ($attempt_count >= $max_attempts) {
+            // Log rate limit violation
+            log_security_event('rate_limit_exceeded', "Rate limit exceeded for action: $action_key", 'warning');
             return false;
         }
 
@@ -360,7 +366,7 @@ function check_daily_form_limit($user_id, $max_forms = 50) {
 }
 
 /**
- * Log activity
+ * Log general activity
  */
 function log_activity($action, $details = '') {
     global $pdo;
@@ -372,6 +378,28 @@ function log_activity($action, $details = '') {
             VALUES (?, ?, ?, ?, NOW())";
 
     db_query($sql, [$user_id, $action, $details, $ip_address]);
+}
+
+/**
+ * Log security events with enhanced metadata
+ */
+function log_security_event($action, $details = '', $severity = 'info') {
+    global $pdo;
+
+    $user_id = $_SESSION['user_id'] ?? null;
+    $ip_address = get_client_ip();
+    $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    $session_id = session_id();
+    $request_method = $_SERVER['REQUEST_METHOD'] ?? '';
+    $request_uri = $_SERVER['REQUEST_URI'] ?? '';
+
+    // Enhanced details for all security events
+    $enhanced_details = $details . " | IP: $ip_address | UA: " . substr($user_agent, 0, 200) . " | Session: $session_id | Method: $request_method | URI: $request_uri";
+
+    $sql = "INSERT INTO security_logs (user_id, action, details, ip_address, user_agent, session_id, request_method, request_uri, severity, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+
+    db_query($sql, [$user_id, $action, $enhanced_details, $ip_address, $user_agent, $session_id, $request_method, $request_uri, $severity]);
 }
 
 /**
@@ -439,7 +467,7 @@ function record_failed_attempt($username, $max_attempts = 5, $lockout_minutes = 
                           WHERE username = ?";
             db_query($update_sql, [$failed_attempts, $locked_until, $username]);
 
-            log_activity('account_locked', "Account locked for user: $username after $failed_attempts failed attempts");
+            log_security_event('account_locked', "Account locked for user: $username after $failed_attempts failed attempts", 'warning');
         } else {
             // Increment failed attempts
             $update_sql = "UPDATE users

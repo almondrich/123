@@ -71,6 +71,10 @@ try {
     $stmt->execute([$status, $user_id]);
 
     $action = $status === 'active' ? 'activated' : 'deactivated';
+
+    // Log admin action
+    log_security_event('admin_user_status_changed', "User '{$user['username']}' {$action}", 'warning');
+
     echo json_encode([
         'success' => true,
         'message' => "User '{$user['username']}' {$action} successfully!"

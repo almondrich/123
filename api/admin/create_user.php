@@ -121,6 +121,9 @@ try {
         $status
     ]);
 
+    // Log admin action
+    log_security_event('admin_user_created', "Created user: $username (Role: $role, Status: $status)", 'info');
+
     set_flash('success', "User '$username' created successfully!");
     header('Location: ../../public/admin/users.php');
     exit;
